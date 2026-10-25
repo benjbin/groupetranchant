@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /maquettes/
+
+Sitemap: https://www.groupetranchant.com/sitemap.xml

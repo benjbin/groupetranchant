@@ -1,0 +1,24 @@
+<section id="implantations" class="pin" style="--screens:7">
+  <div class="sticky">
+    <canvas id="gl-map" aria-hidden="true"></canvas>
+    <div class="labels" id="labels"></div>
+    <div class="chapter ch-hero" data-from="0" data-to=".1">
+      <h1 class="display huge">Nos destinations de jeux et de loisirs</h1>
+    </div>
+    <div class="chapter ch-left" data-from=".15" data-to=".26"><div class="panel"><ul class="places">{{region:manche}}</ul></div></div>
+    <div class="chapter ch-left" data-from=".35" data-to=".46"><div class="panel"><ul class="places">{{region:centre}}</ul></div></div>
+    <div class="chapter ch-left" data-from=".55" data-to=".66"><div class="panel"><ul class="places">{{region:sud}}</ul></div></div>
+    <div class="chapter ch-left" data-from=".75" data-to=".86"><div class="panel"><ul class="places">{{region:est}}</ul></div></div>
+    <div class="chapter ch-bottom" data-from=".93" data-to="1.01">
+      <div class="legend"><span><i class="c-casino"></i>Casinos</span><span><i class="c-hotel"></i>Hôtels</span><span><i class="c-club"></i>Club de jeu</span></div>
+    </div>
+    <div class="tip" id="tip"></div>
+  </div>
+</section>
+
+<section class="section dest-sec" id="annuaire">
+  <div class="filters" data-target="#dest-grid" role="group" aria-label="Filtrer">
+    <button type="button" data-f="all" aria-pressed="true">{{V2}}</button><button type="button" data-f="casino" aria-pressed="false"><i class="c-casino"></i>Casinos</button><button type="button" data-f="hotel" aria-pressed="false"><i class="c-hotel"></i>Hôtels</button><button type="button" data-f="club" aria-pressed="false"><i class="c-club"></i>Club de jeu</button>
+  </div>
+  <div class="dest-grid" id="dest-grid">{{destinations}}</div>
+</section>

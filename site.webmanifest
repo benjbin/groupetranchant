@@ -1,0 +1,13 @@
+{
+  "name": "Groupe Tranchant",
+  "short_name": "Tranchant",
+  "lang": "fr",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#050608",
+  "theme_color": "#050608",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

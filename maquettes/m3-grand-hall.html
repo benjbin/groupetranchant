@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Groupe Tranchant — Grand Hall</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 66 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23fff' stroke='%232F5F90' stroke-width='2'/%3E%3Ccircle cx='45' cy='20' r='18' fill='%23F2C230'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  :root{--bg:#2A2118;--fg:#FFFDF8;--muted:rgba(255,250,240,.82);--line:rgba(255,250,240,.3)}
+  .display{font-family:"Instrument Serif",Georgia,serif;font-weight:400;letter-spacing:-.01em}
+  .ch-hero h1{font-size:clamp(52px,8.4vw,140px);line-height:.95}
+  .chapter h2{font-size:clamp(44px,5vw,84px);line-height:.98}
+  .chapter h2 em,.ch-hero h1 em{font-style:italic}
+  .num{font-family:"Instrument Serif",serif;font-style:italic;font-size:22px;color:var(--yellow);display:block;margin-bottom:6px}
+  .chapter{text-shadow:0 2px 30px rgba(40,25,10,.45)}
+  .chapter .lead{color:var(--muted)}
+  .stat{display:flex;gap:30px;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+  .stat div{font-size:12.5px;color:var(--muted)}
+  .stat b{display:block;font-family:"Instrument Serif",serif;font-weight:400;font-size:48px;line-height:1;color:var(--fg)}
+  .figures b{font-family:"Instrument Serif",serif;font-weight:400}
+  #loader{background:#2A2118}
+  .ch-left,.ch-right{margin-top:-190px}
+  .ch-hero::before,.ch-left::before,.ch-right::before{content:"";position:absolute;inset:-60px -80px;background:radial-gradient(closest-side,rgba(40,26,12,.38),transparent);z-index:-1}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body class="loading">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gt" viewBox="0 0 66 40">
+    <circle cx="20" cy="20" r="18" fill="#fff" stroke="#2F5F90" stroke-width="1.6"/>
+    <text x="20" y="27.5" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="22" fill="#2F5F90">G</text>
+    <circle cx="45" cy="20" r="18" fill="#F2C230"/>
+    <text x="45" y="27.5" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="22" fill="#fff">T</text>
+  </symbol>
+</svg>
+
+<div id="loader"><svg><use href="#gt"/></svg><p>GROUPE TRANCHANT</p><div class="bar"><i></i></div></div>
+<canvas id="gl"></canvas>
+
+<header class="top">
+  <a class="brand" href="index.html"><svg><use href="#gt"/></svg><span>GROUPE TRANCHANT<i class="tri"></i></span></a>
+  <nav class="nav">
+    <a href="#" data-p="0.2">Le jeu</a>
+    <a href="#" data-p="0.36">L'hospitalité</a>
+    <a href="#" data-p="0.52">La table</a>
+    <a href="#" data-p="0.68">La scène</a>
+    <a href="#" data-p="0.84">L'innovation</a>
+    <span class="b18">18+</span>
+  </nav>
+</header>
+
+<section class="chapter ch-hero" data-from="0" data-to=".1">
+  <p class="kicker">Groupe Tranchant · Depuis 1988<i class="tri"></i></p>
+  <h1 class="display">L'art de recevoir,<br><em>en grand.</em></h1>
+  <p class="lead">Une famille visionnaire et une grande entreprise française qui, jour après jour, entretient et invente ses métiers : le jeu, l'hôtellerie, la restauration.</p>
+</section>
+
+<section class="chapter ch-left" data-from=".15" data-to=".26">
+  <span class="num">I.</span>
+  <h2 class="display">Le <em>jeu</em></h2>
+  <p class="lead">Dix-sept casinos en France et en Suisse et le premier club de jeux parisien : des salles vastes, lumineuses et chaleureuses, dans le strict respect de la réglementation.</p>
+  <div class="stat"><div><b>17</b>casinos</div><div><b>1</b>club parisien</div></div>
+</section>
+
+<section class="chapter ch-right" data-from=".31" data-to=".42">
+  <span class="num">II.</span>
+  <h2 class="display">L'<em>hospitalité</em></h2>
+  <p class="lead">Airport Hotel Basel, Golden Tulip Amnéville et Hôtel des Sources : trois adresses trois et quatre étoiles, aux nouveaux standards d'excellence.</p>
+  <div class="stat"><div><b>3</b>hôtels</div><div><b>2</b>pays</div></div>
+</section>
+
+<section class="chapter ch-left" data-from=".47" data-to=".58">
+  <span class="num">III.</span>
+  <h2 class="display">La <em>table</em></h2>
+  <p class="lead">Plus de 50 restaurants, bars et espaces de snacking : une cuisine généreuse qui privilégie les produits frais, portée par des équipes hautement qualifiées.</p>
+  <div class="stat"><div><b>50+</b>restaurants &amp; bars</div></div>
+</section>
+
+<section class="chapter ch-right" data-from=".63" data-to=".74">
+  <span class="num">IV.</span>
+  <h2 class="display">La <em>scène</em></h2>
+  <p class="lead">Plus de 17 salles de concerts et de spectacles, des salons de réception et de séminaire, et un interlocuteur unique pour chaque événement.</p>
+  <div class="stat"><div><b>17+</b>salles</div></div>
+</section>
+
+<section class="chapter ch-left" data-from=".79" data-to=".88">
+  <span class="num">V.</span>
+  <h2 class="display">L'<em>innovation</em></h2>
+  <p class="lead">Casino Advanced Technology, Certus Technologies, Alioscopy, Zalix Biométrie et IDS : la technologie comme accélérateur de croissance.</p>
+  <div class="stat"><div><b>5</b>filiales</div><div><b>1988</b>premier importateur</div></div>
+</section>
+
+<section class="chapter ch-bottom" data-from=".94" data-to="1">
+  <p class="kicker">Chiffres clés<i class="tri"></i></p>
+  <div class="figures" style="margin-top:26px">
+    <div><b>17</b>casinos</div>
+    <div><b>3</b>hôtels</div>
+    <div><b>50+</b>restaurants &amp; bars</div>
+    <div><b>1 181</b>collaborateurs</div>
+    <div><b>3,1 M</b>visiteurs par an</div>
+  </div>
+  <p class="legal">Les jeux d'argent et de hasard peuvent être dangereux : pertes d'argent, conflits familiaux, addiction… Retrouvez nos conseils sur <a href="https://joueurs-info-service.fr/" target="_blank" rel="noopener">joueurs-info-service.fr</a> (09 74 75 13 13 — appel non surtaxé). Interdit aux mineurs.</p>
+</section>
+
+<div class="hint">Avancer<i></i></div>
+<div class="progress"><i></i></div>
+<nav class="switch">
+  <a href="m1-monogramme.html"><b>01</b><span>Monogramme</span></a>
+  <a href="m2-maquette.html"><b>02</b><span>Maquette</span></a>
+  <a href="m3-grand-hall.html" class="on"><b>03</b><span>Grand Hall</span></a>
+</nav>
+<div id="scroll"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script type="module" src="m3.js"></script>
+</body>
+</html>
