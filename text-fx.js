@@ -81,7 +81,7 @@ export function init({ reduceMotion, lenis }) {
   // compteurs
   document.querySelectorAll('[data-count]').forEach(el => { odometer(el); io.observe(el); });
   // grandes phrases hors ouverture : lecture au défilement
-  const scrubs = [...document.querySelectorAll('.lead.big')].filter(el => !el.closest('.chapter'));
+  const scrubs = [...document.querySelectorAll('.lead.big')].filter(el => !el.closest('.chapter, .gm'));
   const update = () => scrubs.forEach(el => { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; scrub(el, clamp01((innerHeight * .88 - r.top) / (innerHeight * .55 + r.height * .4))); });
   if (scrubs.length) { lenis.on('scroll', update); update(); }
   return { scrubVisible: update };

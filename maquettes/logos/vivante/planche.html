@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lignes de nuit · Groupe TRANCHANT</title>
+<link rel="icon" href="symbole.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts.css">
+<style>
+:root{
+  --encre:#0E1014;--nuit:#16191F;--graphite:#262A32;--craie:#EEEAE2;--brume:#8C919B;--braise:#FF5A3C;--papier:#F2EEE7;--ink:#121418;
+  --line:rgba(238,234,226,.12);--muted:rgba(238,234,226,.62);
+  --g:clamp(16px,5vw,72px);
+}
+*{box-sizing:border-box}
+html{background:var(--encre)}
+body{margin:0;background:var(--encre);color:var(--craie);font:16px/1.55 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:Archivo,sans-serif;font-stretch:125%;font-weight:500;margin:0;letter-spacing:-.005em}
+.num{font-family:Inter,sans-serif;font-variant-numeric:tabular-nums}
+.eyebrow{font:600 11px/1 Manrope;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px}
+.eyebrow b{color:var(--braise);font-weight:700}
+section{padding:clamp(64px,10vw,128px) var(--g);border-top:1px solid var(--line)}
+.wrap{max-width:1296px;margin:0 auto}
+.lede{font:400 clamp(22px,2.6vw,34px)/1.28 Manrope;letter-spacing:-.01em;max-width:30ch;margin:22px 0 0}
+.lede em{font-style:normal;color:var(--braise)}
+p.small{color:var(--muted);font-size:14px;max-width:62ch}
+/* ——— Hero ——— */
+#hero{position:relative;height:100svh;min-height:560px;border:0;padding:0;overflow:hidden;background:var(--encre)}
+#hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.hbar{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;padding:20px var(--g);background:var(--encre);border-bottom:1px solid var(--line);z-index:2}
+.hbar svg{height:28px;width:auto;display:block}
+.hbar span{font:600 11px/1 Manrope;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.hpanel{position:absolute;left:0;bottom:0;z-index:2;background:var(--encre);padding:clamp(22px,3vw,40px) var(--g) clamp(26px,3.4vw,44px);max-width:min(580px,100%);border-top:1px solid var(--line);border-right:1px solid var(--line)}
+.hpanel h1{font-size:clamp(38px,5.4vw,78px);line-height:.95;letter-spacing:-.02em;margin:14px 0 16px}
+.hpanel p{margin:0;color:var(--muted);max-width:44ch;font-size:15px}
+.clock{margin-top:18px;display:flex;gap:10px;align-items:center;font:500 13px/1.3 Inter;color:var(--craie)}
+.clock i{width:8px;height:8px;border-radius:50%;background:var(--braise);display:inline-block;animation:bat var(--t,5s) ease-in-out infinite}
+@keyframes bat{0%,100%{transform:scale(.6);opacity:.55}50%{transform:scale(1.25);opacity:1}}
+/* ——— Règle ——— */
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px}
+.cols3>div{background:var(--encre);padding:28px 26px 30px}
+.cols3 h3{font-size:20px;margin:14px 0 8px}
+.cols3 p{margin:0;color:var(--muted);font-size:14px}
+.cols3 .viz{height:170px;margin:10px 0 18px}.cols3 .viz.auto{height:auto;min-height:170px}
+.cols3 svg{display:block;width:100%;height:100%}
+.gestes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gestes figure{margin:0}.gestes svg{width:100%;height:auto;aspect-ratio:1}
+.gestes figcaption{font:600 9.5px/1.2 Manrope;letter-spacing:.06em;color:var(--muted);margin-top:3px;text-align:center}
+.garde{margin-top:28px;display:flex;gap:16px;align-items:flex-start;color:var(--muted);font-size:14px;max-width:80ch}
+.garde b{color:var(--craie)}
+/* ——— Logo ——— */
+.logos{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.tile{border-radius:4px;display:flex;align-items:center;justify-content:center;padding:clamp(36px,7vw,96px) clamp(22px,5vw,64px);min-height:340px}
+.tile.dark{background:var(--nuit);box-shadow:inset 0 0 0 1px var(--line)}
+.tile.light{background:var(--papier)}
+.tile svg{width:100%;max-width:560px;height:auto;display:block}
+.mono{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.mono .tile{min-height:180px;padding:36px 28px}
+.mono .tile svg{max-width:320px}
+.cap{font:600 10.5px/1 Manrope;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+/* ——— Générateur ——— */
+.gen{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);margin-top:48px;align-items:start}
+.stage{background:var(--nuit);box-shadow:inset 0 0 0 1px var(--line);border-radius:4px;padding:clamp(18px,4vw,48px);position:relative}
+.stage svg.big{width:100%;height:auto;display:block;aspect-ratio:1}
+.stage .lk{display:flex;align-items:center;gap:16px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+.stage .lk svg{height:46px;width:auto;flex:none}
+.stage .lk .nm{font:600 12px/1.35 Manrope;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.stage .lk .nm b{display:block;color:var(--craie);letter-spacing:.06em;font:500 15px/1.3 Archivo;font-stretch:112%;text-transform:none;margin-bottom:2px}
+.ctrl label{display:block;font:600 10.5px/1 Manrope;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.ctrl input[type=text],.ctrl select{width:100%;background:var(--encre);color:var(--craie);border:1px solid rgba(238,234,226,.25);border-radius:3px;padding:13px 14px;font:500 16px/1.2 Manrope;appearance:none;-webkit-appearance:none}
+.ctrl select{background-image:linear-gradient(45deg,transparent 50%,var(--craie) 50%),linear-gradient(135deg,var(--craie) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.ctrl label.hv{display:flex}.hv output{text-transform:none;letter-spacing:0}
+.ctrl input:focus,.ctrl select:focus{outline:2px solid var(--braise);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{background:transparent;color:var(--craie);border:1px solid rgba(238,234,226,.22);border-radius:99px;padding:7px 12px;font:500 12.5px/1 Manrope;cursor:pointer}
+.chips button.on,.chips button:hover{background:var(--craie);color:var(--encre);border-color:var(--craie)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input[type=range]{width:100%;accent-color:var(--braise)}
+.hv{display:flex;justify-content:space-between;align-items:baseline}
+.hv output{font:500 13px Inter;color:var(--craie)}
+.read{margin-top:26px;border-top:1px solid var(--line)}
+.read div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.read dt,.read span:first-child{color:var(--muted);font:600 10.5px/1.6 Manrope;letter-spacing:.18em;text-transform:uppercase}
+.read span:last-child{font-family:Inter;font-size:13px}
+/* ——— Famille ——— */
+.fam{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:48px}
+.fam figure{margin:0;background:var(--encre);padding:clamp(20px,3vw,34px)}
+.fam svg{width:100%;height:auto;display:block;aspect-ratio:1}
+.fam figcaption{margin-top:16px;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.fam figcaption b{font:500 15px/1.25 Archivo;font-stretch:112%}
+.fam figcaption span{font:500 11.5px/1.4 Inter;color:var(--muted);text-align:right}
+/* ——— Vivante ——— */
+.viv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);margin-top:48px;align-items:center}
+.viv .stage svg{width:100%;height:auto;display:block;aspect-ratio:1}
+.state{font:500 clamp(40px,6vw,76px)/1 Inter;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.state small{display:block;font:600 11px/1 Manrope;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.meter{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:26px 0}
+.meter div{background:var(--encre);padding:16px}
+.meter span{display:block;font:600 10px/1 Manrope;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.meter b{font:500 22px/1 Inter;font-variant-numeric:tabular-nums}
+.btn{background:transparent;border:1px solid rgba(238,234,226,.3);color:var(--craie);border-radius:99px;padding:9px 16px;font:600 12px/1 Manrope;letter-spacing:.06em;cursor:pointer;margin-top:12px}
+.btn:hover{border-color:var(--craie)}
+.hours{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
+.hours figure{margin:0}.hours svg{width:100%;height:auto;display:block;aspect-ratio:1;background:var(--nuit);border-radius:3px}
+.hours figcaption{margin-top:10px;font:500 12px/1.4 Inter;color:var(--muted)}
+.hours figcaption b{color:var(--craie);font-weight:500}
+/* ——— Fixe ——— */
+.fixe{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.sizes{display:flex;align-items:flex-end;gap:clamp(16px,3vw,36px);flex-wrap:wrap}
+.sizes figure{margin:0;text-align:center}
+.sizes figcaption{font:500 11px Inter;color:var(--muted);margin-top:10px}
+.tile.light .sizes figcaption{color:#6b6f77}
+.sizes img,.sizes svg{display:block}
+.fixe .tile{justify-content:flex-start;min-height:0;padding:40px 32px}
+/* ——— Palette / typo ——— */
+.pal{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:48px}
+.pal div{border-radius:3px;aspect-ratio:3/4;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;font:600 10.5px/1.4 Manrope;letter-spacing:.06em}
+.pal div span{font:500 11px Inter;letter-spacing:0;opacity:.75}
+.typo{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:28px}
+.typo>div{background:var(--encre);padding:26px}
+.typo .sp{font:500 clamp(34px,4.4vw,58px)/1 Archivo;font-stretch:125%;letter-spacing:.04em}
+.typo .tag{font:600 10px/1 Manrope;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.typo p{margin:12px 0 0;color:var(--muted);font-size:13.5px}
+/* ——— Situations ——— */
+.sit{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.sit figure{margin:0}
+.sit .frame{border-radius:4px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line);background:var(--nuit)}
+.sit svg{display:block;width:100%;height:auto}
+.sit figcaption{margin-top:12px;font:600 10.5px/1 Manrope;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+footer{padding:40px var(--g) 56px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media (max-width:900px){
+  .cols3{grid-template-columns:1fr}
+  .logos,.gen,.viv,.fixe,.sit{grid-template-columns:1fr}
+  .mono{grid-template-columns:1fr}
+  .fam{grid-template-columns:repeat(2,1fr)}
+  .hours{grid-template-columns:repeat(2,1fr)}
+  .pal{grid-template-columns:repeat(4,1fr)}
+  .typo{grid-template-columns:1fr}
+  .tile{min-height:220px}
+}
+@media (max-width:560px){
+  .fam figcaption{flex-direction:column;gap:4px}.fam figcaption span{text-align:left}
+  .hpanel{border-right:0;max-width:100%}
+  .hbar span{display:none}
+  .read div{grid-template-columns:92px 1fr}
+}
+@media (prefers-reduced-motion:reduce){.clock i{animation:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="wmT" viewBox="0 -686 9316 686"><path transform="translate(0 0)" d="M334.8916015625 0.0V-572.9444580078125H26.972900390625V-686.7567749023438H771.9471435546875V-572.9444580078125H464.0284423828125V0.0Z"/><path transform="translate(949 0)" d="M102.59417724609375 0.0V-686.7567749023438H631.7574462890625Q702.3251953125 -686.7567749023438 748.4603576660156 -658.3512878417969Q794.5955200195312 -629.94580078125 817.8387451171875 -582.418701171875Q841.0819702148438 -534.8916015625 841.0819702148438 -476.3780517578125Q841.0819702148438 -413.67547607421875 808.7306823730469 -360.9051513671875Q776.37939453125 -308.13482666015625 710.8658447265625 -281.05352783203125L858.3251953125 0.0H713.1070556640625L581.756103515625 -257.1612548828125H231.73101806640625V0.0ZM231.73101806640625 -364.91937255859375H598.5135498046875Q651.1077270507812 -364.91937255859375 680.0128784179688 -395.581298828125Q708.9180297851562 -426.24322509765625 708.9180297851562 -474.10772705078125Q708.9180297851562 -506.51287841796875 696.2154541015625 -529.9315795898438Q683.5128784179688 -553.3502807617188 658.83740234375 -565.7960815429688Q634.1619262695312 -578.2418823242188 598.5135498046875 -578.2418823242188H231.73101806640625Z"/><path transform="translate(2010 0)" d="M27.8916015625 0.0 374.56707763671875 -686.7567749023438H522.2445678710938L868.9200439453125 0.0H726.9722290039062L653.2161254882812 -148.32318115234375H234.7845458984375L161.0284423828125 0.0ZM286.514892578125 -253.81097412109375H601.2425537109375L510.05419921875 -440.539306640625Q504.5677490234375 -452.0257568359375 495.1893615722656 -472.5528564453125Q485.81097412109375 -493.0799560546875 476.31097412109375 -514.8502807617188Q466.81097412109375 -536.62060546875 458.9461364746094 -553.7286682128906Q451.081298828125 -570.8367309570312 448.37872314453125 -575.2418823242188H440.37872314453125Q430.89227294921875 -554.51220703125 418.7842102050781 -528.0257568359375Q406.6761474609375 -501.539306640625 395.8113098144531 -477.539306640625Q384.94647216796875 -453.539306640625 377.94647216796875 -439.78253173828125Z"/><path transform="translate(3057 0)" d="M102.59417724609375 0.0V-686.7567749023438H225.8929443359375L630.593505859375 -285.86785888671875Q642.8638305664062 -275.111083984375 659.2828674316406 -257.5704345703125Q675.701904296875 -240.02978515625 693.1344909667969 -222.09719848632812Q710.5670776367188 -204.16461181640625 722.864501953125 -189.8671875H730.6212768554688Q729.864501953125 -210.16461181640625 728.7293395996094 -240.20526123046875Q727.5941772460938 -270.24591064453125 727.5941772460938 -290.9755859375V-686.7567749023438H852.1903686523438V0.0H733.3509521484375L326.677490234375 -405.13214111328125Q301.623291015625 -429.67279052734375 274.79876708984375 -458.6189270019531Q247.9742431640625 -487.5650634765625 231.9200439453125 -504.6192626953125H224.9200439453125Q225.67681884765625 -489.6734619140625 226.43359375 -457.659912109375Q227.19036865234375 -425.6463623046875 227.19036865234375 -388.997314453125V0.0Z"/><path transform="translate(4162 0)" d="M488.72967529296875 12.0Q352.16192626953125 12.0 259.2564392089844 -28.621612548828125Q166.3509521484375 -69.24322509765625 119.59417724609375 -148.74322509765625Q72.83740234375 -228.24322509765625 72.83740234375 -343.75677490234375Q72.83740234375 -513.7567749023438 179.74288940429688 -606.2567749023438Q286.64837646484375 -698.7567749023438 487.0 -698.7567749023438Q602.2703247070312 -698.7567749023438 690.0406494140625 -667.3377380371094Q777.8109741210938 -635.918701171875 826.9461364746094 -575.3780517578125Q876.081298828125 -514.83740234375 876.081298828125 -426.83740234375H749.2147827148438Q749.2147827148438 -482.91802978515625 715.9041442871094 -519.093505859375Q682.593505859375 -555.2689819335938 623.2154541015625 -572.7554321289062Q563.83740234375 -590.2418823242188 484.4864501953125 -590.2418823242188Q400.5948486328125 -590.2418823242188 337.8384094238281 -563.6473693847656Q275.08197021484375 -537.0528564453125 240.16326904296875 -485.0396423339844Q205.24456787109375 -433.02642822265625 205.24456787109375 -356.75677490234375V-332.0Q205.24456787109375 -253.51422119140625 240.406494140625 -201.24423217773438Q275.56842041015625 -148.9742431640625 339.0680847167969 -122.74456787109375Q402.5677490234375 -96.514892578125 486.94580078125 -96.514892578125Q568.5670776367188 -96.514892578125 627.8370666503906 -113.98779296875Q687.1070556640625 -131.460693359375 719.7960815429688 -167.63616943359375Q752.485107421875 -203.8116455078125 752.485107421875 -258.40582275390625H877.081298828125Q877.081298828125 -171.6761474609375 828.081298828125 -111.135498046875Q779.081298828125 -50.5948486328125 691.8109741210938 -19.29742431640625Q604.5406494140625 12.0 488.72967529296875 12.0Z"/><path transform="translate(5260 0)" d="M102.59417724609375 0.0V-686.7567749023438H231.73101806640625V-407.27099609375H722.810302734375V-686.7567749023438H851.9471435546875V0.0H722.810302734375V-293.45867919921875H231.73101806640625V0.0Z"/><path transform="translate(6365 0)" d="M27.8916015625 0.0 374.56707763671875 -686.7567749023438H522.2445678710938L868.9200439453125 0.0H726.9722290039062L653.2161254882812 -148.32318115234375H234.7845458984375L161.0284423828125 0.0ZM286.514892578125 -253.81097412109375H601.2425537109375L510.05419921875 -440.539306640625Q504.5677490234375 -452.0257568359375 495.1893615722656 -472.5528564453125Q485.81097412109375 -493.0799560546875 476.31097412109375 -514.8502807617188Q466.81097412109375 -536.62060546875 458.9461364746094 -553.7286682128906Q451.081298828125 -570.8367309570312 448.37872314453125 -575.2418823242188H440.37872314453125Q430.89227294921875 -554.51220703125 418.7842102050781 -528.0257568359375Q406.6761474609375 -501.539306640625 395.8113098144531 -477.539306640625Q384.94647216796875 -453.539306640625 377.94647216796875 -439.78253173828125Z"/><path transform="translate(7412 0)" d="M102.59417724609375 0.0V-686.7567749023438H225.8929443359375L630.593505859375 -285.86785888671875Q642.8638305664062 -275.111083984375 659.2828674316406 -257.5704345703125Q675.701904296875 -240.02978515625 693.1344909667969 -222.09719848632812Q710.5670776367188 -204.16461181640625 722.864501953125 -189.8671875H730.6212768554688Q729.864501953125 -210.16461181640625 728.7293395996094 -240.20526123046875Q727.5941772460938 -270.24591064453125 727.5941772460938 -290.9755859375V-686.7567749023438H852.1903686523438V0.0H733.3509521484375L326.677490234375 -405.13214111328125Q301.623291015625 -429.67279052734375 274.79876708984375 -458.6189270019531Q247.9742431640625 -487.5650634765625 231.9200439453125 -504.6192626953125H224.9200439453125Q225.67681884765625 -489.6734619140625 226.43359375 -457.659912109375Q227.19036865234375 -425.6463623046875 227.19036865234375 -388.997314453125V0.0Z"/><path transform="translate(8517 0)" d="M334.8916015625 0.0V-572.9444580078125H26.972900390625V-686.7567749023438H771.9471435546875V-572.9444580078125H464.0284423828125V0.0Z"/></symbol>
+<symbol id="wmG" viewBox="0 -686 8217 686"><path transform="translate(0 0)" d="M483 12Q275 12 171.0 -76.0Q67 -164 67 -343Q67 -460 120.0 -539.5Q173 -619 273.5 -659.0Q374 -699 514 -699Q605 -699 680.0 -683.5Q755 -668 809.5 -636.5Q864 -605 893.5 -557.0Q923 -509 923 -444H775Q775 -480 754.0 -505.0Q733 -530 697.0 -544.5Q661 -559 615.5 -565.5Q570 -572 520 -572Q456 -572 401.5 -559.5Q347 -547 307.0 -520.5Q267 -494 245.0 -453.0Q223 -412 223 -356V-332Q223 -254 257.0 -206.5Q291 -159 353.5 -137.0Q416 -115 501 -115Q595 -115 655.5 -132.0Q716 -149 745.5 -181.0Q775 -213 775 -256V-264H497V-384H924V0H830L814 -90Q777 -54 725.5 -31.5Q674 -9 612.5 1.5Q551 12 483 12Z"/><path transform="translate(1533 0)" d="M97 0V-687H641Q714 -687 760.5 -657.5Q807 -628 830.0 -579.5Q853 -531 853 -472Q853 -411 821.5 -357.5Q790 -304 724 -274L870 0H699L573 -245H249V0ZM249 -371H599Q646 -371 671.5 -398.5Q697 -426 697 -469Q697 -498 686.0 -518.5Q675 -539 653.0 -549.5Q631 -560 599 -560H249Z"/><path transform="translate(2973 0)" d="M508.59838274932616 12.0Q372.46900269541777 12.0 273.2345013477089 -29.5Q174 -71 120.5 -150.5Q67 -230 67.0 -343.52697095435684Q67 -458 120.5 -537.0Q174 -616 273.2345013477089 -657.5Q372.46900269541777 -699.0 508.59838274932616 -699.0Q646 -699 745.0 -657.5Q844 -616 897.5 -537.0Q951 -458 951.0 -343.52697095435684Q951 -230 897.5 -150.5Q844 -71 745.0 -29.5Q646 12 508.59838274932616 12.0ZM509 -115Q571 -115 623.0 -129.0Q675 -143 713.5 -170.0Q752 -197 773.5 -238.08333333333334Q795.0 -279.1666666666667 795 -333V-356Q795.0 -409.63013698630135 773.5 -450.31506849315065Q752 -491 713.5 -518.0Q675 -545 623.0 -558.5Q571 -572 509 -572Q447 -572 395.0 -558.5Q343 -545 304.5 -518.0Q266 -491 245.0 -450.31506849315065Q224.0 -409.63013698630135 224 -356V-333Q224.0 -279.1666666666667 245.0 -238.08333333333334Q266 -197 304.5 -170.0Q343 -143 395.0 -129.0Q447 -115 509 -115Z"/><path transform="translate(4511 0)" d="M472 12Q343 12 258.5 -28.0Q174 -68 132.5 -141.5Q91 -215 91 -315V-687H243V-322Q243 -223 302.5 -169.0Q362 -115 472 -115Q582 -115 641.5 -169.0Q701 -223 701 -322V-687H853V-315Q853 -215 811.5 -141.5Q770 -68 686.0 -28.0Q602 12 472 12Z"/><path transform="translate(5975 0)" d="M97 0V-687H601Q668 -687 717.5 -658.0Q767 -629 794.5 -578.5Q822 -528 822.0 -462.0148148148148Q822 -397 794.0 -345.5Q766 -294 715.5 -265.0Q665 -236 597 -236H249V0ZM249 -363H555Q608.3333333333334 -363.0 637.6666666666667 -389.06506849315065Q667.0 -415.13013698630135 667.0 -461.0753424657534Q667 -492 653.9714285714285 -514.0540540540541Q640.9428571428572 -536.1081081081081 615.9714285714285 -548.0540540540541Q591 -560 555 -560H249Z"/><path transform="translate(7351 0)" d="M97 0V-687H792V-560H249V-413H732V-286H249V-127H800V0Z"/></symbol></defs></svg>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero" aria-label="Ouverture">
+  <canvas id="hcv" aria-hidden="true"></canvas>
+  <div class="hbar"><svg id="hbarLogo" viewBox="0 0 10 10" aria-label="Groupe TRANCHANT"></svg><span>Piste « vivante » · Série 2</span></div>
+  <div class="hpanel">
+    <div class="eyebrow"><b>●</b> Lignes de nuit</div>
+    <h1>Un logo<br>qui respire.</h1>
+    <p>Chaque établissement plie les sept lignes du Groupe à sa manière. Passez la main sur le champ : vous êtes un lieu de plus.</p>
+    <div class="clock num" id="clock"><i></i><span>Paris</span></div>
+  </div>
+</section>
+
+<!-- ═══ CONCEPT ═══ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><b>01</b> Le concept</div>
+    <p class="lede">Le Groupe TRANCHANT n’a pas un logo, il a <em>une règle</em>. Sept lignes d’horizon, une par métier, que chaque lieu plie selon trois données : où il est, ce qu’il fait, l’heure à laquelle il ouvre. La nuit, les lignes respirent au rythme de l’heure réelle.</p>
+    <div class="cols3">
+      <div>
+        <div class="eyebrow"><b>A</b> Lieu → position</div>
+        <div class="viz"><svg id="vizLieu" viewBox="0 0 200 150"></svg></div>
+        <h3>Vu depuis Paris</h3>
+        <p>Les coordonnées GPS sont mesurées depuis le siège. Le pli se place dans la direction exacte du lieu ; la distance est compressée pour rester dans le carré.</p>
+      </div>
+      <div>
+        <div class="eyebrow"><b>B</b> Activité → geste</div>
+        <div class="viz auto"><div class="gestes" id="vizGestes"></div></div>
+        <h3>Huit gestes, une seule courbe</h3>
+        <p>Chaque geste dérive de la même cloche de Gauss (et de ses dérivées). La parenté est mathématique, pas décorative.</p>
+      </div>
+      <div>
+        <div class="eyebrow"><b>C</b> Heure → inclinaison</div>
+        <div class="viz"><svg id="vizHeure" viewBox="0 0 200 150"></svg></div>
+        <h3>Un cadran de 24 heures</h3>
+        <p>L’heure d’ouverture est un point sur un cadran : son abscisse incline le geste (jusqu’à 50°), son ordonnée l’étire ou le resserre.</p>
+      </div>
+    </div>
+    <div class="garde"><svg width="40" height="22" viewBox="0 0 40 22" style="flex:none;margin-top:2px"><path d="M0 4h40M0 11h40M0 18h40" stroke="#EEEAE2" stroke-width="2"/></svg><p style="margin:0"><b>Pas de hasard, pas de forme ratée.</b> Les lignes ne se croisent jamais et ne se touchent jamais : l’amplitude de chaque pli est calculée pour atteindre exactement la même tension. Elles entrent et sortent toujours à l’horizontale. L’épaisseur suit l’écartement, comme une gravure en taille-douce.</p></div>
+  </div>
+</section>
+
+<!-- ═══ LOGO ═══ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><b>02</b> Le logo maître</div>
+    <p class="lede">La forme du Groupe : le siège, à Paris, au point zéro. Son geste est <em>le pli</em>, à 3 h du matin, l’heure où la nuit est pleine.</p>
+    <div class="logos">
+      <div class="tile dark"><svg id="lkDark" role="img" aria-label="Logo Groupe TRANCHANT sur fond sombre"></svg></div>
+      <div class="tile light"><svg id="lkLight" role="img" aria-label="Logo Groupe TRANCHANT sur fond clair"></svg></div>
+    </div>
+    <div class="mono">
+      <div><div class="tile light" style="background:#fff"><svg id="lkMonoN" role="img" aria-label="Monochrome noir"></svg></div><div class="cap">Monochrome noir</div></div>
+      <div><div class="tile dark" style="background:#000"><svg id="lkMonoB" role="img" aria-label="Monochrome blanc"></svg></div><div class="cap">Monochrome blanc</div></div>
+      <div><div class="tile" style="background:var(--braise)"><svg id="lkMonoR" role="img" aria-label="Monochrome sur braise"></svg></div><div class="cap">Ton sur braise</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GÉNÉRATEUR ═══ -->
+<section id="gen">
+  <div class="wrap">
+    <div class="eyebrow"><b>03</b> Le générateur</div>
+    <p class="lede">Tapez un établissement. Sa forme <em>se calcule</em>, elle ne se dessine pas.</p>
+    <div class="gen">
+      <div class="stage">
+        <svg class="big" id="genSvg" viewBox="-10 -10 120 120" role="img" aria-label="Forme générée"></svg>
+        <div class="lk"><svg id="genLk" viewBox="0 0 100 100"></svg><div class="nm"><b id="genNm">Casino — Ville A</b><span id="genSub">Groupe TRANCHANT</span></div></div>
+      </div>
+      <div class="ctrl">
+        <label>Établissements du Groupe</label>
+        <div class="chips" id="chips"></div>
+        <label for="gName">Nom de l’établissement</label>
+        <input type="text" id="gName" autocomplete="off" placeholder="ex. Hôtel — Ville F">
+        <div class="row2">
+          <div><label for="gAct">Activité</label><select id="gAct"></select></div>
+          <div><label for="gVille">Lieu</label><select id="gVille"></select></div>
+        </div>
+        <label for="gH" class="hv"><span>Heure d’ouverture</span><output id="gHo" class="num">20 h 00</output></label>
+        <input type="range" id="gH" min="0" max="23.75" step="0.25" value="20">
+        <div class="read" id="gRead"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAMILLE ═══ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><b>04</b> La famille</div>
+    <p class="lede">Neuf lieux, neuf formes. <em>Aucune n’a été dessinée</em> : toutes sortent de la même règle.</p>
+    <div class="fam" id="fam"></div>
+  </div>
+</section>
+
+<!-- ═══ VIVANTE ═══ -->
+<section id="viv">
+  <div class="wrap">
+    <div class="eyebrow"><b>05</b> L’animation vivante</div>
+    <p class="lede">Le jour, la forme se tient presque immobile. La nuit, elle <em>respire</em> : plus ample et plus lente à mesure que la nuit avance, au plus fort vers 1 h du matin.</p>
+    <div class="viv">
+      <div class="stage"><svg id="vivSvg" viewBox="-10 -10 120 120" role="img" aria-label="Logo animé"></svg></div>
+      <div>
+        <div class="state"><small id="vivMode">Heure réelle · Paris</small><span id="vivH">--:--</span></div>
+        <div class="meter"><div><span>Nuit</span><b id="vivN">--</b></div><div><span>Un souffle</span><b id="vivT">--</b></div><div><span>Amplitude</span><b id="vivB">--</b></div><div><span>Phase</span><b id="vivP">--</b></div></div>
+        <label for="vivR" class="hv" style="font:600 10.5px/1 Manrope;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)"><span>Simuler une heure</span><output id="vivRo" class="num" style="letter-spacing:0">—</output></label>
+        <input type="range" id="vivR" min="0" max="23.75" step="0.25" value="23" style="margin-top:12px">
+        <button class="btn" id="vivReal">Revenir à l’heure réelle</button>
+      </div>
+    </div>
+    <div class="hours" id="hours"></div>
+    <p class="small" style="margin-top:16px">Chaque vignette superpose les deux extrêmes du souffle : à 13 h l’enveloppe est un trait, à 1 h du matin elle s’ouvre.</p>
+  </div>
+</section>
+
+<!-- ═══ FIXE ═══ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><b>06</b> La version fixe</div>
+    <p class="lede">Pour l’impression et le favicon, la forme se fige. <em>Sous 48 px</em>, elle passe à cinq lignes plus épaisses.</p>
+    <div class="fixe">
+      <div class="tile dark"><div class="sizes" id="szD"></div></div>
+      <div class="tile light"><div class="sizes" id="szL"></div></div>
+    </div>
+    <p class="small" style="margin-top:16px">Règles : zone de protection d’un interligne autour du lockup ; le point braise n’est jamais retiré sauf en monochrome ; la forme n’est jamais redessinée à la main, toujours régénérée.</p>
+  </div>
+</section>
+
+<!-- ═══ PALETTE ═══ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><b>07</b> Palette et typographie</div>
+    <p class="lede">Encre et craie pour la nuit, <em>braise</em> pour le lieu. Une seule couleur vive : le point où l’on est.</p>
+    <div class="pal" id="pal"></div>
+    <div class="typo">
+      <div><div class="tag">Wordmark et titres · Archivo 500, chasse 125 %</div><div class="sp">TRANCHANT</div><p>Capitales larges, approche +150. Hauteur de capitale = deux interlignes du symbole.</p></div>
+      <div><div class="tag">Texte · Manrope</div><div style="font:400 22px/1.35 Manrope">La nuit commence ici, depuis 1988.</div><p>200 à 800. Corps courant, interfaces.</p></div>
+      <div><div class="tag">Données · Inter</div><div class="num" style="font:500 22px/1.35 Inter">48,86° N · 2,35° E<br>20 h 00 → 23°</div><p>Chiffres tabulaires : coordonnées, heures, paramètres.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SITUATIONS ═══ -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow"><b>08</b> Mises en situation</div>
+    <p class="lede">Le Groupe signe avec le pli ; <em>chaque lieu</em> signe avec sa propre forme.</p>
+    <div class="sit">
+      <figure><div class="frame"><svg id="mWeb" viewBox="0 0 640 400"></svg></div><figcaption>En-tête du site</figcaption></figure>
+      <figure><div class="frame"><svg id="mCard" viewBox="0 0 640 400"></svg></div><figcaption>Carte de visite · recto et verso</figcaption></figure>
+      <figure><div class="frame"><svg id="mApp" viewBox="0 0 640 400"></svg></div><figcaption>Icône d’application</figcaption></figure>
+      <figure><div class="frame"><svg id="mFac" viewBox="0 0 640 400"></svg></div><figcaption>Enseigne sur façade, la nuit</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<footer><span>Groupe TRANCHANT · piste « vivante » · Lignes de nuit</span><span>Archivo, Manrope, Inter · SVG et canvas, sans image externe</span></footer>
+
+<script>
+/*CORE*/
+// ——— Système « Lignes de nuit » · Groupe TRANCHANT ———
+// Sept lignes d'horizon. Chaque lieu les plie selon trois données : où il est, ce qu'il fait, quand il ouvre.
+const TAU = Math.PI * 2;
+const G = (u, v, a, b) => Math.exp(-(u * u / (a * a) + v * v / (b * b)));
+// Les gestes : une même cloche de Gauss et ses dérivées (fonctions d'Hermite). Même famille par construction.
+const GESTES = {
+  groupe:     { nom: 'Le pli',          act: 'Groupe (siège)',            k: (u, v) => (u / .2) * G(u, v, .22, .2) },
+  casino:     { nom: 'Le soulèvement',  act: 'Casinos et clubs de jeux',  k: (u, v) => G(u, v, .27, .17) },
+  hotel:      { nom: 'Le repos',        act: 'Hôtels',                    k: (u, v) => -G(u, v, .27, .17) },
+  restaurant: { nom: 'La tablée',       act: 'Restaurants et bars',       k: (u, v) => G(u - .12, v, .13, .17) + G(u + .12, v, .13, .17) },
+  spectacle:  { nom: 'La scène',        act: 'Concerts et spectacles',    k: (u, v) => (1 - 2 * u * u / .045) * G(u, v, .2, .18) },
+  reception:  { nom: 'L’accueil',       act: 'Réceptions et séminaires',  k: (u, v) => -(1 - 2 * u * u / .045) * G(u, v, .2, .18) },
+  techno:     { nom: 'L’onde',          act: 'Technologies',              k: (u, v) => (u / .16) * (1.5 - u * u / .03) * G(u, v, .2, .18) },
+  sport:      { nom: 'L’élan',          act: 'Sports',                    k: (u, v) => (u / .26) * G(u, v, .3, .12) },
+};
+const PARIS = { lat: 48.8566, lon: 2.3522 };
+
+// Champ : f(x,y) = y + Σ amplitude × geste(position, rotation). Les lignes sont les niveaux de f.
+// Fenêtre : les lignes entrent et sortent toujours à l'horizontale (bord net du carré).
+const lisse = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+function champ(sites, fen = true) {
+  for (const s of sites) { s.c = Math.cos(s.a); s.n = Math.sin(s.a); s.sc = s.sc || 1; s.m = s.m == null ? 1 : s.m; s.K = GESTES[s.k].k; s.e = s.e || 1; }
+  return (x, y) => {
+    let p = 0;
+    for (const s of sites) {
+      const dx = (x - s.x) / s.sc, dy = (y - s.y) / s.sc;
+      if (dx * dx + dy * dy > 1.2) continue;
+      p += s.amp * s.m * s.sc * s.K((dx * s.c + dy * s.n) / s.e, -dx * s.n + dy * s.c);
+    }
+    return fen ? p * lisse(x / .2) * lisse((1 - x) / .2) : p;
+  };
+}
+// Garde-fou : on règle l'amplitude pour que chaque forme ait exactement la même « tension ».
+// Les lignes ne se croisent jamais (df/dy ≥ cible > 0) et ne se serrent jamais trop.
+function tension(sites, cible = .2, box = [-.1, 1.1, -.1, 1.1], serre = 7, fen = true) {
+  sites.forEach(s => s.amp = 1);
+  const P = champ(sites, fen), h = .002, N = 70;
+  let mn = 0, mx = 0;
+  for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
+    const x = box[0] + (box[1] - box[0]) * i / N, y = box[2] + (box[3] - box[2]) * j / N;
+    const d = (P(x, y + h) - P(x, y - h)) / (2 * h);
+    if (d < mn) mn = d; if (d > mx) mx = d;
+  }
+  let k = mn < 0 ? (cible - 1) / mn : 1;
+  if (mx > 0) k = Math.min(k, (serre - 1) / mx);
+  sites.forEach(s => s.amp = k);
+  return sites;
+}
+// Résolution d'une ligne : pour chaque x, on cherche y tel que y + P(x,y) = niveau (Newton, toujours monotone).
+function resoudre(P, x, lv, y, it) {
+  const h = .0015; let fy = 1;
+  for (let k = 0; k < it; k++) {
+    const p = P(x, y); fy = 1 + (P(x, y + h) - P(x, y - h)) / (2 * h);
+    let st = (y + p - lv) / Math.max(fy, .12); if (st > .15) st = .15; if (st < -.15) st = -.15;
+    y -= st; if (Math.abs(st) < 1e-5) break;
+  }
+  return [x, y, fy];
+}
+function lignes(P, L, x0 = 0, x1 = 1, R = 140, prev = null) {
+  const out = [];
+  for (let l = 0; l < L; l++) {
+    const lv = (l + .5) / L, row = [];
+    for (let i = 0; i <= R; i++) {
+      const x = x0 + (x1 - x0) * i / R;
+      row.push(resoudre(P, x, lv, prev ? prev[l][i][1] : lv, prev ? 4 : 14));
+    }
+    out.push(row);
+  }
+  return out;
+}
+// Ruban : l'épaisseur suit l'espacement local (gravure en taille-douce : densité d'encre constante).
+function ruban(row, w, mod = true) {
+  const top = [], bot = [], n = row.length;
+  for (let i = 0; i < n; i++) {
+    const p = row[i], a = row[Math.max(0, i - 1)], b = row[Math.min(n - 1, i + 1)];
+    let tx = b[0] - a[0], ty = b[1] - a[1]; const d = Math.hypot(tx, ty) || 1; tx /= d; ty /= d;
+    const k = mod ? Math.min(1.55, Math.max(.55, Math.pow(1 / Math.max(p[2], .05), .8))) : 1;
+    const hw = w * k / 2;
+    top.push([p[0] - ty * hw, p[1] + tx * hw]); bot.push([p[0] + ty * hw, p[1] - tx * hw]);
+  }
+  return top.concat(bot.reverse());
+}
+function cheminSVG(lns, w, S = 100, ox = 0, oy = 0, mod = true) {
+  const f = q => (ox + q[0] * S).toFixed(2) + ' ' + (oy + q[1] * S).toFixed(2);
+  return lns.map(r => { const pts = ruban(r, w, mod); return 'M' + pts.map(f).join('L') + 'Z'; }).join('');
+}
+// Données → site. Position : décalage réel par rapport au siège parisien (compressé). Rotation : l'heure d'ouverture sur un cadran de 24 h.
+function lieu(e) {
+  const kx = 111.32 * Math.cos((e.lat + PARIS.lat) / 2 * Math.PI / 180);
+  const dx = (e.lon - PARIS.lon) * kx, dy = (e.lat - PARIS.lat) * 110.57, d = Math.hypot(dx, dy);
+  const r = d < 1 ? 0 : .19 * (1 - Math.exp(-d / 450));
+  const x = .5 + (d < 1 ? 0 : dx / d * r), y = .5 - (d < 1 ? 0 : dy / d * r);
+  // L'heure est un point sur un cadran de 24 h : son abscisse incline le geste (±50°), son ordonnée l'étire ou le resserre.
+  const t = (e.h / 24) * TAU, a = Math.sin(t) * 50 * Math.PI / 180, el = Math.pow(1.22, -Math.cos(t));
+  const s = { x, y, a, e: el, k: e.act, amp: 1, sc: 1 };
+  tension([s]);
+  return { s, d, cap: Math.atan2(dx, dy) };
+}
+function forme(e, L = 7, mod = true, R = 140, m = 1) {
+  const { s } = lieu(e); s.m = m;
+  return { lines: lignes(champ([s]), L, 0, 1, R), s };
+}
+// Respiration : la nuit (pic à 1 h du matin) la forme respire plus ample et plus lente.
+function souffle(h) {
+  const nuit = (1 + Math.cos(TAU * (h - 1) / 24)) / 2;
+  return { nuit, B: .025 + .2 * nuit * nuit, T: 9 - 4.2 * nuit };
+}
+const GROUPE = { nom: 'Groupe TRANCHANT', lat: PARIS.lat, lon: PARIS.lon, act: 'groupe', h: 3 };
+/*ENDCORE*/
+const WM = { tw: 9316, tcap: 686, gw: 8217, gcap: 686 };
+// ——— Données ———
+const VILLES = {
+  paris: { n: 'Paris (siège)', lat: 48.8566, lon: 2.3522 },
+  A: { n: 'Ville A · France', lat: 43.7031, lon: 7.2661 },
+  B: { n: 'Ville B · France', lat: 45.7640, lon: 4.8357 },
+  C: { n: 'Ville C · France', lat: 50.6292, lon: 3.0573 },
+  D: { n: 'Ville D · France', lat: 44.8378, lon: -0.5792 },
+  E: { n: 'Ville E · France', lat: 48.5734, lon: 7.7521 },
+  F: { n: 'Ville F · Europe', lat: 50.8503, lon: 4.3517 },
+  G: { n: 'Ville G · Europe', lat: 43.7384, lon: 7.4246 },
+  H: { n: 'Ville H · Afrique', lat: 14.7167, lon: -17.4677 },
+  I: { n: 'Ville I · Afrique', lat: 5.3600, lon: -4.0083 },
+  J: { n: 'Ville J · France', lat: 47.2184, lon: -1.5536 },
+};
+const ETABS = [
+  { nom: 'Casino — Ville A', act: 'casino', v: 'A', h: 10 },
+  { nom: 'Hôtel — Ville B', act: 'hotel', v: 'B', h: 7 },
+  { nom: 'Restaurant — Ville C', act: 'restaurant', v: 'C', h: 12 },
+  { nom: 'Salle de concerts — Ville D', act: 'spectacle', v: 'D', h: 20.5 },
+  { nom: 'Salons de réception — Ville E', act: 'reception', v: 'E', h: 18 },
+  { nom: 'Club de jeux — Paris', act: 'casino', v: 'paris', h: 16 },
+  { nom: 'Alioscopy', act: 'techno', v: 'J', h: 9 },
+  { nom: 'Patrouille Tranchant', act: 'sport', v: 'D', h: 14 },
+  { nom: 'Casino — Ville H', act: 'casino', v: 'H', h: 21 },
+  { nom: 'Hôtel — Ville F', act: 'hotel', v: 'F', h: 15 },
+  { nom: 'Bar — Ville G', act: 'restaurant', v: 'G', h: 22 },
+  { nom: 'Casino Advanced Technology', act: 'techno', v: 'paris', h: 8.5 },
+  { nom: 'Certus Technologies', act: 'techno', v: 'B', h: 9.5 },
+  { nom: 'Zalix Biométrie', act: 'techno', v: 'C', h: 8 },
+  { nom: 'Importation Distribution Services', act: 'techno', v: 'I', h: 7.5 },
+  { nom: 'Shooting Clubs', act: 'sport', v: 'E', h: 10.5 },
+];
+const etab = e => ({ ...e, lat: VILLES[e.v].lat, lon: VILLES[e.v].lon });
+const C_ = { papier: '#F2EEE7', craie: '#EEEAE2', braise: '#FF5A3C', encre: '#0E1014', ink: '#121418', braiseC: '#E8492B' };
+const fmtH = h => { const H = Math.floor(h), M = Math.round((h - H) * 60); return `${H} h ${String(M).padStart(2, '0')}`; };
+const fmtDeg = (v, p, n) => `${Math.abs(v).toFixed(2).replace('.', ',')}° ${v >= 0 ? p : n}`;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const parisHour = () => { const d = new Date(); const s = d.toLocaleTimeString('fr-FR', { timeZone: 'Europe/Paris', hour12: false }); const [H, M, S] = s.split(':').map(Number); return H + M / 60 + S / 3600; };
+const $ = id => document.getElementById(id);
+
+// ——— Rendu SVG d'une forme ———
+function formeSVG(e, o = {}) {
+  const L = o.L || 7, w = (o.w || .3) / L, S0 = o.S || 100, ox = o.ox || 0, oy = o.oy || 0;
+  const { s } = lieu(e); s.m = o.m == null ? 1 : o.m;
+  const lines = lignes(champ([s]), L, 0, 1, o.R || 120);
+  const d = cheminSVG(lines, w, S0, ox, oy, o.mod !== false);
+  const r = S0 * (o.r || (L > 5 ? .034 : .052));
+  return `<path fill="${o.ink || C_.craie}" ${o.op ? `opacity="${o.op}"` : ''} d="${d}"/>` + (o.dot === false ? '' : `<circle cx="${(ox + s.x * S0).toFixed(2)}" cy="${(oy + s.y * S0).toFixed(2)}" r="${r.toFixed(2)}" fill="${o.dotc || C_.braise}"/>`);
+}
+// Lockup : symbole 100 × 100 + wordmark (capitale = 2 interlignes, posée sur les lignes 3 à 5)
+function lockupSVG(el, ink, dot, e = GROUPE, sub = null) {
+  const sp = 100 / 7, cap = 2 * sp, tw = WM.tw / WM.tcap * cap, x0 = 138, gcap = sp * .5, gw = WM.gw / WM.gcap * gcap;
+  const W = x0 + tw;
+  el.setAttribute('viewBox', `-4 0 ${W + 8} 100`);
+  el.innerHTML = formeSVG(e, { ink, dotc: dot }) +
+    `<use href="#wmT" x="${x0}" y="${2.5 * sp}" width="${tw}" height="${cap}" fill="${ink}"/>` +
+    `<use href="#wmG" x="${x0 + 2}" y="${1.5 * sp - gcap}" width="${gw}" height="${gcap}" fill="${ink}"/>` +
+    (sub ? `<text x="${x0 + 2}" y="${5.5 * sp + 4}" fill="${ink}" font-family="Manrope" font-weight="600" font-size="${sp * .5 * 1.34}" letter-spacing="2.2">${sub}</text>` : '');
+  return W;
+}
+
+// ——— HERO : le champ ———
+(() => {
+  const cv = $('hcv'), ctx = cv.getContext('2d');
+  let W, H, ar, L, R, sites, ptr, prev = null, dpr, t0 = performance.now(), visible = true;
+  const HERO_D = [['groupe', .66, .47, 3, 2.6], ['casino', .09, .27, 21, 1], ['restaurant', .30, .17, 12, 1], ['hotel', .93, .14, 7, 1], ['techno', .97, .86, 9, 1]];
+  const HERO_M = [['groupe', .55, .3, 3, 2.2], ['casino', .2, .1, 21, 1], ['spectacle', .82, .52, 20.5, 1]];
+  function setup() {
+    W = cv.clientWidth; H = cv.clientHeight; ar = W / H; dpr = Math.min(2, devicePixelRatio || 1);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    const mob = W < 700;
+    L = Math.round(H / (mob ? 22 : 24)); R = Math.round(W / (mob ? 4 : 7));
+    const sc = mob ? .5 * ar : .34;
+    sites = (mob ? HERO_M : HERO_D).map(([k, fx, fy, h, z], i) => {
+      const t = h / 24 * TAU, S = sc * z;
+      const s = { k, x: fx * ar, y: fy, a: Math.sin(t) * 50 * Math.PI / 180, e: Math.pow(1.22, -Math.cos(t)), sc: S, amp: 1, m: 0, ph: i * 1.7, delay: .4 + i * .3 };
+      tension([s], z > 1 ? .08 : .2, [s.x - S, s.x + S, s.y - S, s.y + S], 9, false); s.base = s.amp; return s;
+    });
+    // garde-fou conjoint : même au plus fort du souffle, aucune ligne ne se croise
+    { sites.forEach(s => { s.amp = s.base; s.m = 1.25; }); const P = champ(sites, false), hh = .002; let mn = 0;
+      for (let j = 0; j <= 70; j++) for (let i = 0; i <= 140; i++) { const x = ar * i / 140, y = -.1 + 1.2 * j / 70; const d = (P(x, y + hh) - P(x, y - hh)) / (2 * hh); if (d < mn) mn = d; }
+      if (1 + mn < .07) { const k = (.07 - 1) / mn; sites.forEach(s => s.base *= k); } sites.forEach(s => s.m = 0); }
+    ptr = { k: 'groupe', x: -9, y: .5, a: 0, e: 1, sc: mob ? sc * 1.1 : .36, amp: 1, m: 0, tx: -9, ty: .5, w: 0, tw: 0, ta: 0, g: 1 };
+    tension([ptr], .3, [-ptr.sc, ptr.sc, .5 - ptr.sc, .5 + ptr.sc], 5, false); ptr.base = ptr.amp; ptr.x = -9;
+    prev = null;
+  }
+  const ease = t => t <= 0 ? 0 : t >= 1 ? 1 : t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  function frame(now) {
+    const t = (now - t0) / 1000, h = parisHour(), sf = souffle(h);
+    for (const s of sites) { const r = ease((t - s.delay) / 1.8); s.r = r; s.amp = s.base; s.m = r * (1 + sf.B * Math.sin(TAU * t / sf.T + s.ph)); }
+    // pointeur : un lieu de plus
+    ptr.w += (ptr.tw - ptr.w) * .06; ptr.x += (ptr.tx - ptr.x) * .14; ptr.y += (ptr.ty - ptr.y) * .14; ptr.a += (ptr.ta - ptr.a) * .05;
+    ptr.amp = ptr.base; ptr.m = ptr.w * .9 * ptr.g;
+    const all = ptr.w > .01 ? sites.concat([ptr]) : sites;
+    const P = champ(all, false);
+    const lns = lignes(P, L, -.02 * ar, 1.02 * ar, R, prev && prev.length === L ? prev : null); prev = lns;
+    if (ptr.w > .01) { let mf = 9; for (const r of lns) for (const p of r) if (p[2] < mf) mf = p[2]; ptr.g = mf < .24 ? ptr.g * .82 : Math.min(1, ptr.g + .015); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = C_.craie; const w = .3 / L;
+    for (const row of lns) { const pts = ruban(row, w); ctx.beginPath(); ctx.moveTo(pts[0][0] * H, pts[0][1] * H); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0] * H, pts[i][1] * H); ctx.closePath(); ctx.fill(); }
+    ctx.fillStyle = C_.braise;
+    for (const s of sites) if (s.r > 0) { ctx.globalAlpha = s.r; ctx.beginPath(); ctx.arc(s.x * H, s.y * H, (W < 700 ? 3.6 : 4.6) * (1 + .25 * sf.B * Math.sin(TAU * t / sf.T + s.ph) / .2), 0, TAU); ctx.fill(); }
+    ctx.globalAlpha = 1;
+  }
+  function loop(now) { if (visible) frame(now); if (!RM) requestAnimationFrame(loop); }
+  addEventListener('resize', () => { setup(); if (RM) frame(performance.now() + 1e5); });
+  let lx = 0, ly = 0;
+  const mv = ev => { const r = cv.getBoundingClientRect(); const x = (ev.clientX - r.left) / H, y = (ev.clientY - r.top) / H; const vx = x - lx, vy = y - ly; lx = x; ly = y; ptr.tx = x; ptr.ty = y; if (ptr.x < -5) { ptr.x = x; ptr.y = y; } ptr.tw = 1; if (Math.hypot(vx, vy) > .002) ptr.ta = Math.max(-.9, Math.min(.9, Math.atan2(vy, Math.abs(vx) + 1e-6))); };
+  cv.addEventListener('pointermove', mv); cv.addEventListener('pointerdown', mv);
+  cv.addEventListener('pointerleave', () => ptr.tw = 0);
+  new IntersectionObserver(es => visible = es[0].isIntersecting).observe(cv);
+  setup(); if (RM) frame(performance.now() + 1e5); else requestAnimationFrame(loop);
+  window.__hero = { setPtr(x, y) { ptr.tx = ptr.x = x * ar; ptr.ty = ptr.y = y; ptr.tw = ptr.w = 1; }, setT(s) { t0 = performance.now() - s * 1000; } };
+})();
+
+// barre du hero + horloge
+(() => {
+  const el = $('hbarLogo'); lockupSVG(el, C_.craie, C_.braise);
+  const tick = () => { const h = parisHour(), sf = souffle(h); const H = Math.floor(h), M = Math.floor((h - H) * 60);
+    $('clock').innerHTML = `<i style="--t:${sf.T.toFixed(1)}s"></i><span>Paris · ${H} h ${String(M).padStart(2, '0')} · nuit ${Math.round(sf.nuit * 100)} % · un souffle toutes les ${sf.T.toFixed(1).replace('.', ',')} s</span>`; };
+  tick(); setInterval(tick, 20000);
+})();
+
+// ——— La règle : trois schémas ———
+(() => {
+  // A : lieux vus depuis Paris
+  let sv = `<rect x="0" y="0" width="200" height="150" fill="none"/>`;
+  const cx = 100, cy = 75;
+  sv += `<path d="M${cx - 70} ${cy}H${cx + 70}M${cx} ${cy - 66}V${cy + 66}" stroke="rgba(238,234,226,.18)" stroke-width="1"/>`;
+  for (const [k, v] of Object.entries(VILLES)) { if (k === 'paris') continue; const { s } = lieu({ lat: v.lat, lon: v.lon, act: 'casino', h: 0 }); const x = cx + (s.x - .5) * 360, y = cy + (s.y - .5) * 360;
+    sv += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(238,234,226,.35)" stroke-width=".8"/><circle cx="${x}" cy="${y}" r="3" fill="${C_.craie}"/><text x="${x + 5}" y="${y + 3}" font-family="Inter" font-size="8" fill="rgba(238,234,226,.6)">${k}</text>`; }
+  sv += `<circle cx="${cx}" cy="${cy}" r="4.5" fill="${C_.braise}"/><text x="${cx + 7}" y="${cy - 6}" font-family="Inter" font-size="7.5" fill="${C_.craie}">Paris</text>`;
+  $('vizLieu').innerHTML = sv;
+  // B : les huit gestes
+  $('vizGestes').innerHTML = Object.entries(GESTES).map(([k, g]) => `<figure><svg viewBox="-8 -8 116 116">${formeSVG({ lat: PARIS.lat, lon: PARIS.lon, act: k, h: 6 }, { L: 5, w: .34, R: 70 })}</svg><figcaption>${g.nom.replace('’', '’')}</figcaption></figure>`).join('');
+  // C : cadran
+  let c = `<circle cx="75" cy="75" r="58" fill="none" stroke="rgba(238,234,226,.25)"/>`;
+  for (let i = 0; i < 24; i++) { const a = i / 24 * TAU - TAU / 4, r1 = i % 6 ? 54 : 49; c += `<line x1="${75 + Math.cos(a) * r1}" y1="${75 + Math.sin(a) * r1}" x2="${75 + Math.cos(a) * 58}" y2="${75 + Math.sin(a) * 58}" stroke="rgba(238,234,226,.5)" stroke-width="${i % 6 ? .7 : 1.4}"/>`; }
+  [['0', 0], ['6', 6], ['12', 12], ['18', 18]].forEach(([t, h]) => { const a = h / 24 * TAU - TAU / 4; c += `<text x="${75 + Math.cos(a) * 39}" y="${75 + Math.sin(a) * 39 + 3}" text-anchor="middle" font-family="Inter" font-size="8" fill="rgba(238,234,226,.6)">${t}</text>`; });
+  c += `<g id="hand"></g><g id="handForm" transform="translate(146 44)"></g>`;
+  $('vizHeure').innerHTML = c;
+  let hh = 20;
+  const upd = () => { const a = hh / 24 * TAU - TAU / 4; $('hand').innerHTML = `<line x1="75" y1="75" x2="${75 + Math.cos(a) * 46}" y2="${75 + Math.sin(a) * 46}" stroke="${C_.braise}" stroke-width="2" stroke-linecap="round"/><circle cx="75" cy="75" r="3" fill="${C_.braise}"/><text x="75" y="146" text-anchor="middle" font-family="Inter" font-size="8.5" fill="${C_.craie}">${fmtH(hh)}</text>`;
+    $('handForm').innerHTML = `<rect x="-4" y="-4" width="58" height="58" fill="${C_.encre}" stroke="rgba(238,234,226,.15)"/>` + formeSVG({ lat: PARIS.lat, lon: PARIS.lon, act: 'groupe', h: hh }, { L: 7, S: 50, R: 70 }); };
+  upd(); if (!RM) setInterval(() => { hh = (hh + .5) % 24; upd(); }, 900);
+})();
+
+// ——— Logos ———
+lockupSVG($('lkDark'), C_.craie, C_.braise);
+lockupSVG($('lkLight'), C_.ink, C_.braiseC);
+lockupSVG($('lkMonoN'), '#000', '#000');
+lockupSVG($('lkMonoB'), '#fff', '#fff');
+lockupSVG($('lkMonoR'), C_.encre, C_.encre);
+
+// ——— Générateur ———
+(() => {
+  const sel = $('gAct'), sv = $('gVille'), nm = $('gName'), hr = $('gH');
+  Object.entries(GESTES).forEach(([k, g]) => sel.add(new Option(g.act, k)));
+  Object.entries(VILLES).forEach(([k, v]) => sv.add(new Option(v.n, k)));
+  const chips = $('chips');
+  ETABS.forEach((e, i) => { const b = document.createElement('button'); b.textContent = e.nom; b.type = 'button'; b.onclick = () => { apply(e, true); }; chips.append(b); });
+  let cur = null, layers = [], prev = null;
+  function readCur() { return { nom: nm.value.trim() || 'Nouvel établissement', act: sel.value, v: sv.value, h: +hr.value }; }
+  function apply(e, fill) {
+    if (fill) { nm.value = e.nom; sel.value = e.act; sv.value = e.v; hr.value = e.h; }
+    [...chips.children].forEach(b => b.classList.toggle('on', b.textContent === nm.value));
+    cur = e; const E = etab(e); const { s, d, cap } = lieu(E);
+    layers.forEach(l => l.tw = 0); layers.push({ s, w: 0, tw: 1 });
+    $('gHo').textContent = fmtH(e.h);
+    $('genNm').textContent = e.nom; $('genSub').textContent = `${GESTES[e.act].act} · Groupe TRANCHANT`;
+    const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO']; const dir = dirs[Math.round(((cap * 180 / Math.PI) + 360) % 360 / 45) % 8];
+    const t = e.h / 24 * TAU;
+    $('gRead').innerHTML = [
+      ['Lieu', `${fmtDeg(E.lat, 'N', 'S')} · ${fmtDeg(E.lon, 'E', 'O')}`],
+      ['Depuis Paris', d < 1 ? 'Point zéro : le pli au centre' : `${Math.round(d).toLocaleString('fr-FR')} km au ${dir} → x ${s.x.toFixed(2).replace('.', ',')} · y ${s.y.toFixed(2).replace('.', ',')}`],
+      ['Geste', `${GESTES[e.act].nom} · ${GESTES[e.act].act.toLowerCase()}`],
+      ['Ouverture', `${fmtH(e.h)} → inclinaison ${Math.round(Math.sin(t) * 50)}° · étirement ×${s.e.toFixed(2).replace('.', ',')}`],
+      ['Tension', `amplitude ${s.amp.toFixed(3).replace('.', ',')} · écart minimal garanti`],
+    ].map(([a, b]) => `<div><span>${a}</span><span>${b}</span></div>`).join('');
+    lockupMini();
+  }
+  function lockupMini() { $('genLk').innerHTML = formeSVG(etab(cur), { R: 60 }); }
+  // Nom tapé : on reconnaît l'activité et la ville dans le texte
+  const MOTS = [[/casino|jeu|club de jeux|poker/i, 'casino'], [/h[oô]tel|r[ée]sidence|suite/i, 'hotel'], [/restaurant|bar|brasserie|caf[ée]|table|bistrot/i, 'restaurant'], [/concert|spectacle|th[ée][aâ]tre|salle|op[ée]ra|cabaret/i, 'spectacle'], [/r[ée]ception|s[ée]minaire|salon|congr[eè]s|[ée]v[ée]nement/i, 'reception'], [/tech|biom|alioscopy|certus|zalix|distribution|import/i, 'techno'], [/sport|patrouille|voltige|shooting|tir|golf|club/i, 'sport'], [/groupe|si[eè]ge/i, 'groupe']];
+  nm.addEventListener('input', () => {
+    const v = nm.value; const hit = ETABS.find(e => e.nom.toLowerCase() === v.trim().toLowerCase());
+    if (hit) return apply(hit, true);
+    const m = MOTS.find(([r]) => r.test(v)); if (m) sel.value = m[1];
+    const vm = v.match(/ville\s+([a-j])\b/i); if (vm) sv.value = vm[1].toUpperCase(); else if (/paris/i.test(v)) sv.value = 'paris';
+    apply(readCur(), false);
+  });
+  [sel, sv].forEach(x => x.addEventListener('change', () => apply(readCur(), false)));
+  hr.addEventListener('input', () => apply(readCur(), false));
+  const svg = $('genSvg'); const t0 = performance.now();
+  function frame(now) {
+    const t = (now - t0) / 1000, sf = souffle(parisHour());
+    for (const l of layers) l.w += (l.tw - l.w) * .085;
+    layers = layers.filter(l => l.tw > 0 || l.w > .004);
+    const tot = layers.reduce((a, l) => a + l.w, 0) || 1, br = 1 + sf.B * Math.sin(TAU * t / sf.T);
+    const ss = layers.map(l => Object.assign({}, l.s, { m: l.w / tot * br }));
+    const lns = lignes(champ(ss), 7, 0, 1, 120, prev); prev = lns;
+    const top = layers[layers.length - 1];
+    svg.innerHTML = `<path fill="${C_.craie}" d="${cheminSVG(lns, .3 / 7)}"/>` + layers.map(l => `<circle cx="${(l.s.x * 100).toFixed(2)}" cy="${(l.s.y * 100).toFixed(2)}" r="${(3.4 * (1 + (br - 1) * 1.2)).toFixed(2)}" fill="${C_.braise}" opacity="${(l.w / tot).toFixed(3)}"/>`).join('');
+    if (!RM) requestAnimationFrame(frame);
+  }
+  apply(ETABS[0], true); requestAnimationFrame(frame);
+  window.__gen = { type(v) { nm.value = v; nm.dispatchEvent(new Event('input')); } };
+})();
+
+// ——— Famille ———
+(() => {
+  const nine = [0, 1, 2, 3, 4, 6, 7, 8, 15].map(i => ETABS[i]);
+  $('fam').innerHTML = nine.map(e => `<figure><svg viewBox="-8 -8 116 116" role="img" aria-label="${e.nom}">${formeSVG(etab(e), { R: 140 })}</svg><figcaption><b>${e.nom}</b><span>${GESTES[e.act].nom}<br>${VILLES[e.v].n.split(' · ')[0]} · ${fmtH(e.h)}</span></figcaption></figure>`).join('');
+})();
+
+// ——— Vivante ———
+(() => {
+  const svg = $('vivSvg'), rng = $('vivR'); let sim = null, prev = null; const t0 = performance.now();
+  const { s } = lieu(GROUPE);
+  rng.addEventListener('input', () => { sim = +rng.value; });
+  $('vivReal').onclick = () => { sim = null; };
+  function frame(now) {
+    const t = (now - t0) / 1000, h = sim == null ? parisHour() : sim, sf = souffle(h);
+    const ph = Math.sin(TAU * t / sf.T), br = 1 + sf.B * ph;
+    const ss = [Object.assign({}, s, { m: br })];
+    const lns = lignes(champ(ss), 7, 0, 1, 130, prev); prev = lns;
+    svg.innerHTML = `<path fill="${C_.craie}" d="${cheminSVG(lns, .3 / 7)}"/><circle cx="${s.x * 100}" cy="${s.y * 100}" r="${(3.4 * (1 + ph * sf.B * 1.4)).toFixed(2)}" fill="${C_.braise}"/>`;
+    const H = Math.floor(h), M = Math.floor((h - H) * 60);
+    $('vivH').textContent = `${String(H).padStart(2, '0')}:${String(M).padStart(2, '0')}`;
+    $('vivMode').textContent = sim == null ? 'Heure réelle · Paris' : 'Heure simulée';
+    $('vivRo').textContent = sim == null ? '—' : fmtH(sim);
+    $('vivN').textContent = Math.round(sf.nuit * 100) + ' %';
+    $('vivT').textContent = sf.T.toFixed(1).replace('.', ',') + ' s';
+    $('vivB').textContent = '± ' + Math.round(sf.B * 100) + ' %';
+    $('vivP').textContent = ph >= 0 ? 'inspire' : 'expire';
+    if (!RM) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  window.__viv = { set(h) { sim = h; rng.value = h; } };
+  $('hours').innerHTML = [13, 20, 23, 1].map(h => { const sf = souffle(h);
+    return `<figure><svg viewBox="-10 -10 120 120">${formeSVG(GROUPE, { m: 1 + sf.B, op: .32, dot: false })}${formeSVG(GROUPE, { m: 1 - sf.B, op: .32, dot: false })}${formeSVG(GROUPE, {})}</svg><figcaption><b>${fmtH(h)}</b> · nuit ${Math.round(sf.nuit * 100)} % · souffle ${sf.T.toFixed(1).replace('.', ',')} s</figcaption></figure>`; }).join('');
+})();
+
+// ——— Version fixe ———
+(() => {
+  const mk = (bg, ink, dot, px) => { const L = px < 48 ? 5 : 7, pad = px < 48 ? 15 : 12, Sz = 100 - 2 * pad;
+    return `<svg width="${px}" height="${px}" viewBox="0 0 100 100"><rect width="100" height="100" rx="${px <= 32 ? 18 : 14}" fill="${bg}"/>${formeSVG(GROUPE, { L, w: L === 5 ? .4 : .32, S: Sz, ox: pad, oy: pad, ink, dotc: dot, r: L === 5 ? .066 : .042 })}</svg>`; };
+  const row = (bg, ink, dot) => [128, 64, 32, 16].map(px => `<figure>${mk(bg, ink, dot, px)}<figcaption>${px} px</figcaption></figure>`).join('');
+  $('szD').innerHTML = row(C_.encre, C_.craie, C_.braise);
+  $('szL').innerHTML = row(C_.papier, C_.ink, C_.braiseC).replace(/fill="#F2EEE7"/g, 'fill="#F2EEE7" stroke="rgba(18,20,24,.12)" stroke-width="1"');
+})();
+
+// ——— Palette ———
+$('pal').innerHTML = [['Encre', '#0E1014', '#EEEAE2'], ['Nuit', '#16191F', '#EEEAE2'], ['Graphite', '#262A32', '#EEEAE2'], ['Brume', '#8C919B', '#0E1014'], ['Craie', '#EEEAE2', '#0E1014'], ['Papier', '#F2EEE7', '#0E1014'], ['Braise', '#FF5A3C', '#0E1014']]
+  .map(([n, c, f]) => `<div style="background:${c};color:${f};${c === '#0E1014' ? 'box-shadow:inset 0 0 0 1px rgba(238,234,226,.18)' : ''}">${n}<span>${c}</span></div>`).join('');
+
+// ——— Mises en situation ———
+(() => {
+  // champ large pour les bandeaux
+  function bande(ar, L, defs, x0, y0, Wpx, Hpx, ink, w = .3) {
+    const ss = defs.map(([k, fx, fy, h, sc]) => { const t = h / 24 * TAU; const s = { k, x: fx * ar, y: fy, a: Math.sin(t) * 50 * Math.PI / 180, e: Math.pow(1.22, -Math.cos(t)), sc, amp: 1 }; tension([s], .25, [s.x - sc, s.x + sc, s.y - sc, s.y + sc], 6, false); return s; });
+    const lns = lignes(champ(ss, false), L, 0, ar, Math.round(ar * 90));
+    const d = lns.map(r => { const p = ruban(r, w / L); return 'M' + p.map(q => (x0 + q[0] / ar * Wpx).toFixed(1) + ' ' + (y0 + q[1] * Hpx).toFixed(1)).join('L') + 'Z'; }).join('');
+    return { d, ss };
+  }
+  // 1. Site web
+  {
+    const b = bande(640 / 300, 14, [['groupe', .62, .45, 3, .42], ['casino', .86, .62, 21, .32]], 0, 64, 640, 300, C_.craie);
+    const sp = 100 / 7, sc = .2;
+    let s = `<rect width="640" height="400" fill="${C_.encre}"/><rect width="640" height="26" fill="#1d2027"/><circle cx="16" cy="13" r="4" fill="#3a3e47"/><circle cx="30" cy="13" r="4" fill="#3a3e47"/><circle cx="44" cy="13" r="4" fill="#3a3e47"/><rect x="200" y="7" width="240" height="12" rx="6" fill="#2a2e36"/>`;
+    s += `<g><path d="${b.d}" fill="${C_.craie}" opacity=".9"/>${b.ss.map(q => `<circle cx="${q.x / (640 / 300) * 640}" cy="${64 + q.y * 300}" r="4" fill="${C_.braise}"/>`).join('')}</g>`;
+    s += `<rect x="0" y="26" width="640" height="38" fill="${C_.encre}"/><line x1="0" y1="64" x2="640" y2="64" stroke="rgba(238,234,226,.12)"/>`;
+    s += `<svg x="24" y="35" width="110" height="20" viewBox="-4 0 ${138 + WM.tw / WM.tcap * 2 * sp + 8} 100" id="mwLk"></svg>`;
+    s += ['Le Groupe', 'Établissements', 'Technologies', 'Carrières'].map((t, i) => `<text x="${330 + i * 74}" y="49" font-family="Manrope" font-weight="600" font-size="9.5" fill="rgba(238,234,226,.75)">${t}</text>`).join('');
+    s += `<rect x="0" y="252" width="350" height="148" fill="${C_.encre}"/><text x="28" y="298" font-family="Archivo" font-weight="500" font-size="21" style="font-stretch:125%" fill="${C_.craie}">La nuit, depuis 1988.</text><text x="28" y="326" font-family="Manrope" font-size="11" fill="rgba(238,234,226,.62)">Casinos, hôtels, restaurants, scènes et salons.</text><rect x="28" y="346" width="132" height="30" rx="15" fill="${C_.craie}"/><text x="94" y="365" text-anchor="middle" font-family="Manrope" font-weight="700" font-size="10" fill="${C_.encre}">Trouver un lieu</text>`;
+    $('mWeb').innerHTML = s; lockupSVG(document.getElementById('mwLk'), C_.craie, C_.braise);
+  }
+  // 2. Carte de visite
+  {
+    const e = etab(ETABS[0]);
+    let s = `<rect width="640" height="400" fill="#1b1e24"/>`;
+    s += `<g transform="translate(40 92) rotate(-4)"><rect width="300" height="190" rx="4" fill="${C_.encre}" filter="url(#sh)"/>${(() => { const b = bande(300 / 190, 9, [['casino', .58, .5, 10, .5]], 0, 0, 300, 190, C_.craie); return `<path d="${b.d}" fill="${C_.craie}"/><circle cx="${b.ss[0].x / (300 / 190) * 300}" cy="${b.ss[0].y * 190}" r="4" fill="${C_.braise}"/>`; })()}</g>`;
+    s += `<g transform="translate(316 132) rotate(3)"><rect width="300" height="190" rx="4" fill="${C_.papier}" filter="url(#sh)"/><svg x="22" y="22" width="150" height="30" id="mcLk"></svg>
+      <text x="22" y="112" font-family="Archivo" font-stretch="112%" font-weight="500" font-size="15" fill="${C_.ink}">Prénom Nom</text>
+      <text x="22" y="128" font-family="Manrope" font-weight="600" font-size="8" letter-spacing="1.4" fill="#6b6f77">DIRECTION · CASINO — VILLE A</text>
+      <text x="22" y="156" font-family="Inter" font-size="8.5" fill="${C_.ink}">+33 0 00 00 00 00</text><text x="22" y="169" font-family="Inter" font-size="8.5" fill="${C_.ink}">prenom.nom@groupe-tranchant.fr</text>
+      <svg x="226" y="118" width="52" height="52" viewBox="-6 -6 112 112">${formeSVG(e, { ink: C_.ink, dotc: C_.braiseC, L: 7, R: 70 })}</svg></g>`;
+    s = `<defs><filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".45"/></filter></defs>` + s;
+    $('mCard').innerHTML = s; lockupSVG(document.getElementById('mcLk'), C_.ink, C_.braiseC);
+  }
+  // 3. Icône d'application
+  {
+    let s = `<rect width="640" height="400" fill="#1b1e24"/><g transform="translate(220 22)"><rect width="200" height="400" rx="34" fill="#08090b"/><rect x="8" y="8" width="184" height="390" rx="28" fill="#2b2033"/>
+      <rect x="8" y="8" width="184" height="390" rx="28" fill="url(#wall)"/><text x="100" y="58" text-anchor="middle" font-family="Inter" font-weight="500" font-size="30" fill="#fff">23:41</text><text x="100" y="74" text-anchor="middle" font-family="Manrope" font-size="8.5" fill="rgba(255,255,255,.7)">jeudi 5 novembre</text>`;
+    const pos = []; for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) pos.push([22 + c * 42, 108 + r * 56]);
+    pos.forEach(([x, y], i) => { if (i === 5) { s += `<svg x="${x}" y="${y}" width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="23" fill="${C_.encre}"/>${formeSVG(GROUPE, { L: 5, w: .4, S: 70, ox: 15, oy: 15, r: .066, R: 60 })}</svg><text x="${x + 17}" y="${y + 44}" text-anchor="middle" font-family="Manrope" font-weight="600" font-size="6.5" fill="#fff">Tranchant</text>`; } else s += `<rect x="${x}" y="${y}" width="34" height="34" rx="8" fill="rgba(255,255,255,${.1 + (i % 3) * .04})"/>`; });
+    s += `</g><defs><linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a45"/><stop offset="1" stop-color="#121418"/></linearGradient></defs>`;
+    s += `<svg x="470" y="150" width="120" height="120" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="${C_.encre}" stroke="rgba(238,234,226,.18)"/>${formeSVG(GROUPE, { L: 7, w: .32, S: 76, ox: 12, oy: 12, r: .042 })}</svg><text x="530" y="292" text-anchor="middle" font-family="Inter" font-size="9" fill="rgba(238,234,226,.55)">1024 px · 7 lignes</text>`;
+    s += `<svg x="70" y="178" width="64" height="64" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="${C_.encre}" stroke="rgba(238,234,226,.18)"/>${formeSVG(GROUPE, { L: 5, w: .4, S: 70, ox: 15, oy: 15, r: .066 })}</svg><text x="102" y="262" text-anchor="middle" font-family="Inter" font-size="9" fill="rgba(238,234,226,.55)">≤ 48 px · 5 lignes</text>`;
+    $('mApp').innerHTML = s;
+  }
+  // 4. Façade la nuit : enseigne en tubes lumineux
+  {
+    const e = etab(ETABS[0]);
+    let s = `<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07080b"/><stop offset="1" stop-color="#151820"/></linearGradient>
+      <filter id="neon" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <radialGradient id="pool" cx=".5" cy="0" r=".9"><stop offset="0" stop-color="rgba(238,234,226,.16)"/><stop offset="1" stop-color="rgba(238,234,226,0)"/></radialGradient></defs>
+      <rect width="640" height="400" fill="url(#sky)"/>`;
+    // pierre de taille
+    s += `<rect x="40" y="40" width="560" height="330" fill="#1a1c21"/>`;
+    for (let y = 40; y < 370; y += 22) s += `<line x1="40" y1="${y}" x2="600" y2="${y}" stroke="#121317" stroke-width="1.2"/>`;
+    [[70, 60], [200, 60], [330, 60], [460, 60]].forEach(([x, y]) => s += `<rect x="${x}" y="${y}" width="80" height="70" fill="#0c0d10"/><rect x="${x + 4}" y="${y + 4}" width="72" height="62" fill="rgba(255,190,140,.06)"/>`);
+    s += `<rect x="40" y="150" width="560" height="96" fill="#0b0c0f"/>`;
+    s += `<g filter="url(#neon)"><svg x="92" y="160" width="76" height="76" viewBox="-4 -4 108 108">${formeSVG(e, { ink: '#FFF4E8', dotc: '#FF6A48', R: 80 })}</svg>
+      <use href="#wmT" x="194" y="184" width="${WM.tw / WM.tcap * 26}" height="26" fill="#FFF4E8"/>
+      <text x="196" y="228" font-family="Manrope" font-weight="600" font-size="10" letter-spacing="5" fill="#FFF4E8">CASINO — VILLE A</text></g>`;
+    s += `<rect x="40" y="246" width="560" height="124" fill="url(#pool)"/>`;
+    s += `<rect x="260" y="270" width="120" height="100" fill="#0a0b0d"/><rect x="264" y="274" width="112" height="96" fill="rgba(255,200,150,.08)"/><line x1="320" y1="274" x2="320" y2="370" stroke="#0a0b0d" stroke-width="3"/>`;
+    s += `<rect x="0" y="370" width="640" height="30" fill="#0a0b0d"/><rect x="0" y="370" width="640" height="2" fill="rgba(238,234,226,.08)"/>`;
+    $('mFac').innerHTML = s;
+  }
+})();
+</script>
+</body>
+</html>

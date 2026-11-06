@@ -1,0 +1,795 @@
+<!-- PAGE TEST, VARIANTE C : « native au site du groupe, mode app premium ».
+     Fiche lieu : ouverture avec le mur incliné de la page Nos destinations, barre d'infos clés, univers en grandes cartes photo,
+     horaires intelligents (jour courant, ouvert / fermé maintenant), cartes d'animations, fiches des lieux.
+     Textes repris du site du casino (casino-pougues-les-eaux.fr). Photos hébergées par le casino (tranchant.backoffice.lbo-data.fr).
+     Pas d'image d'alcool : ni photo du bar ni de la salle du restaurant, ni affiches « VIP Club » et « Flash » ;
+     la photo de L'Eclipse n'est montrée que par le haut (plafond, lumières), jamais le comptoir. -->
+<style>
+.pc{--ink:#0B1B2E;--ink-2:#132A45;--card:#fff;--soft:#FBF9F5;--ok:#1F9D63;--late:#E0A21A;--ko:#C8323C;
+  --sh:0 1px 0 rgba(11,27,46,.05),0 30px 50px -36px rgba(11,27,46,.35);--sh-lg:0 2px 0 rgba(11,27,46,.04),0 50px 80px -50px rgba(11,27,46,.55);
+  --r:20px;--r-lg:24px}
+.pc .section{padding:clamp(84px,12vh,150px) var(--gutter)}
+.pc .btn{margin:0;height:48px;padding:0 22px;gap:10px;white-space:nowrap}
+.pc .btn span[aria-hidden]{font-size:.95em}
+.pc :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
+.pc .pc-dark :focus-visible,.pc .pc-hero :focus-visible,.pc .pc-tile:focus-visible{outline-color:var(--yellow)}
+.pc .pc-tile:focus-visible{outline-offset:4px;border-radius:var(--r)}
+.pc h3{font-family:var(--display);font-stretch:110%;font-weight:500;letter-spacing:-.02em}
+.pc .pc-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px 40px;flex-wrap:wrap;margin-bottom:clamp(34px,5.5vh,64px)}
+.pc .pc-head h2{font-size:clamp(38px,5vw,84px);margin-top:20px;line-height:.98;letter-spacing:-.04em}
+.pc .pc-head .btn{flex:none}
+.pc .pc-lab{font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- Ouverture : le mur incliné de Nos destinations, avec les photos du casino ---------- */
+.pc-hero{--px:0;--py:0;min-height:clamp(600px,calc(100vh - 150px),900px);min-height:clamp(600px,calc(100svh - 150px),900px);background:#0B1B2E;color:#fff;border-bottom:0;padding-bottom:calc(clamp(56px,9vh,100px) + 64px)}
+.pc-hero::after{z-index:1;pointer-events:none;background:
+  linear-gradient(90deg,#0B1B2E 0 20%,rgba(11,27,46,.84) 40%,rgba(11,27,46,.25) 66%,rgba(11,27,46,.08)),
+  linear-gradient(to top,#0B1B2E 0,rgba(11,27,46,0) 40%),
+  linear-gradient(to bottom,rgba(11,27,46,.85) 0,rgba(11,27,46,0) 22%)}
+.pc-wall{position:absolute;inset:0;overflow:hidden;perspective:1600px;perspective-origin:70% 40%}
+.pc-wall-in{position:absolute;right:-6%;top:-42%;width:min(64%,1180px);height:184%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.3vw,22px);
+  transform:rotateX(calc(20deg + var(--py) * -4deg)) rotateY(calc(-16deg + var(--px) * 6deg)) rotateZ(10deg);transition:transform 1.2s var(--ease);animation:pcFade 2.2s var(--ease) .2s both}
+@keyframes pcFade{from{opacity:0}}
+.pc-track{animation:pcUp 110s linear infinite;will-change:transform}
+.pc-col:nth-child(2) .pc-track{animation-name:pcDown;animation-duration:140s}
+.pc-col:nth-child(3) .pc-track{animation-duration:125s;animation-delay:-40s}
+.pc-col:nth-child(4) .pc-track{animation-name:pcDown;animation-duration:150s;animation-delay:-70s}
+.pc-hero.pc-off .pc-track{animation-play-state:paused}
+.pc-track img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;margin-bottom:clamp(12px,1.3vw,22px);border-radius:16px;filter:saturate(.85) brightness(.78);box-shadow:0 30px 60px -20px rgba(0,0,0,.6);background:#132A45}
+@keyframes pcUp{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes pcDown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+.pc-hero .page-head-in{z-index:2}
+.pc-hero .crumbs{color:rgba(255,255,255,.62)}
+.pc-kick{display:flex;align-items:center;gap:12px;margin:clamp(14px,2.6vh,26px) 0 clamp(16px,2.4vh,24px);font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.pc-kick i{width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px rgba(255,255,255,.16)}
+.pc-hero .display.huge{color:#fff;font-size:clamp(38px,6.9vw,132px);line-height:.92;letter-spacing:-.045em;text-shadow:0 20px 80px rgba(0,0,0,.5)}
+.pc-hero-l{display:flex;align-items:center;gap:18px;margin-top:clamp(22px,3.6vh,40px);font-size:clamp(14px,1.1vw,17px);font-weight:500;color:rgba(255,255,255,.82)}
+.pc-hero-l::before{content:"";flex:none;width:clamp(70px,7vw,120px);height:4px;background:linear-gradient(90deg,var(--fr-blue) 0 33.3%,#fff 33.3% 66.6%,var(--fr-red) 66.6%)}
+
+/* ---------- Barre d'infos clés ---------- */
+.pc-bar{position:relative;z-index:4;margin:-64px var(--gutter) 0}
+.pc-bar-in{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,.82fr) minmax(0,1.22fr) auto;padding:8px;border-radius:var(--r-lg);background:var(--card);box-shadow:var(--sh-lg)}
+.pc-cell{position:relative;display:flex;flex-direction:column;gap:9px;padding:20px 24px;min-width:0}
+.pc-cell+.pc-cell::before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:1px;background:var(--line)}
+.pc-live+.pc-cell::before{display:none}
+.pc-val{font-size:15px;font-weight:600;line-height:1.45;color:var(--ink);overflow-wrap:break-word}
+.pc-val a{transition:color .3s}.pc-val a:hover{color:var(--blue)}
+.pc-lnk{display:inline-flex;align-items:center;gap:6px;margin-top:auto;font-size:12.5px;font-weight:700;color:var(--blue)}
+.pc-lnk:hover{text-decoration:underline;text-underline-offset:3px}
+.pc-live{justify-content:center;gap:6px;border-radius:18px;background:var(--ink);color:#fff;padding:20px 26px}
+.pc-live .pc-lab{color:rgba(255,255,255,.6)}
+.pc-st{display:flex;align-items:center;gap:10px;font-family:var(--display);font-stretch:110%;font-weight:500;font-size:clamp(19px,1.5vw,23px);letter-spacing:-.02em;line-height:1.15}
+.pc-dot{position:relative;flex:none;width:10px;height:10px;border-radius:50%;background:currentColor;opacity:.5}
+.is-open .pc-dot{background:var(--ok);opacity:1}
+.is-open .pc-dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--ok);opacity:0;animation:pcPing 2.4s var(--ease) infinite}
+.is-late .pc-dot{background:var(--late)}.is-late .pc-dot::after{border-color:var(--late)}
+.is-closed .pc-dot{background:var(--ko);opacity:1}
+@keyframes pcPing{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+.pc-st2{font-size:13.5px;color:rgba(255,255,255,.72)}
+.pc-live small{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px}
+.pc-acts{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:12px 14px 12px 22px}
+.pc-acts .btn{justify-content:center}
+
+/* ---------- Univers : grandes cartes photo (langage des fiches de Nos destinations) ---------- */
+.pc-uni{padding-top:clamp(90px,13vh,160px)!important}
+.pc-bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:clamp(250px,21vw,330px);gap:clamp(14px,1.4vw,22px)}
+.pc-tile{position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:clamp(20px,2vw,32px);border-radius:var(--r);overflow:hidden;isolation:isolate;color:#fff;background:#0B1B2E;box-shadow:0 40px 60px -40px rgba(11,27,46,.7);transition:transform .8s var(--ease),box-shadow .8s var(--ease)}
+.pc-tile:hover{transform:translateY(-6px);box-shadow:0 50px 70px -40px rgba(11,27,46,.85)}
+.pc-tile figure{position:absolute;inset:0;z-index:-1;overflow:hidden;container-type:size}
+.pc-tile img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) brightness(.92);transition:transform 1.6s var(--ease),filter .8s}
+.pc-tile:hover img{transform:scale(1.06);filter:none}
+.pc-tile figure::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(11,27,46,.95) 0,rgba(11,27,46,.62) 30%,rgba(11,27,46,0) 62%),linear-gradient(to bottom,rgba(11,27,46,.45),rgba(11,27,46,0) 24%)}
+.pc-tile .pc-tk{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.74)}
+.pc-tile h3{font-size:clamp(23px,2vw,34px);line-height:1.02;color:#fff;padding-bottom:16px;background:linear-gradient(var(--yellow),var(--yellow)) left bottom/34px 2px no-repeat;transition:background-size .7s var(--ease)}
+.pc-tile:hover h3{background-size:100% 2px}
+.pc-tile .pc-go{position:absolute;top:clamp(16px,1.6vw,24px);right:clamp(16px,1.6vw,24px);width:44px;height:44px;display:grid;place-items:center;border-radius:50%;font-size:16px;color:#fff;background:rgba(11,27,46,.35);border:1px solid rgba(255,255,255,.3);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:background .4s,color .4s,border-color .4s,transform .6s var(--ease)}
+.pc-tile:hover .pc-go{background:var(--yellow);border-color:var(--yellow);color:#0B1B2E;transform:rotate(90deg)}
+.pc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.pc-tags li{list-style:none;padding:7px 12px;border-radius:999px;font-size:11.5px;font-weight:600;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.24);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pc-tags b{font-weight:800}
+.t-jeux{grid-column:span 2;grid-row:span 2}
+.t-jeux h3{font-size:clamp(30px,3.2vw,54px);max-width:11em}
+.t-jeux img{object-position:50% 40%}
+.pc-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:6px}
+.pc-nums li{list-style:none;display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.pc-nums b{font-family:var(--display);font-stretch:115%;font-weight:500;font-size:clamp(28px,2.6vw,42px);letter-spacing:-.03em;line-height:1;color:#fff}
+.t-ycaste{grid-column:span 2}
+.t-ycaste img{object-position:50% 30%}
+/* L'Eclipse : seul le haut de la photo est visible (plafond, lumières), jamais le comptoir */
+.t-eclipse img{position:absolute;top:0;left:50%;max-width:none;width:max(100%,273cqh);height:auto;aspect-ratio:1.5;transform:translateX(-50%)}
+.t-eclipse:hover img{transform:translateX(-50%) scale(1.06);transform-origin:50% 0}
+.t-hotel{grid-column:1/-1}
+.t-hotel figure::after{background:linear-gradient(90deg,rgba(11,27,46,.94) 0,rgba(11,27,46,.7) 32%,rgba(11,27,46,0) 70%),linear-gradient(to top,rgba(11,27,46,.6),rgba(11,27,46,0) 40%)}
+.t-hotel img{object-position:50% 45%}
+.t-hotel h3{max-width:12em}
+.pc-ring{display:inline-block;width:9px;height:9px;border-radius:50%;box-shadow:inset 0 0 0 2.5px var(--yellow);margin-right:8px;vertical-align:1px}
+
+/* ---------- Horaires : jour courant, ouvert / fermé maintenant ---------- */
+.pc-hours{display:flex;flex-direction:column;gap:18px}
+.pc-hours .pc-st{font-size:clamp(20px,1.6vw,25px)}
+.pc-hours .pc-st2{color:var(--muted);font-size:14px;margin-top:-10px}
+.pc-day{display:flex;flex-direction:column;gap:8px}
+.pc-day-tr{position:relative;height:10px;border-radius:999px;background:rgba(11,27,46,.08);overflow:visible}
+.pc-day-tr i{position:absolute;top:0;bottom:0;border-radius:999px;background:var(--ink)}
+.pc-day-tr .pc-now{position:absolute;top:-6px;bottom:-6px;width:2px;margin-left:-1px;border-radius:2px;background:var(--fr-red)}
+.pc-day-tr .pc-now::before{content:"";position:absolute;left:50%;top:-5px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--fr-red)}
+.pc-day-l{display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
+.pc-week{display:flex;flex-direction:column;margin:0 -12px}
+.pc-week li{list-style:none;position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px;padding:9px 12px;border-radius:12px;font-size:14px;font-variant-numeric:tabular-nums}
+.pc-week li+li::before{content:"";position:absolute;left:12px;right:12px;top:0;height:1px;background:var(--line)}
+.pc-week li.on::before,.pc-week li.on+li::before{display:none}
+.pc-week li span:first-child{font-weight:600;display:flex;align-items:center;gap:10px}
+.pc-week li span:last-child{text-align:right;color:rgba(11,27,46,.78)}
+.pc-week li.off span:last-child{color:var(--muted)}
+.pc-week li.eve span:first-child{font-weight:500;font-style:italic;color:var(--muted)}
+.pc-week li.on{background:var(--ink);color:#fff}
+.pc-week li.on span{color:#fff!important;font-style:normal!important}
+.pc-week li.on span:first-child::after{content:attr(data-tag);padding:4px 8px;border-radius:999px;background:var(--yellow);color:var(--ink);font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+
+/* ---------- Infos pratiques ---------- */
+.pc-infos-in{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(14px,1.4vw,22px);align-items:stretch}
+.pc-card{border-radius:var(--r-lg);background:var(--card);box-shadow:var(--sh);padding:clamp(24px,2.6vw,40px)}
+.pc-card-h{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.pc-card-h h3{font-size:clamp(20px,1.6vw,26px)}
+.pc-cond{--fg:#F5F1EA;--muted:rgba(245,241,234,.66);--line:rgba(245,241,234,.16);background:var(--ink);color:var(--fg);display:flex;flex-direction:column;gap:22px;box-shadow:var(--sh-lg)}
+.pc-cond .pc-card-h{margin:0}
+.pc-cond img{width:52px;height:52px;flex:none}
+.pc-rules{display:grid;gap:8px}
+.pc-rules li{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:14.5px;font-weight:600}
+.pc-rules li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--yellow)}
+.pc-cond p{font-size:14.5px;line-height:1.7;color:var(--muted)}
+.pc-id{display:flex;align-items:center;gap:14px;margin-top:auto;padding-top:20px;border-top:1px solid var(--line);font-size:13.5px;font-weight:600}
+.pc-id b{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:2px solid var(--fr-red);font-family:var(--display);font-size:13px;font-weight:700}
+
+/* ---------- Les jeux : panneau bleu nuit ---------- */
+.pc-dark{--bg:#0B1B2E;--fg:#F5F1EA;--fg-rgb:245,241,234;--muted:rgba(245,241,234,.66);--line:rgba(245,241,234,.15);background:#0B1B2E!important;color:var(--fg)}
+.pc-panel{margin:0 clamp(0px,1.2vw,18px);border-radius:28px}
+.pc-dark .btn{border-color:rgba(245,241,234,.28)}
+.pc-dark .btn.solid{border-color:var(--fg)}
+.pc-games{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);grid-template-rows:repeat(2,clamp(230px,19vw,300px));gap:clamp(14px,1.4vw,22px)}
+.pc-g{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(20px,2vw,30px);border-radius:var(--r);overflow:hidden;isolation:isolate;background:#132A45}
+.pc-g figure{position:absolute;inset:0;z-index:-1}
+.pc-g figure img{width:100%;height:100%;object-fit:cover;filter:saturate(.95) brightness(.9);transition:transform 1.6s var(--ease)}
+.pc-g:hover figure img{transform:scale(1.05)}
+.pc-g figure::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(11,27,46,.92) 0,rgba(11,27,46,.4) 34%,rgba(11,27,46,0) 60%)}
+.pc-g b{font-family:var(--display);font-stretch:115%;font-weight:500;font-size:clamp(64px,7.4vw,128px);letter-spacing:-.05em;line-height:.9;color:#fff}
+.pc-g>span{margin-top:12px;font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.g199{grid-row:span 2}
+.g7{grid-row:span 2}
+.g7 figure img{object-position:50% 60%}
+.g35{background:linear-gradient(160deg,#16345A,#0F2742);border:1px solid rgba(245,241,234,.1)}
+.g35::before{content:"";position:absolute;right:-30%;top:-40%;width:90%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(157,180,208,.22),rgba(157,180,208,0) 65%);z-index:-1}
+.pc-livec{display:flex;flex-direction:column;gap:4px;padding:clamp(20px,2vw,28px);border-radius:var(--r);background:var(--yellow);color:#0B1B2E;transition:transform .6s var(--ease)}
+.pc-livec:hover{transform:translateY(-4px)}
+.pc-livec .pc-lab{color:rgba(11,27,46,.62);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pc-livec .pc-lab::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--fr-red);animation:pcBlink 1.6s steps(2,start) infinite}
+@keyframes pcBlink{to{visibility:hidden}}
+.pc-livec ul{display:flex;flex-direction:column}
+.pc-livec li{list-style:none;padding:8px 0;border-top:1px solid rgba(11,27,46,.14);font-size:14px;font-weight:700;line-height:1.3}
+.pc-livec .pc-more{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800}
+.pc-livec .pc-more i{font-style:normal;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#0B1B2E;color:var(--yellow);transition:transform .5s var(--ease)}
+.pc-livec:hover .pc-more i{transform:rotate(45deg)}
+.pc-resp{display:flex;align-items:center;gap:20px;margin-top:clamp(22px,3vh,34px);padding:18px 22px;border-radius:18px;border:1px solid var(--line);font-size:13.5px;line-height:1.6;color:var(--muted)}
+.pc-resp img{width:40px;height:40px;flex:none}
+.pc-resp a{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
+.pc-resp p{flex:1}
+
+/* ---------- À l'affiche : cartes d'animations ---------- */
+.pc-evs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.4vw,22px)}
+.pc-ev{display:grid;grid-template-columns:clamp(130px,13vw,188px) minmax(0,1fr);gap:clamp(18px,2vw,30px);padding:12px;border-radius:var(--r-lg);background:var(--card);box-shadow:var(--sh);transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.pc-ev:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+.pc-ev figure{aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#ECE6DB;align-self:start}
+.pc-ev figure img{width:100%;height:100%;object-fit:cover}
+.pc-ev-b{display:flex;flex-direction:column;gap:10px;padding:10px clamp(4px,1vw,14px) 10px 0;min-width:0}
+.pc-ev-m{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.pc-date{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;background:var(--ink);color:#fff;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.pc-date b{font-family:var(--display);font-stretch:110%;font-size:14px;font-weight:600}
+.pc-soon{display:inline-flex;align-items:center;height:30px;padding:0 11px;border-radius:999px;background:var(--yellow);color:var(--ink);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.pc-soon:empty{display:none}
+.pc-ev h3{font-size:clamp(19px,1.45vw,23px);line-height:1.12}
+.pc-ev p{font-size:14px;line-height:1.6;color:var(--muted)}
+.pc-ev .pc-ev-r{margin-top:auto;font-size:13px;font-weight:600;color:var(--ink)}
+.pc-ev .pc-ev-r a{color:var(--blue);white-space:nowrap}
+.pc-flash{display:flex!important;flex-direction:column;justify-content:space-between;padding:18px;background:var(--yellow)!important;color:var(--ink)}
+.pc-flash b{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(30px,3vw,44px);letter-spacing:-.04em;line-height:.9}
+.pc-flash span{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;line-height:1.5}
+.pc-flash i{display:block;width:44px;height:4px;background:linear-gradient(90deg,var(--fr-blue) 0 33.3%,#fff 33.3% 66.6%,var(--fr-red) 66.6%)}
+
+/* ---------- Fiches des lieux (texte à gauche, carte pratique à droite) ---------- */
+.pc-fiche{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,440px);gap:clamp(40px,6vw,110px);align-items:start}
+.pc-fiche+.pc-fiche{padding-top:0!important}
+.pc-fiche+.pc-fiche .pc-f-main{padding-top:clamp(70px,10vh,120px);border-top:1px solid var(--line)}
+.pc-fiche+.pc-fiche .pc-side{margin-top:clamp(70px,10vh,120px)}
+.pc-f-main h2{font-size:clamp(46px,6.2vw,108px);line-height:.92;letter-spacing:-.045em;margin:20px 0 clamp(26px,4vh,40px)}
+.pc-figs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px clamp(28px,3vw,48px);padding-bottom:clamp(24px,3.4vh,34px);margin-bottom:clamp(24px,3.4vh,34px);border-bottom:1px solid var(--line)}
+.pc-figs li{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.pc-figs b{font-family:var(--display);font-stretch:115%;font-weight:500;font-size:clamp(40px,3.8vw,62px);letter-spacing:-.04em;line-height:.9;color:var(--fg)}
+.pc-figs .pc-chip{flex-direction:row;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--line);font-size:12px;letter-spacing:.1em;color:var(--fg)}
+.pc-figs .pc-chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--yellow)}
+.pc-f-main p{font-size:clamp(15.5px,1.12vw,17.5px);line-height:1.75;color:rgba(var(--fg-rgb),.74);max-width:38em}
+.pc-f-main p+p{margin-top:1.1em}
+.pc-f-main .pc-lead{font-family:var(--display);font-stretch:108%;font-weight:500;font-size:clamp(21px,1.8vw,30px);line-height:1.3;letter-spacing:-.02em;color:var(--fg);max-width:24em;margin-bottom:1.2em}
+.pc-side{position:sticky;top:104px;display:flex;flex-direction:column;gap:20px}
+.pc-side .pc-card{display:flex;flex-direction:column;gap:22px}
+.pc-note{display:flex;gap:12px;padding:14px 16px;border-radius:14px;background:var(--soft);border:1px solid var(--line);font-size:13px;line-height:1.55;color:rgba(11,27,46,.74)}
+.pc-note::before{content:"i";flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:800;font-style:italic;font-family:Georgia,serif}
+.pc-ctas{display:grid;gap:8px}
+.pc-ctas .btn{justify-content:center;width:100%}
+.pc-ctas .btn.pc-mail{font-size:12.5px;padding:0 14px}
+.pc-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* L'Eclipse : panneau bleu nuit */
+.pc-ecl{position:relative;overflow:hidden}
+.pc-ecl::before{content:"";position:absolute;right:-12%;top:-30%;width:60%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(157,180,208,.16),rgba(157,180,208,0) 62%);pointer-events:none}
+.pc-ecl-in{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+.pc-ecl-t p{max-width:34em}
+.pc-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(26px,4vh,40px)}
+.pc-dl{display:flex;flex-direction:column}
+.pc-dl div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.pc-dl div:first-child{border-top:0;padding-top:0}
+.pc-dl dt{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.pc-dl dd{font-size:14.5px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
+.pc-dl dd a{color:var(--blue)}
+.pc-dl dd small{display:block;font-weight:500;color:var(--muted);font-size:13px}
+
+/* ---------- Fin : jeu responsable, réseaux ---------- */
+.pc-end{padding-top:0!important}
+.pc-end-in{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(14px,1.4vw,22px)}
+.pc-end .pc-card{display:flex;flex-direction:column;gap:18px}
+.pc-end .pc-r1{flex-direction:row;align-items:flex-start;gap:22px}
+.pc-end .pc-r1 img{width:52px;height:52px;flex:none}
+.pc-end .pc-r1 p{font-size:15px;line-height:1.7;color:rgba(11,27,46,.74);margin:10px 0 20px}
+.pc-end .pc-r1 a:not(.btn){color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.pc-soc{display:flex;flex-wrap:wrap;gap:8px}
+.pc-soc a{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;font-weight:600;transition:background .3s,color .3s,border-color .3s}
+.pc-soc a:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- Tablette ---------- */
+@media (max-width:1180px){
+  .pc-bar-in{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pc-live{grid-column:1/-1}
+  .pc-live+.pc-cell::before{display:none}
+  .pc-acts{grid-column:1/-1;flex-direction:row;padding:8px 14px 14px}
+  .pc-acts .btn{flex:1}
+  .pc-fiche{grid-template-columns:minmax(0,1fr) minmax(300px,380px);gap:48px}
+}
+@media (max-width:980px){
+  .pc-wall-in{right:-40%;width:150%;top:-30%;height:150%;transform:rotateX(18deg) rotateZ(10deg)}
+  .pc-hero::after{background:linear-gradient(to top,#0B1B2E 10%,rgba(11,27,46,.72) 48%,rgba(11,27,46,.35) 75%,rgba(11,27,46,.8))}
+  .pc-infos-in,.pc-end-in{grid-template-columns:minmax(0,1fr)}
+  .pc-fiche{grid-template-columns:minmax(0,1fr);gap:32px}
+  .pc-side{position:static}
+  .pc-fiche+.pc-fiche .pc-side{margin-top:0}
+  .pc-evs{grid-template-columns:minmax(0,1fr)}
+  .pc-games{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:auto}
+  .g199{grid-column:1/-1;grid-row:auto;aspect-ratio:16/11}
+  .g7,.g35{grid-row:auto;aspect-ratio:1}
+  .pc-livec{grid-column:1/-1}
+}
+/* ---------- Mobile ---------- */
+@media (max-width:640px){
+  .pc .section{padding:clamp(64px,10vh,96px) var(--gutter)}
+  .pc .pc-head{margin-bottom:28px}
+  .pc .pc-head h2{font-size:clamp(34px,10vw,48px)}
+  .pc-hero{min-height:88svh;padding-bottom:calc(48px + 40px)}
+  .pc-hero .display.huge{font-size:clamp(30px,10.4vw,46px);font-stretch:106%;letter-spacing:-.04em;line-height:.96}
+  .pc-hero-l{font-size:13.5px;gap:14px}
+  .pc-hero-l::before{width:54px;height:3px}
+  .pc-bar{margin:-40px 12px 0}
+  .pc-bar-in{grid-template-columns:minmax(0,1fr);padding:6px;border-radius:22px}
+  .pc-live{padding:18px 20px;border-radius:17px}
+  .pc-cell{padding:16px 16px 16px 18px;gap:6px}
+  .pc-cell+.pc-cell::before{left:18px;right:18px;top:0;bottom:auto;width:auto;height:1px}
+  .pc-live+.pc-cell::before{display:none}
+  .pc-cell .pc-lnk{position:absolute;right:14px;top:50%;transform:translateY(-50%);margin:0;width:44px;height:44px;justify-content:center;border-radius:50%;background:var(--soft);border:1px solid var(--line);font-size:0}
+  .pc-cell .pc-lnk::after{content:"↗";font-size:15px;color:var(--ink)}
+  .pc-cell:has(.pc-lnk){padding-right:70px}
+  .pc-acts{flex-direction:column;padding:8px 10px 10px}
+  .pc-acts .btn{flex:none;width:100%}
+  .pc-bento{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;gap:10px}
+  .pc-tile{padding:18px;min-height:200px;border-radius:18px}
+  .t-jeux{grid-column:1/-1;grid-row:auto;min-height:440px}
+  .t-jeux h3{font-size:30px}
+  .t-ycaste,.t-hotel{grid-column:1/-1;min-height:250px}
+  .t-salon,.t-eclipse{min-height:230px}
+  .t-salon h3,.t-eclipse h3{font-size:20px}
+  .pc-tile .pc-tk{font-size:10px;letter-spacing:.16em}
+  .pc-tile .pc-go{width:38px;height:38px;font-size:14px;top:14px;right:14px}
+  .t-salon .pc-tags,.t-eclipse .pc-tags{display:none}
+  .pc-nums{gap:6px}
+  .pc-nums li{padding:12px 10px;font-size:9px;letter-spacing:.1em;border-radius:12px}
+  .pc-nums b{font-size:28px}
+  .pc-card{padding:22px 20px;border-radius:22px}
+  .pc-games{gap:10px}
+  .pc-g{padding:18px;border-radius:18px}
+  .pc-g b{font-size:72px}
+  .g199 b{font-size:96px}
+  .pc-g>span{font-size:10px;letter-spacing:.16em}
+  .g199{aspect-ratio:4/5}
+  .pc-resp{flex-direction:column;align-items:flex-start;gap:12px;padding:16px 18px}
+  .pc-ev{grid-template-columns:104px minmax(0,1fr);gap:14px;padding:10px;border-radius:20px}
+  .pc-ev-b{padding:4px 4px 4px 0;gap:8px}
+  .pc-ev h3{font-size:18px}
+  .pc-ev p{font-size:13.5px;line-height:1.55}
+  .pc-flash{padding:12px}
+  .pc-flash b{font-size:26px}
+  .pc-flash span{font-size:8.5px}
+  .pc-f-main h2{font-size:clamp(44px,13vw,60px)}
+  .pc-figs b{font-size:44px}
+  .pc-two{grid-template-columns:minmax(0,1fr)}
+  .pc-panel{margin:0 8px;border-radius:24px}
+  .pc-dl div{grid-template-columns:minmax(0,1fr);gap:4px}
+  .pc-end .pc-r1{flex-direction:column;gap:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pc-track,.pc-wall-in,.pc-livec .pc-lab::before,.is-open .pc-dot::after{animation:none!important}
+  .pc-tile,.pc-tile img,.pc-ev,.pc-livec,.pc-g figure img,.pc-wall-in{transition:none!important}
+  .pc-tile:hover,.pc-ev:hover,.pc-livec:hover{transform:none}
+}
+</style>
+
+<div class="pc">
+
+<!-- Ouverture -->
+<section class="page-head pc-hero">
+  <div class="pc-wall" aria-hidden="true">
+    <div class="pc-wall-in">
+      <div class="pc-col"><div class="pc-track">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/1087/conversions/IMG_4541-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1030/conversions/Machines-%C3%A0-sous-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1091/conversions/IMG_1228-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1107/conversions/Encart-site-web---Dragon-d'or---2025-2026-thumb.jpg" alt="">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/1087/conversions/IMG_4541-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1030/conversions/Machines-%C3%A0-sous-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1091/conversions/IMG_1228-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1107/conversions/Encart-site-web---Dragon-d'or---2025-2026-thumb.jpg" alt="">
+      </div></div>
+      <div class="pc-col"><div class="pc-track">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/25/conversions/roulette-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/201/conversions/Ext%C3%A9rieur-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1089/conversions/IMG_4539-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1090/conversions/IMG_0936-thumb.jpg" alt="">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/25/conversions/roulette-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/201/conversions/Ext%C3%A9rieur-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1089/conversions/IMG_4539-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1090/conversions/IMG_0936-thumb.jpg" alt="">
+      </div></div>
+      <div class="pc-col"><div class="pc-track">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/1553/conversions/Encart-site-web---Monopoly---ao%C3%BBt-2026-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1087/conversions/IMG_4541-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1090/conversions/IMG_0936-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1091/conversions/IMG_1228-thumb.jpg" alt="">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/1553/conversions/Encart-site-web---Monopoly---ao%C3%BBt-2026-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1087/conversions/IMG_4541-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1090/conversions/IMG_0936-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1091/conversions/IMG_1228-thumb.jpg" alt="">
+      </div></div>
+      <div class="pc-col"><div class="pc-track">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/1089/conversions/IMG_4539-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1030/conversions/Machines-%C3%A0-sous-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/201/conversions/Ext%C3%A9rieur-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/25/conversions/roulette-thumb.jpg" alt="">
+        <img src="https://tranchant.backoffice.lbo-data.fr/storage/1089/conversions/IMG_4539-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/1030/conversions/Machines-%C3%A0-sous-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/201/conversions/Ext%C3%A9rieur-thumb.jpg" alt=""><img src="https://tranchant.backoffice.lbo-data.fr/storage/25/conversions/roulette-thumb.jpg" alt="">
+      </div></div>
+    </div>
+  </div>
+  <div class="page-head-in">
+    {{crumbs}}
+    <p class="pc-kick"><i></i>Casino · Nièvre</p>
+    <h1 class="display huge">Casino de<br>Pougues&#8209;les&#8209;Eaux</h1>
+    <p class="pc-hero-l">Espace ouvert 7/7 jours, 365 jours/an</p>
+  </div>
+</section>
+
+<!-- Barre d'infos clés -->
+<section class="pc-bar" aria-label="Infos clés">
+  <div class="pc-bar-in">
+    <div class="pc-cell pc-live" data-live="casino" aria-live="polite">
+      <p class="pc-lab">Casino · Horaire d'ouverture</p>
+      <p class="pc-st"><span class="pc-dot"></span><span data-st>Espace ouvert 7/7 jours</span></p>
+      <p class="pc-st2" data-st2>365 jours/an</p>
+    </div>
+    <div class="pc-cell">
+      <p class="pc-lab">Adresse</p>
+      <p class="pc-val">1315 Avenue de Paris<br>58320 Pougues-les-Eaux</p>
+      <a class="pc-lnk" href="https://www.google.fr/maps/dir/?api=1&amp;travelmode=driving&amp;destination=1315%20Avenue%20de%20Paris+58320%20Pougues-les-Eaux" target="_blank" rel="noopener" aria-label="GPS : itinéraire vers le casino (nouvel onglet)">GPS <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="pc-cell">
+      <p class="pc-lab">Téléphone</p>
+      <p class="pc-val"><a href="tel:+33386901700">+33(0)3 86 90 17 00</a></p>
+      <a class="pc-lnk" href="tel:+33386901700" aria-label="Appeler le casino">Appeler <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="pc-cell">
+      <p class="pc-lab">E-mail</p>
+      <p class="pc-val"><a href="mailto:infopou@groupetranchant.com">infopou@groupetranchant.com</a></p>
+      <a class="pc-lnk" href="mailto:infopou@groupetranchant.com" aria-label="Écrire au casino">Écrire <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="pc-acts">
+      <a class="btn solid" href="https://app.overfull.fr/booking-v2/?key_id=Wy23TKTKtS8&amp;source=Web&amp;lang=fr" target="_blank" rel="noopener">Réserver une table <span aria-hidden="true">↗</span></a>
+      <a class="btn" href="#infos">Horaires &amp; accès</a>
+    </div>
+  </div>
+</section>
+
+<!-- Les univers -->
+<section class="section pc-uni" id="univers" aria-labelledby="pc-uni-t">
+  <header class="pc-head">
+    <div>
+      <p class="kicker">Casino de Pougues-les-Eaux<i class="tri"></i></p>
+      <h2 class="display" id="pc-uni-t">Les univers</h2>
+    </div>
+  </header>
+  <div class="pc-bento">
+    <a class="pc-tile t-jeux" href="#jeux" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/25/roulette.jpg" alt="" loading="lazy" decoding="async"></figure>
+      <span class="pc-go" aria-hidden="true">↓</span>
+      <p class="pc-tk">Casino</p>
+      <h3>Les jeux</h3>
+      <ul class="pc-nums">
+        <li><b>199</b>Machines à sous</li>
+        <li><b>35</b>Jeux électroniques</li>
+        <li><b>7</b>Jeux traditionnels</li>
+      </ul>
+    </a>
+    <a class="pc-tile t-ycaste" href="#ycaste" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/206/terrasse.jpg" alt="" loading="lazy" decoding="async"></figure>
+      <span class="pc-go" aria-hidden="true">↓</span>
+      <p class="pc-tk">Restaurant</p>
+      <h3>L'Ycaste</h3>
+      <ul class="pc-tags"><li><b>90</b> couverts</li><li><b>50</b> en terrasse</li></ul>
+    </a>
+    <a class="pc-tile t-salon" href="#salon" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1091/IMG_1228.jpg" alt="" loading="lazy" decoding="async"></figure>
+      <span class="pc-go" aria-hidden="true">↓</span>
+      <p class="pc-tk">Bar</p>
+      <h3>Le Salon</h3>
+      <ul class="pc-tags"><li><b>35</b> couverts</li><li>Coworking</li></ul>
+    </a>
+    <a class="pc-tile t-eclipse" href="#eclipse" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/186/17157379_1561042047256821_2920663232900395433_o.jpg" alt="" loading="lazy" decoding="async"></figure>
+      <span class="pc-go" aria-hidden="true">↓</span>
+      <p class="pc-tk">Entreprise · Réception</p>
+      <h3>Salle L'Eclipse</h3>
+      <ul class="pc-tags"><li><b>600</b> m²</li><li><b>200</b> couverts</li></ul>
+    </a>
+    <a class="pc-tile t-hotel" href="#hotel" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/201/Ext%C3%A9rieur.jpg" alt="" loading="lazy" decoding="async"></figure>
+      <span class="pc-go" aria-hidden="true">↓</span>
+      <p class="pc-tk"><span class="pc-ring" aria-hidden="true"></span>Hôtel des Sources</p>
+      <h3>Partir très loin, sans partir trop loin</h3>
+      <ul class="pc-tags"><li>À 5 minutes du casino</li><li>24h/24 - 7j/7</li></ul>
+    </a>
+  </div>
+</section>
+
+<!-- Infos pratiques -->
+<section class="section pc-infos" id="infos" aria-labelledby="pc-infos-t">
+  <header class="pc-head">
+    <div>
+      <p class="kicker">Infos pratiques<i class="tri"></i></p>
+      <h2 class="display" id="pc-infos-t">Espace ouvert 7/7 jours, 365 jours/an</h2>
+    </div>
+  </header>
+  <div class="pc-infos-in">
+    <div class="pc-card" data-reveal>
+      <div class="pc-card-h"><h3>Horaire d'ouverture</h3><span class="pc-lab">Casino</span></div>
+      <div class="pc-hours" data-hours>
+        <ul class="pc-week">
+          <li data-d="1" data-h="09:00-03:00"><span>Lundi</span><span>09:00 – 03:00</span></li>
+          <li data-d="2" data-h="09:00-03:00"><span>Mardi</span><span>09:00 – 03:00</span></li>
+          <li data-d="3" data-h="09:00-03:00"><span>Mercredi</span><span>09:00 – 03:00</span></li>
+          <li data-d="4" data-h="09:00-03:00"><span>Jeudi</span><span>09:00 – 03:00</span></li>
+          <li data-d="5" data-h="09:00-04:00"><span>Vendredi</span><span>09:00 – 04:00</span></li>
+          <li data-d="6" data-h="09:00-04:00"><span>Samedi</span><span>09:00 – 04:00</span></li>
+          <li data-d="0" data-h="09:00-03:00"><span>Dimanche</span><span>09:00 – 03:00</span></li>
+          <li class="eve" data-d="eve" data-h="09:00-04:00"><span>Veille de jour férié</span><span>09:00 – 04:00</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pc-card pc-cond" data-reveal>
+      <div class="pc-card-h"><h3>Conditions d'entrée</h3><img src="/img/18ans.png" alt="Réservé aux personnes majeures" width="52" height="52"></div>
+      <ul class="pc-rules">
+        <li>Tenue correcte exigée.</li>
+        <li>Tenue de sport et de plage interdites.</li>
+      </ul>
+      <p>Conformément à la réglementation en vigueur, l'accès aux salles de jeux est réservé aux personnes majeures sur présentation d'une pièce d'identité en cours de validité ; à l'exception des personnes dont le Ministère de l'Intérieur a requis l'exclusion dans les conditions fixées par Arrêté.</p>
+      <p class="pc-id"><b>18+</b><span>Pièce d'identité en cours de validité</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- Les jeux -->
+<section class="section pc-jeux pc-dark pc-panel" id="jeux" aria-labelledby="pc-jeux-t">
+  <header class="pc-head">
+    <div>
+      <p class="kicker">Les jeux<i class="tri"></i></p>
+      <h2 class="display" id="pc-jeux-t">Machines à sous, jeux électroniques et jeux traditionnels</h2>
+    </div>
+  </header>
+  <div class="pc-games">
+    <div class="pc-g g199" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1030/Machines-%C3%A0-sous.JPEG" alt="La salle des machines à sous" loading="lazy" decoding="async"></figure>
+      <b data-count>199</b><span>Machines à sous</span>
+    </div>
+    <div class="pc-g g7" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1090/IMG_0936.jpg" alt="Une table de jeux traditionnels" loading="lazy" decoding="async"></figure>
+      <b data-count>7</b><span>Jeux traditionnels</span>
+    </div>
+    <div class="pc-g g35" data-reveal>
+      <b data-count>35</b><span>Jeux électroniques</span>
+    </div>
+    <a class="pc-livec" href="https://casino-pougues-les-eaux.fr/live-historique" target="_blank" rel="noopener" data-reveal>
+      <span class="pc-lab">Live / Historique</span>
+      <ul>
+        <li>Les Jackpots progressifs</li>
+        <li>3 plus gros gains de la semaine</li>
+        <li>Les 12 derniers gains &gt; à 100€</li>
+      </ul>
+      <span class="pc-more">Voir historique <i aria-hidden="true">↗</i></span>
+    </a>
+  </div>
+  <div class="pc-resp">
+    <img src="/img/18ans.png" alt="18+" width="40" height="40">
+    <p>Les jeux d'argent et de hasard peuvent être dangereux : pertes d'argent, conflits familiaux, addiction… Retrouvez nos conseils sur <a href="https://www.joueurs-info-service.fr/" target="_blank" rel="noopener">joueurs-info-service.fr</a> (09 74 75 13 13 - appel non surtaxé).</p>
+  </div>
+</section>
+
+<!-- Animations et spectacles -->
+<section class="section pc-anim" id="animations" aria-labelledby="pc-anim-t">
+  <header class="pc-head">
+    <div>
+      <p class="kicker">Animations et spectacles<i class="tri"></i></p>
+      <h2 class="display" id="pc-anim-t">À l'affiche</h2>
+    </div>
+    <a class="btn" href="https://casino-pougues-les-eaux.fr/animations" target="_blank" rel="noopener">Billetterie <span aria-hidden="true">↗</span></a>
+  </header>
+  <div class="pc-evs">
+    <article class="pc-ev" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1625/Encart-site-internet---concert-%C3%A0-l'Ycaste---10-novembre-2026.png" alt="Affiche du concert crooner au restaurant L'Ycaste" loading="lazy" decoding="async"></figure>
+      <div class="pc-ev-b">
+        <p class="pc-ev-m"><span class="pc-date"><b>10</b> nov. 2026 · 20h</span><span class="pc-soon" data-when="2026-11-10T20:00"></span></p>
+        <h3>Concert à L'Ycaste le 10 novembre</h3>
+        <p>Mardi 10 novembre à 20h, veille de jour férié, le restaurant l'Ycaste vous convie à une soirée spéciale CROONER ! Une bonne table, de la musique &amp; un moment de partage… tous les ingrédients sont réunis pour une soirée réussie !</p>
+        <p class="pc-ev-r">Renseignements &amp; réservations au <a href="tel:+33386901700">03 86 90 17 00</a></p>
+      </div>
+    </article>
+    <article class="pc-ev" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1627/Encart-site-internet---concert-%C3%A0-l'Ycaste---13-novembre-2026.png" alt="Affiche du concert de YELOH au restaurant L'Ycaste" loading="lazy" decoding="async"></figure>
+      <div class="pc-ev-b">
+        <p class="pc-ev-m"><span class="pc-date"><b>13</b> nov. 2026 · 20h</span><span class="pc-soon" data-when="2026-11-13T20:00"></span></p>
+        <h3>Concert à L'Ycaste le 13 novembre</h3>
+        <p>Envie d'une belle soirée musicale ? Retrouvez YELOH, duo acoustique guitare &amp; voix, pour un concert placé sous le signe de la pop, du rock &amp; de la folk !</p>
+        <p class="pc-ev-r">Renseignements &amp; réservations : <a href="tel:+33386901700">03 86 90 17 00</a></p>
+      </div>
+    </article>
+    <article class="pc-ev" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1553/Encart-site-web---Monopoly---ao%C3%BBt-2026.jpg" alt="Affiche Monopoly sur les machines à sous" loading="lazy" decoding="async"></figure>
+      <div class="pc-ev-b">
+        <p class="pc-ev-m"><span class="pc-date">Depuis le <b>27</b> août 2026</span></p>
+        <h3>Le Monopoly change de plateau</h3>
+        <p>Le célèbre Monopoly est arrivé sur 4 de vos machines à sous ! Préparez-vous à redécouvrir le jeu emblématique… d'une toute nouvelle façon !</p>
+      </div>
+    </article>
+    <article class="pc-ev" data-reveal>
+      <figure class="pc-flash" aria-hidden="true"><i></i><b>Flash</b><span>Tickets « Flash »<br>borne · lots</span></figure>
+      <div class="pc-ev-b">
+        <p class="pc-ev-m"><span class="pc-date">2026 – 2027</span></p>
+        <h3>Flashs</h3>
+        <p>Comme toujours : transformez vos flashs en cadeaux ! Jouez sur les machines, remportez des tickets « Flash », scannez-les sur la borne &amp; échangez-les contre un lot !</p>
+      </div>
+    </article>
+    <article class="pc-ev" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1107/Encart-site-web---Dragon-d'or---2025-2026.jpg" alt="Affiche Le précieux trésor du Dragon d'Or" loading="lazy" decoding="async"></figure>
+      <div class="pc-ev-b">
+        <p class="pc-ev-m"><span class="pc-date">Tous les jours</span></p>
+        <h3>Le précieux trésor du Dragon d'Or</h3>
+        <p>Le Dragon d'Or garde son trésor… mais il est prêt à le partager avec vous ! Tous les jours, scannez vos tickets sur la borne située en salle des machines à sous.</p>
+      </div>
+    </article>
+    <article class="pc-ev" data-reveal>
+      <figure><img src="https://tranchant.backoffice.lbo-data.fr/storage/1642/Encart-site-web---Tombola-privil%C3%A8ge-500%E2%82%AC---2025-2026.png" alt="Affiche Tombola privilège" loading="lazy" decoding="async"></figure>
+      <div class="pc-ev-b">
+        <p class="pc-ev-m"><span class="pc-date">Tous les <b>1<sup>ers</sup></b> du mois</span><span class="pc-soon" data-first></span></p>
+        <h3>Tombola privilège 500€</h3>
+        <p>Tous les 1ers du mois, un ticket de jeu de 500€ est à gagner. Qui décrochera le prochain ? Bonne chance à tous !</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Restaurant L'Ycaste -->
+<section class="section pc-fiche" id="ycaste" aria-labelledby="pc-yc-t">
+  <div class="pc-f-main">
+    <p class="kicker">Restaurant<i class="tri"></i></p>
+    <h2 class="display" id="pc-yc-t">L'Ycaste</h2>
+    <ul class="pc-figs"><li><b>90</b>couverts</li><li><b>50</b>en terrasse</li></ul>
+    <p>Dans un décor cosy et contemporain, vous passerez sans aucun doute un moment délicieux au restaurant "L'Ycaste" ou sur sa terrasse au bord de l'eau. En cuisine, le chef et sa brigade s'attachent à vous proposer des menus et une carte de mets variés et originaux, tout en équilibre et en délicatesse, alliant cuisine du terroir et produits régionaux qui évoluent au rythme des saisons.</p>
+    <p>Formules rapides pour le midi, apéritifs, ou menus de fête. Une farandole de plaisirs à déguster en toute liberté ! Le restaurant est une adresse idéale pour tous les dîners d'affaires, commerciaux, en famille ou encore en amoureux.</p>
+  </div>
+  <aside class="pc-side" aria-label="L'Ycaste : horaires et réservation">
+    <div class="pc-card">
+      <div class="pc-card-h"><h3>Horaire d'ouverture</h3><span class="pc-lab">L'Ycaste</span></div>
+      <div class="pc-hours" data-hours>
+        <ul class="pc-week">
+          <li data-d="1" class="off"><span>Lundi</span><span>Fermé</span></li>
+          <li data-d="2" data-h="12:00-14:00,19:00-22:15"><span>Mardi</span><span>12:00 – 14:00 / 19:00 – 22:15</span></li>
+          <li data-d="3" data-h="12:00-14:00,19:00-22:15"><span>Mercredi</span><span>12:00 – 14:00 / 19:00 – 22:15</span></li>
+          <li data-d="4" data-h="12:00-14:00,19:00-22:15"><span>Jeudi</span><span>12:00 – 14:00 / 19:00 – 22:15</span></li>
+          <li data-d="5" data-h="12:00-14:00,19:00-23:00"><span>Vendredi</span><span>12:00 – 14:00 / 19:00 – 23:00</span></li>
+          <li data-d="6" data-h="12:00-14:00,19:00-23:00"><span>Samedi</span><span>12:00 – 14:00 / 19:00 – 23:00</span></li>
+          <li data-d="0" class="off"><span>Dimanche</span><span>Fermé</span></li>
+          <li class="eve" data-d="eve" data-h="12:00-14:00,19:00-23:00"><span>Veille de jour férié</span><span>12:00 – 14:00 / 19:00 – 23:00</span></li>
+        </ul>
+      </div>
+      <p class="pc-note">Les réservations près de la baie vitrée ne sont pas sûres, merci de votre compréhension.</p>
+      <div class="pc-ctas">
+        <a class="btn solid" href="https://app.overfull.fr/booking-v2/?key_id=Wy23TKTKtS8&amp;source=Web&amp;lang=fr" target="_blank" rel="noopener">Réserver <span aria-hidden="true">↗</span></a>
+        <div class="pc-two">
+          <a class="btn" href="https://menu.lbo-data.fr/restaurant/restaurant-lycaste-du-casino" target="_blank" rel="noopener">Voir la carte <span aria-hidden="true">↗</span></a>
+          <a class="btn" href="tel:+33386901700">03 86 90 17 00</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<!-- Bar Le Salon -->
+<section class="section pc-fiche" id="salon" aria-labelledby="pc-sa-t">
+  <div class="pc-f-main">
+    <p class="kicker">Bar<i class="tri"></i></p>
+    <h2 class="display" id="pc-sa-t">Le Salon</h2>
+    <ul class="pc-figs"><li><b>35</b>couverts</li><li class="pc-chip">Terrasse</li><li class="pc-chip">Coworking</li></ul>
+    <p>Dans une ambiance élégante et feutrée, Le Salon vous accueille pour un moment de détente et de convivialité. Que vous soyez entre amis, en famille, en duo ou de passage, laissez-vous séduire par ce lieu chaleureux et accessible à tous. Tout au long de la journée et en soirée, profitez d'une pause gourmande autour de cocktails maison, d'une sélection de vins, de softs raffinés et de planches à partager.</p>
+    <p>Un espace de coworking est également à votre disposition, idéal pour travailler dans un environnement inspirant et confortable. Le lieu peut aussi être privatisé pour vos événements professionnels et privés.</p>
+  </div>
+  <aside class="pc-side" aria-label="Le Salon : horaires et contact">
+    <div class="pc-card">
+      <div class="pc-card-h"><h3>Horaire d'ouverture</h3><span class="pc-lab">Le Salon</span></div>
+      <div class="pc-hours" data-hours>
+        <ul class="pc-week">
+          <li data-d="1" data-h="09:00-00:00"><span>Lundi</span><span>09:00 – 00:00</span></li>
+          <li data-d="2" data-h="09:00-00:00"><span>Mardi</span><span>09:00 – 00:00</span></li>
+          <li data-d="3" data-h="09:00-00:00"><span>Mercredi</span><span>09:00 – 00:00</span></li>
+          <li data-d="4" data-h="09:00-00:00"><span>Jeudi</span><span>09:00 – 00:00</span></li>
+          <li data-d="5" data-h="09:00-02:00"><span>Vendredi</span><span>09:00 – 02:00</span></li>
+          <li data-d="6" data-h="09:00-02:00"><span>Samedi</span><span>09:00 – 02:00</span></li>
+          <li data-d="0" data-h="09:00-00:00"><span>Dimanche</span><span>09:00 – 00:00</span></li>
+          <li class="eve" data-d="eve" data-h="09:00-02:00"><span>Veille de jour férié</span><span>09:00 – 02:00</span></li>
+        </ul>
+      </div>
+      <div class="pc-ctas">
+        <a class="btn solid" href="tel:+33386901700">03 86 90 17 00</a>
+        <a class="btn pc-mail" href="mailto:infopou@groupetranchant.com">infopou@groupetranchant.com</a>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<!-- Salle L'Eclipse -->
+<section class="section pc-ecl pc-dark pc-panel" id="eclipse" aria-labelledby="pc-ec-t">
+  <div class="pc-fiche pc-ecl-in">
+    <div class="pc-f-main">
+      <p class="kicker">Entreprise · Réception<i class="tri"></i></p>
+      <h2 class="display" id="pc-ec-t">Salle L'Eclipse</h2>
+      <ul class="pc-figs"><li><b>600</b>m²</li><li><b>200</b>couverts</li><li class="pc-chip">Terrasse</li></ul>
+      <p class="pc-lead">Recevoir dans un casino du Groupe Tranchant, c'est vouloir partager entre collaborateurs un moment de joie et de convivialité.</p>
+    </div>
+    <div class="pc-f-main pc-ecl-t">
+      <p>Véritable lieu atypique pour vos manifestations, le Casino de Pougues-les-Eaux est avant tout un espace de réception de 600m carré.</p>
+      <p>Assemblée générale, séminaire, repas de fin d'année, conférence, arbre de Noël, cocktail, ... quelle que soit l'occasion, l'espace est modulable selon vos envies et votre événement.</p>
+      <p>Un interlocuteur unique vous accompagne tout au long de votre projet pour coordonner tous les prestataires et faire de votre manifestation un moment inoubliable.</p>
+      <div class="pc-btns">
+        <a class="btn solid" href="mailto:infopou@groupetranchant.com">infopou@groupetranchant.com</a>
+        <a class="btn" href="tel:+33386901700">03 86 90 17 00</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hôtel des Sources -->
+<section class="section pc-fiche" id="hotel" aria-labelledby="pc-ho-t">
+  <div class="pc-f-main">
+    <p class="kicker">Hôtel des Sources<i class="tri"></i></p>
+    <h2 class="display" id="pc-ho-t">Partir très loin, sans partir trop loin</h2>
+    <p>Dans un cadre de verdure et de calme, au cœur de la station de Pougues-les-Eaux, l'Hôtel des Sources est situé à 5 minutes du casino. Nous vous offrons un lieu unique et charmant alliant travail et détente. Profitez de votre séjour dans la Nièvre pour pratiquer une multitude d'activités, été comme hiver, et découvrir l'une des plus belles régions de France avec ses départements limitrophes : l'Yonne, la Côte-d'Or, la Saône-et-Loire, l'Allier, le Cher et le Loiret.</p>
+  </div>
+  <aside class="pc-side" aria-label="Hôtel des Sources : réservation">
+    <div class="pc-card">
+      <div class="pc-card-h"><h3><span class="pc-ring" aria-hidden="true"></span>Hôtel des Sources</h3></div>
+      <dl class="pc-dl">
+        <div><dt>Réservation</dt><dd><a href="tel:+33386367405">03 86 36 74 05</a><small>24h/24 - 7j/7</small></dd></div>
+        <div><dt>Adresse</dt><dd>132 Rue de la Mignarderie<br>58320 Pougues-les-Eaux</dd></div>
+        <div><dt>E-mail</dt><dd><a href="mailto:info@hoteldessources.fr">info@hoteldessources.fr</a></dd></div>
+      </dl>
+      <div class="pc-ctas">
+        <a class="btn solid" href="https://www.hoteldessources.fr/fr/" target="_blank" rel="noopener">Réservez : www.hoteldessources.fr <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<!-- Jeu responsable et liens -->
+<section class="section pc-end" aria-label="Jeu responsable et liens">
+  <div class="pc-end-in">
+    <div class="pc-card pc-r1">
+      <img src="/img/18ans.png" alt="18+" width="52" height="52">
+      <div>
+        <p class="pc-lab">Jeu responsable</p>
+        <p>Les jeux d'argent et de hasard peuvent être dangereux : pertes d'argent, conflits familiaux, addiction… Retrouvez nos conseils sur <a href="https://www.joueurs-info-service.fr/" target="_blank" rel="noopener">joueurs-info-service.fr</a> (09 74 75 13 13 - appel non surtaxé).</p>
+        <a class="btn" href="https://jeuresponsable.groupetranchant.com/" target="_blank" rel="noopener">Jeu responsable <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <div class="pc-card">
+      <p class="pc-lab">Suivre le casino</p>
+      <div class="pc-soc">
+        <a href="https://www.facebook.com/casinopougues" target="_blank" rel="noopener">Facebook <span aria-hidden="true">↗</span></a>
+        <a href="https://www.instagram.com/casinopougues/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a>
+        <a href="https://casino-pougues-les-eaux.fr/" target="_blank" rel="noopener">Site du casino <span aria-hidden="true">↗</span></a>
+        <a href="/nos-destinations/#annuaire">Toutes nos destinations <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<script type="module">
+/* Horaires intelligents : jour courant, ouvert / fermé maintenant, veilles de jours fériés (France), compte à rebours des animations */
+const root = document.querySelector('.pc');
+const qs = new URLSearchParams(location.search);
+// ?now=2026-11-10T21:30 pour vérifier un autre moment
+const NOW = qs.has('now') ? new Date(qs.get('now')) : new Date();
+const DAYS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+const pad = n => String(n).padStart(2, '0');
+const hm = m => `${pad(Math.floor(m / 60) % 24)}:${pad(m % 60)}`;
+const toMin = s => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
+const parse = s => (s || '').split(',').filter(Boolean).map(r => { const [a, b] = r.split('-').map(toMin); return [a, b <= a ? b + 1440 : b]; });
+const ymd = d => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+// jours fériés : dates fixes + Pâques (lundi), Ascension, Pentecôte (lundi)
+const holidays = y => {
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3),
+    h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451),
+    mo = Math.floor((h + l - 7 * m + 114) / 31), da = ((h + l - 7 * m + 114) % 31) + 1, easter = new Date(y, mo - 1, da);
+  return new Set([[0, 1], [4, 1], [4, 8], [6, 14], [7, 15], [10, 1], [10, 11], [11, 25]].map(([M, D]) => ymd(new Date(y, M, D))).concat([1, 39, 50].map(n => ymd(addDays(easter, n)))));
+};
+const isEve = d => { const t = addDays(d, 1); return holidays(t.getFullYear()).has(ymd(t)); };
+
+root.querySelectorAll('[data-hours]').forEach(box => {
+  const rows = [...box.querySelectorAll('li')];
+  const sched = {}; rows.forEach(r => { sched[r.dataset.d] = parse(r.dataset.h); });
+  const sessions = d => (isEve(d) && sched.eve.length ? sched.eve : sched[d.getDay()] || []);
+  // journée « de service » : avant 6 h, on est encore sur la soirée de la veille
+  const nowMin = NOW.getHours() * 60 + NOW.getMinutes();
+  const service = nowMin < 360 ? addDays(NOW, -1) : new Date(NOW);
+  const m = nowMin < 360 ? nowMin + 1440 : nowMin;
+  const today = sessions(service);
+  const cur = today.find(([a, b]) => m >= a && m < b);
+  let state, l1, l2;
+  if (cur) {
+    const left = cur[1] - m;
+    state = left <= 60 ? 'is-late' : 'is-open';
+    l1 = left <= 60 ? 'Ferme bientôt' : 'Ouvert maintenant';
+    l2 = `Jusqu'à ${hm(cur[1])}`;
+  } else {
+    state = 'is-closed'; l1 = 'Fermé maintenant';
+    const later = today.find(([a]) => a > m);
+    if (later) l2 = `Ouvre aujourd'hui à ${hm(later[0])}`;
+    else for (let k = 1; k <= 7; k++) { const d = addDays(service, k), s = sessions(d); if (s.length) { l2 = `Ouvre ${k === 1 ? 'demain' : DAYS[d.getDay()]} à ${hm(s[0][0])}`; break; } }
+  }
+  // ligne du jour
+  const eve = isEve(service);
+  rows.forEach(r => r.classList.remove('on'));
+  const on = eve && sched.eve.length ? rows.find(r => r.dataset.d === 'eve') : rows.find(r => r.dataset.d === String(service.getDay()));
+  if (on) { on.classList.add('on'); on.firstElementChild.dataset.tag = eve ? 'Ce jour' : "Aujourd'hui"; }
+  // statut + frise de la journée (6 h → 6 h)
+  const head = document.createElement('div');
+  head.innerHTML = `<p class="pc-st ${state}" aria-live="polite"><span class="pc-dot"></span><span>${l1}</span></p><p class="pc-st2">${l2 || ''}</p>
+    <div class="pc-day" aria-hidden="true"><div class="pc-day-tr">${today.map(([a, b]) => { const x = Math.max(a, 360), y = Math.min(b, 1800); return y > x ? `<i style="left:${(x - 360) / 14.4}%;width:${(y - x) / 14.4}%"></i>` : ''; }).join('')}<b class="pc-now" style="left:${(m - 360) / 14.4}%"></b></div>
+    <div class="pc-day-l"><span>6h</span><span>12h</span><span>18h</span><span>0h</span><span>6h</span></div></div>`;
+  box.prepend(...head.children);
+  // barre d'infos clés (casino)
+  if (box.closest('#infos')) {
+    const live = root.querySelector('[data-live]');
+    live.classList.add(state);
+    live.querySelector('[data-st]').textContent = l1;
+    const t = today.map(([a, b]) => `${hm(a)} – ${hm(b)}`).join(' / ');
+    live.querySelector('[data-st2]').textContent = `${l2 || ''}${t ? ` · ${eve ? 'veille de jour férié' : DAYS[service.getDay()]} ${t}` : ''}`;
+  }
+});
+
+// animations : « Ce soir », « Demain », « Dans 7 jours »
+const day0 = new Date(NOW.getFullYear(), NOW.getMonth(), NOW.getDate());
+const until = d => Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - day0) / 864e5);
+const label = n => n === 0 ? 'Ce soir' : n === 1 ? 'Demain' : n <= 30 ? `Dans ${n} jours` : '';
+root.querySelectorAll('.pc-soon[data-when]').forEach(el => { const n = until(new Date(el.dataset.when)); el.textContent = n >= 0 ? label(n) : ''; });
+root.querySelectorAll('.pc-soon[data-first]').forEach(el => { const n = until(new Date(NOW.getFullYear(), NOW.getMonth() + (NOW.getDate() === 1 ? 0 : 1), 1)); el.textContent = n === 0 ? "Aujourd'hui" : n === 1 ? 'Demain' : `Prochaine dans ${n} jours`; });
+
+// mur de photos : léger suivi du pointeur, arrêt hors écran
+const hero = root.querySelector('.pc-hero');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+new IntersectionObserver(([e]) => hero.classList.toggle('pc-off', !e.isIntersecting)).observe(hero);
+if (!reduce && matchMedia('(pointer: fine)').matches) {
+  let raf = 0;
+  hero.addEventListener('pointermove', e => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { const r = hero.getBoundingClientRect(); hero.style.setProperty('--px', ((e.clientX - r.left) / r.width - .5).toFixed(3)); hero.style.setProperty('--py', ((e.clientY - r.top) / r.height - .5).toFixed(3)); }); });
+  hero.addEventListener('pointerleave', () => { hero.style.setProperty('--px', 0); hero.style.setProperty('--py', 0); });
+}
+</script>

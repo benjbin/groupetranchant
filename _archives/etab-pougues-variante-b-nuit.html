@@ -1,0 +1,725 @@
+<!-- VARIANTE B — « La nuit, immersif » : Casino de Pougues-les-Eaux.
+     Textes repris du site du casino (casino-pougues-les-eaux.fr), photos hébergées par le casino (tranchant.backoffice.lbo-data.fr).
+     Pas d'image d'alcool : ni photo du bar, ni photo de la salle de réception dressée (verres), ni affiches « VIP Club » et « Flash ». -->
+<style>
+.pb{--ink:#050C16;--night:#0B1B2E;--navy2:#10243A;--gold:#C9A862;--gold-l:#E6D3A0;--sun:#F9C83B;--pb-tx:#F5F1EA;--mu:rgba(245,241,234,.7);--hair:rgba(201,168,98,.26);--hair2:rgba(245,241,234,.12);
+  position:relative;background:var(--ink);color:var(--pb-tx);overflow-x:clip;font-family:var(--sans)}
+.pb::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:5;opacity:.055;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.pb a:focus-visible,.pb button:focus-visible,.pb [tabindex]:focus-visible{outline:2px solid var(--sun);outline-offset:4px;border-radius:6px}
+.pb .btn{margin-top:0;border-color:rgba(245,241,234,.28)}
+.pb .btn.solid{background:var(--gold);border-color:var(--gold);color:#0B1B2E}
+.pb .btn.solid:hover{background:var(--sun);border-color:var(--sun)}
+.pb-cta{display:flex;flex-wrap:wrap;gap:10px}
+.pb-k{display:flex;align-items:center;gap:14px;font-size:11.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
+.pb-k::before{content:"";width:34px;height:1px;background:currentColor;opacity:.8}
+.pb-h2{font-family:var(--display);font-stretch:120%;font-weight:500;letter-spacing:-.04em;line-height:.95;font-size:clamp(40px,6vw,100px);margin-top:22px}
+.pb-gold{background:linear-gradient(100deg,var(--pb-tx) 0%,var(--gold-l) 38%,var(--gold) 72%,#A8873F 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pb p{line-height:1.7}
+.pb-txt p{color:var(--mu);font-size:15.5px;max-width:58ch}
+.pb-txt p+p{margin-top:1em}
+.pb-txt a{color:var(--pb-tx);border-bottom:1px solid var(--hair)}
+.pb-lead{font-family:var(--display);font-stretch:108%;font-size:clamp(20px,1.8vw,27px)!important;line-height:1.35!important;color:var(--pb-tx)!important;letter-spacing:-.01em}
+.pb-badges{display:flex;flex-wrap:wrap;gap:8px 28px;margin:30px 0 32px;list-style:none}
+.pb-badges li{display:flex;align-items:baseline;gap:9px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+.pb-badges b{font-family:var(--display);font-stretch:125%;font-weight:500;font-size:clamp(30px,3vw,44px);letter-spacing:-.03em;color:var(--pb-tx);text-transform:none}
+.pb-badges li.pb-tag{padding:7px 14px;border:1px solid var(--hair);border-radius:99px;color:var(--gold-l);align-self:center}
+.pb-sec{position:relative;padding:clamp(100px,17vh,200px) var(--gutter)}
+
+/* révélations au défilement (seulement si le script tourne) */
+.pb-js [data-pb]{opacity:0;transform:translateY(46px);filter:blur(6px);transition:opacity 1.3s var(--ease),transform 1.4s var(--ease),filter 1.2s ease;transition-delay:var(--dl,0s)}
+.pb-js [data-pb].in{opacity:1;transform:none;filter:none}
+.pb-js .pb-mask{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.pb-js .pb-mask>span{display:block;transform:translateY(108%);transition:transform 1.5s var(--ease) var(--dl,0s)}
+.pb-js .in .pb-mask>span,.pb-js .pb-mask.in>span{transform:none}
+
+/* ---------- Ouverture ---------- */
+.pb-hero{position:relative;min-height:100svh;display:flex;flex-direction:column;padding:clamp(104px,14vh,140px) var(--gutter) clamp(26px,4.5vh,44px);isolation:isolate;overflow:hidden}
+.pb-hero-bg{position:absolute;inset:0;z-index:-3;overflow:hidden;background:var(--night)}
+.pb-hero-bg img{width:100%;height:112%;object-fit:cover;object-position:50% 34%;filter:grayscale(1) contrast(1.25) brightness(1.05);transform:translateY(calc(var(--hp,0) * 9%)) scale(calc(1.08 - var(--hp,0) * .04));animation:pbKen 3.2s var(--ease) both}
+.pb-hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#22528f,#16365f 60%,#0B1B2E);mix-blend-mode:multiply}
+.pb-hero-sh{position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(5,12,22,.7) 0%,rgba(5,12,22,0) 24%,rgba(5,12,22,.05) 48%,rgba(5,12,22,.8) 76%,var(--ink) 100%),linear-gradient(90deg,rgba(5,12,22,.55),transparent 55%)}
+.pb-halo{position:absolute;z-index:-1;pointer-events:none;border-radius:50%;mix-blend-mode:screen;filter:blur(10px)}
+.pb-hero .pb-halo.h1{width:62vmax;height:62vmax;right:-14vmax;top:-18vmax;background:radial-gradient(closest-side,rgba(249,200,59,.34),rgba(201,168,98,.12) 55%,transparent);animation:pbBreathe 9s ease-in-out infinite alternate}
+.pb-hero .pb-halo.h2{width:46vmax;height:46vmax;left:-16vmax;bottom:-20vmax;background:radial-gradient(closest-side,rgba(51,95,148,.5),transparent);animation:pbBreathe 11s ease-in-out -4s infinite alternate}
+.pb-hero .crumbs{color:rgba(245,241,234,.7);margin-bottom:0}
+.pb-hero .crumbs [aria-current]{color:var(--pb-tx)}
+.pb-hero-mid{margin-top:auto;padding-top:6vh}
+.pb-h1{font-family:var(--display);font-weight:500;font-stretch:125%;letter-spacing:-.055em;line-height:.84;font-size:clamp(58px,min(13.2vw,24vh),230px);margin:22px 0 0}
+.pb-h1 .l{display:block;overflow:hidden;padding:0 .04em .07em 0}
+.pb-h1 .l>span{display:block;animation:pbRise 1.6s var(--ease) both}
+.pb-h1 .l1{font-size:.25em;font-stretch:112%;letter-spacing:.01em;font-weight:500;color:var(--gold-l);margin-bottom:.32em;line-height:1}
+.pb-h1 .l1>span{animation-delay:.15s}
+.pb-h1 .l2>span{animation-delay:.28s}
+.pb-h1 .l3{padding-left:.9em}
+.pb-h1 .l3>span{animation-delay:.42s}
+.pb-hero-bar{display:grid;grid-template-columns:auto 1fr;gap:28px 60px;align-items:end;margin-top:clamp(26px,5vh,54px);padding-top:clamp(20px,3vh,30px);border-top:1px solid var(--hair);animation:pbFade 1.4s var(--ease) .9s both}
+.pb-live{display:inline-flex;align-items:center;gap:12px;font-size:13.5px;font-weight:600;margin-bottom:18px}
+.pb-live i{position:relative;width:9px;height:9px;border-radius:50%;background:var(--sun);box-shadow:0 0 14px var(--sun)}
+.pb-live i::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--sun);opacity:0;animation:pbPing 2.4s ease-out infinite}
+.pb-live.off i{background:var(--mu);box-shadow:none}.pb-live.off i::after{display:none}
+.pb-facts{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:18px 46px;font-size:14px}
+.pb-facts dt{font-size:10.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.pb-facts dd{line-height:1.55;color:var(--pb-tx)}
+.pb-facts a{border-bottom:1px solid var(--hair);transition:border-color .3s,color .3s}
+.pb-facts a:hover{color:var(--gold-l);border-color:var(--gold)}
+.pb-nav{position:relative;z-index:2;display:flex;gap:6px 0;flex-wrap:wrap;justify-content:center;padding:22px var(--gutter);border-top:1px solid var(--hair2);border-bottom:1px solid var(--hair2);background:var(--ink)}
+.pb-nav a{position:relative;padding:8px 18px;font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mu);transition:color .3s}
+.pb-nav a+a::before{content:"";position:absolute;left:-2px;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background:var(--gold);opacity:.6}
+.pb-nav a:hover{color:var(--gold-l)}
+
+@keyframes pbKen{from{scale:1.14;opacity:0}to{scale:1;opacity:1}}
+@keyframes pbRise{from{transform:translateY(110%)}to{transform:none}}
+@keyframes pbFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pbBreathe{from{opacity:.65;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+@keyframes pbPing{0%{opacity:.8;transform:scale(.4)}100%{opacity:0;transform:scale(1.6)}}
+
+/* ---------- Infos pratiques ---------- */
+.pb-infos{overflow:hidden}
+.pb-infos .pb-halo{width:70vmax;height:70vmax;left:30%;top:10%;background:radial-gradient(closest-side,rgba(201,168,98,.14),transparent)}
+.pb-infos-head{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:5vw;align-items:end}
+.pb-sign{position:relative;aspect-ratio:4/5;max-height:58vh;border-radius:220px 220px 26px 26px;overflow:hidden;justify-self:end;width:100%;max-width:430px;box-shadow:0 60px 120px -50px rgba(0,0,0,.9)}
+.pb-sign img{width:100%;height:118%;object-fit:cover;object-position:50% 40%;filter:grayscale(1) contrast(1.3) brightness(.78);transform:translateY(var(--py,0px))}
+.pb-sign::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#1a4a85 0%,#0B1B2E 100%);mix-blend-mode:multiply}
+.pb-sign::before{content:"";position:absolute;z-index:1;inset:0;background:radial-gradient(60% 40% at 50% 46%,rgba(249,200,59,.32),transparent 70%);mix-blend-mode:screen}
+.pb-hrs{position:relative;z-index:2;margin-top:clamp(40px,7vh,80px);width:100%;padding:clamp(24px,3.4vw,52px);border:1px solid var(--hair);border-radius:30px;background:linear-gradient(155deg,rgba(19,42,69,.78),rgba(5,12,22,.86) 70%);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 50px 120px -40px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.06)}
+.pb-hrs-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px 30px}
+.pb-hrs-t{font-family:var(--display);font-stretch:112%;font-size:clamp(20px,1.7vw,26px);font-weight:500;letter-spacing:-.01em}
+.pb-days{display:flex;flex-wrap:wrap;gap:6px}
+.pb-days button{position:relative;min-width:54px;height:44px;padding:0 14px;border-radius:99px;border:1px solid var(--hair2);font-size:13px;font-weight:600;color:var(--mu);transition:background .35s,color .35s,border-color .35s}
+.pb-days button:hover{border-color:var(--gold);color:var(--pb-tx)}
+.pb-days button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#0B1B2E}
+.pb-days button.today::after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--sun)}
+.pb-days button.today[aria-pressed="true"]::after{background:#0B1B2E}
+.pb-days .pb-eve{padding:0 18px}
+.pb-hrs-out{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:0;margin-top:clamp(26px,4vh,44px);border-top:1px solid var(--hair2)}
+.pb-hrs-out>div{padding:clamp(20px,3vh,32px) clamp(16px,2vw,32px) 4px 0}
+.pb-hrs-out>div+div{padding-left:clamp(16px,2vw,32px);border-left:1px solid var(--hair2)}
+.pb-hrs-l{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.pb-hrs-l small{display:block;font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--mu);margin-top:6px}
+.pb-hrs-v{font-family:var(--display);font-stretch:118%;font-weight:500;letter-spacing:-.035em;line-height:1.02;font-size:clamp(24px,2.4vw,38px);font-variant-numeric:tabular-nums;transition:opacity .35s,transform .5s var(--ease)}
+.pb-hrs-v span{display:block;white-space:nowrap}
+.pb-hrs-c .pb-hrs-v{font-size:clamp(40px,4.4vw,72px)}
+.pb-hrs-v .sep{display:inline-block;margin:0 .14em;color:var(--gold);font-weight:300}
+.pb-hrs-v.off{color:rgba(245,241,234,.45)}
+.pb-hrs-out.swap .pb-hrs-v{opacity:0;transform:translateY(12px)}
+.pb-hrs-day{margin-top:22px;font-size:13px;color:var(--mu)}
+.pb-hrs-day b{color:var(--pb-tx);font-weight:600}
+.pb-cond{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px 46px;align-items:start;margin-top:clamp(60px,10vh,110px);max-width:1310px}
+.pb-18{display:grid;place-items:center;width:clamp(96px,9vw,128px);aspect-ratio:1;border-radius:50%;border:1px solid var(--gold);font-family:var(--display);font-stretch:125%;font-size:clamp(30px,3vw,42px);font-weight:500;color:var(--gold-l);box-shadow:0 0 60px -10px rgba(201,168,98,.45),inset 0 0 30px rgba(201,168,98,.12)}
+.pb-cond h3{font-family:var(--display);font-stretch:112%;font-weight:500;font-size:clamp(22px,2vw,30px);margin-bottom:14px}
+.pb-cond p{max-width:76ch}
+.pb-cond .pb-id{margin-top:14px;font-size:13px;letter-spacing:.06em;color:var(--gold-l)}
+
+/* ---------- Les jeux : cartes empilées ---------- */
+.pb-jeux{padding-bottom:clamp(70px,12vh,130px)}
+.pb-jeux-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:30px;margin-bottom:clamp(40px,8vh,90px)}
+.pb-jeux-head .pb-h2{max-width:13em}
+.pb-stack{position:relative}
+.pb-card{--cv:0;position:sticky;top:calc(84px + var(--i,0) * 20px);height:min(76vh,740px);min-height:440px;margin-bottom:9vh;border-radius:32px;overflow:hidden;isolation:isolate;transform-origin:50% 0;transform:scale(calc(1 - var(--cv) * .06));box-shadow:0 -30px 80px -40px rgba(0,0,0,.9),0 0 0 1px rgba(201,168,98,.18);background:var(--night)}
+.pb-card:last-child{margin-bottom:0}
+.pb-card::after{content:"";position:absolute;inset:0;z-index:3;background:#02060c;opacity:calc(var(--cv) * .62);pointer-events:none}
+.pb-card>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;transform:scale(calc(1.14 - var(--cin,0) * .1));filter:saturate(.9) contrast(1.05) brightness(.85)}
+.pb-card-sh{position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(5,12,22,.95) 0%,rgba(5,12,22,.55) 38%,rgba(5,12,22,0) 70%),linear-gradient(90deg,rgba(5,12,22,.55),transparent 60%)}
+.pb-card-in{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 40px;padding:clamp(24px,4vw,64px)}
+.pb-num{display:block;font-family:var(--display);font-stretch:125%;font-weight:600;letter-spacing:-.07em;line-height:.78;font-size:clamp(130px,21vw,340px);margin-left:-.05em}
+.pb-num-l{display:block;margin-top:clamp(14px,2vh,24px);font-family:var(--display);font-stretch:115%;font-size:clamp(22px,2.6vw,40px);font-weight:500;letter-spacing:-.02em}
+.pb-card-2{background:radial-gradient(70% 90% at 85% 10%,rgba(249,200,59,.2),transparent 60%),radial-gradient(60% 80% at 10% 100%,rgba(51,95,148,.45),transparent 70%),linear-gradient(160deg,#10243A,#050C16)}
+.pb-card-2 .pb-rings{position:absolute;right:-10%;top:-30%;width:min(80vw,900px);aspect-ratio:1;border-radius:50%;z-index:-1;background:repeating-radial-gradient(circle,transparent 0 38px,rgba(201,168,98,.10) 39px 40px);mask:radial-gradient(closest-side,#000 30%,transparent);-webkit-mask:radial-gradient(closest-side,#000 30%,transparent)}
+.pb-livecard{display:block;width:min(100%,400px);padding:26px 28px;border:1px solid var(--hair);border-radius:22px;background:rgba(5,12,22,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:border-color .4s,transform .6s var(--ease),background .4s}
+.pb-livecard:hover{border-color:var(--gold);transform:translateY(-4px);background:rgba(5,12,22,.75)}
+.pb-livecard .pb-k{margin-bottom:12px}
+.pb-livecard span.r{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--hair2);font-size:14.5px}
+.pb-livecard span.r::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sun);box-shadow:0 0 10px var(--sun);flex:none}
+.pb-livecard .more{display:inline-flex;gap:10px;margin-top:18px;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l)}
+.pb-resp{display:flex;align-items:center;gap:18px;max-width:900px;margin:clamp(50px,8vh,80px) auto 0;padding:18px 24px;border:1px solid var(--hair2);border-radius:18px;font-size:13.5px;color:var(--mu)}
+.pb-resp b{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);color:var(--gold-l);font-size:13px}
+.pb-resp a{color:var(--pb-tx);border-bottom:1px solid var(--hair)}
+
+/* ---------- À l'affiche ---------- */
+.pb-aff{position:relative;background:linear-gradient(180deg,var(--ink),#081424 30%,#081424 70%,var(--ink))}
+.pb-aff-pin{position:relative;padding:clamp(90px,14vh,150px) 0 clamp(70px,10vh,110px);overflow:hidden}
+.pb-aff-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px 40px;padding:0 var(--gutter);margin-bottom:clamp(36px,6vh,60px)}
+.pb-aff-head .pb-h2{font-size:clamp(48px,8.4vw,150px);line-height:.86}
+.pb-aff-ctl{display:flex;align-items:center;gap:10px}
+.pb-arrow{width:50px;height:50px;border-radius:50%;border:1px solid rgba(245,241,234,.28);display:grid;place-items:center;font-size:18px;transition:background .3s,color .3s,border-color .3s}
+.pb-arrow:hover{background:var(--pb-tx);color:var(--ink);border-color:var(--pb-tx)}
+.pb-track{display:flex;gap:clamp(22px,3vw,48px);padding:10px var(--gutter) 30px;margin:0;list-style:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.pb-track::-webkit-scrollbar{display:none}
+.pb-ev{--d:0;position:relative;flex:none;width:min(78vw,340px);scroll-snap-align:center;display:flex;flex-direction:column}
+.pb-poster{position:relative;aspect-ratio:3/4;isolation:isolate}
+.pb-poster .glow{position:absolute;inset:6%;z-index:-1;width:88%;height:88%;object-fit:cover;filter:blur(46px) saturate(1.7) brightness(1.1);opacity:calc(.75 - var(--ad,0) * .45);transform:scale(1.18);pointer-events:none}
+.pb-poster .ph{position:relative;width:100%;height:100%;object-fit:cover;border-radius:14px;box-shadow:0 40px 80px -30px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.08);transform:translateY(calc(var(--d) * 26px)) scale(calc(1 - var(--ad,0) * .05));transition:box-shadow .5s}
+.pb-flash{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;height:100%;border-radius:14px;overflow:hidden;text-align:center;padding:24px;background:radial-gradient(circle at 50% 42%,rgba(249,200,59,.55),rgba(201,168,98,.12) 38%,transparent 62%),repeating-conic-gradient(from 0deg at 50% 42%,rgba(249,200,59,.12) 0 4deg,transparent 4deg 14deg),#0B1B2E;box-shadow:0 40px 80px -30px rgba(0,0,0,.95),0 0 0 1px rgba(201,168,98,.3);transform:translateY(calc(var(--d) * 26px)) scale(calc(1 - var(--ad,0) * .05))}
+.pb-flash b{font-family:var(--display);font-stretch:125%;font-weight:700;font-size:clamp(64px,7vw,104px);letter-spacing:-.05em;line-height:.9;color:var(--sun);text-shadow:0 0 40px rgba(249,200,59,.6)}
+.pb-flash span{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--pb-tx)}
+.pb-flash-g{position:absolute;inset:10%;z-index:-1;border-radius:50%;background:var(--sun);filter:blur(60px);opacity:calc(.4 - var(--ad,0) * .25)}
+.pb-ev-t{padding-top:26px}
+.pb-ev-d{font-family:var(--display);font-stretch:112%;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.pb-ev-d b{font-size:1.5em;letter-spacing:-.02em;color:var(--gold-l)}
+.pb-ev h3{font-family:var(--display);font-stretch:112%;font-weight:500;font-size:clamp(20px,1.6vw,24px);line-height:1.15;letter-spacing:-.015em;margin:10px 0 10px}
+.pb-ev p.x{font-size:14px;line-height:1.62;color:var(--mu)}
+.pb-ev p.r{margin-top:12px;font-size:13.5px;color:var(--pb-tx)}
+.pb-ev p.r a{border-bottom:1px solid var(--hair);white-space:nowrap}
+.pb-aff-hint{display:none}
+/* galerie épinglée (grand écran) : le défilement vertical fait glisser les affiches */
+.pb-aff.pinned .pb-aff-pin{position:sticky;top:0;height:100vh;padding:clamp(80px,11vh,120px) 0 4vh;display:flex;flex-direction:column;justify-content:center}
+.pb-aff.pinned .pb-track{overflow:visible;scroll-snap-type:none;padding-bottom:0;transform:translate3d(var(--pb-x,0px),0,0);will-change:transform}
+.pb-aff.pinned .pb-ev{width:auto;flex-direction:row;align-items:flex-end;gap:30px}
+.pb-aff.pinned .pb-poster{height:min(56vh,560px);width:auto}
+.pb-aff.pinned .pb-ev-t{width:280px;padding:0 0 6px}
+.pb-aff.pinned .pb-arrow{display:none}
+.pb-aff.pinned .pb-aff-hint{display:inline-flex;align-items:center;gap:12px;font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mu)}
+.pb-aff.pinned .pb-aff-hint i{width:46px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.pb-aff.pinned .pb-ev:last-child{padding-right:var(--gutter)}
+
+/* ---------- Lieux ---------- */
+.pb-yc{overflow:hidden}
+.pb-yc .pb-halo{width:60vmax;height:60vmax;left:-20vmax;top:0;background:radial-gradient(closest-side,rgba(249,200,59,.16),transparent)}
+.pb-yc-title{font-family:var(--display);font-stretch:125%;font-weight:500;letter-spacing:-.06em;line-height:.8;font-size:clamp(84px,17vw,300px);margin:20px 0 0;position:relative;z-index:2;pointer-events:none}
+.pb-yc-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(30px,6vw,100px);align-items:start;margin-top:clamp(-90px,-6vw,-30px)}
+.pb-arch{position:relative;aspect-ratio:3/4;max-width:500px;border-radius:999px 999px 28px 28px;overflow:hidden;box-shadow:0 70px 120px -50px rgba(0,0,0,.95),0 0 0 1px rgba(201,168,98,.2)}
+.pb-js .pb-arch{clip-path:inset(14% 8% 0 8% round 999px 999px 28px 28px);transition:clip-path 1.8s var(--ease)}
+.pb-js .pb-arch.in{clip-path:inset(0 0 0 0 round 999px 999px 28px 28px)}
+.pb-arch img{width:100%;height:116%;object-fit:cover;transform:translateY(var(--py,0px))}
+.pb-arch::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,12,22,.5),transparent 40%)}
+.pb-yc-txt{padding-top:clamp(60px,12vw,200px)}
+.pb-mini{margin-top:38px;padding:24px 26px;border:1px solid var(--hair);border-radius:22px;background:rgba(16,36,58,.45);max-width:560px}
+.pb-mini h3{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.pb-mini dl div{display:flex;justify-content:space-between;align-items:baseline;gap:8px 20px;flex-wrap:wrap;padding:11px 0;border-bottom:1px solid var(--hair2);font-size:14px}
+.pb-mini dl div:last-child{border-bottom:0}
+.pb-mini dt{color:var(--mu)}
+.pb-mini dd{font-variant-numeric:tabular-nums;font-weight:600}
+.pb-mini .pb-note{margin-top:14px;font-size:13px;color:var(--gold-l);line-height:1.55}
+.pb-mini .pb-tolist{display:inline-block;margin-top:12px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--hair)}
+
+.pb-salon-stage{position:relative;height:170vh}
+.pb-salon-pin{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden}
+.pb-salon-media{position:absolute;inset:0;clip-path:inset(calc((1 - var(--sp,0)) * 16%) calc((1 - var(--sp,0)) * 24%) round calc((1 - var(--sp,0)) * 40px));will-change:clip-path}
+.pb-salon-media img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;transform:scale(calc(1.25 - var(--sp,0) * .2));filter:brightness(.72) saturate(.95)}
+.pb-salon-media::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 50%,transparent,rgba(5,12,22,.75)),linear-gradient(0deg,var(--ink),transparent 30%)}
+.pb-salon-title{position:relative;z-index:2;text-align:center;pointer-events:none}
+.pb-salon-title .pb-k{justify-content:center;margin-bottom:18px}
+.pb-salon-title .pb-k::after{content:"";width:34px;height:1px;background:currentColor;opacity:.8}
+.pb-salon-title h2{font-family:var(--display);font-stretch:125%;font-weight:500;letter-spacing:-.06em;line-height:.82;font-size:clamp(78px,15vw,270px);text-shadow:0 20px 80px rgba(0,0,0,.6);transform:scale(calc(.9 + var(--sp,0) * .1));opacity:calc(.35 + var(--sp,0) * .65)}
+.pb-salon-body{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,6vw,110px);padding:clamp(40px,8vh,90px) var(--gutter) clamp(100px,16vh,190px);margin-top:-1px;background:var(--ink)}
+.pb-salon-body .pb-badges{margin-top:0}
+
+.pb-ecl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(30px,6vw,110px);align-items:center;overflow:hidden;background:radial-gradient(60% 70% at 25% 50%,#0d2138,var(--ink) 70%)}
+.pb-eclipse{position:relative;width:min(100%,620px);aspect-ratio:1;justify-self:center}
+.pb-eclipse .co{position:absolute;inset:4%;border-radius:50%;background:radial-gradient(circle,transparent 47%,rgba(255,236,170,1) 48.5%,rgba(249,200,59,.75) 51%,rgba(201,168,98,.28) 58%,rgba(201,168,98,.08) 66%,transparent 71%);filter:blur(2px);opacity:calc(.35 + var(--ep,0) * .65);transform:scale(calc(.94 + var(--ep,0) * .06))}
+.pb-eclipse .rays{position:absolute;inset:-6%;border-radius:50%;background:repeating-conic-gradient(rgba(249,200,59,.10) 0 1.2deg,transparent 1.2deg 9deg);mask:radial-gradient(closest-side,transparent 52%,#000 56%,transparent 100%);-webkit-mask:radial-gradient(closest-side,transparent 52%,#000 56%,transparent 100%);opacity:calc(var(--ep,0) * .9);animation:pbSpin 90s linear infinite}
+.pb-eclipse .moon{position:absolute;inset:19%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#0f223a,#03070d 70%);box-shadow:inset -10px -10px 40px rgba(0,0,0,.8),0 0 0 1px rgba(201,168,98,.08);transform:translate(calc((1 - var(--ep,0)) * 34%),calc((1 - var(--ep,0)) * -12%))}
+.pb-eclipse .big{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-family:var(--display);font-stretch:125%;font-weight:500;letter-spacing:-.05em;line-height:.9;font-size:clamp(54px,7vw,112px);color:var(--pb-tx);z-index:2}
+.pb-eclipse .big small{display:block;font-size:.26em;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--gold);margin-top:.6em;font-stretch:100%}
+@keyframes pbSpin{to{transform:rotate(360deg)}}
+
+.pb-hotel{position:relative;min-height:100vh;display:flex;align-items:flex-end;justify-content:flex-end;padding:clamp(100px,14vh,160px) var(--gutter);overflow:hidden;isolation:isolate}
+.pb-hotel-bg{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.pb-hotel-bg img{width:100%;height:116%;object-fit:cover;object-position:30% 50%;transform:translateY(var(--py,0px));filter:brightness(.6) saturate(.7) contrast(1.05)}
+.pb-hotel-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--ink) 0%,rgba(5,12,22,.15) 22%,rgba(5,12,22,.2) 60%,var(--ink) 100%),linear-gradient(90deg,transparent 35%,rgba(5,12,22,.75)),rgba(11,40,80,.35)}
+.pb-hotel-card{width:min(100%,620px);padding:clamp(26px,3.4vw,52px);border:1px solid var(--hair);border-radius:30px;background:rgba(5,12,22,.72);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 60px 120px -40px rgba(0,0,0,.9)}
+.pb-hotel-card .pb-h2{font-size:clamp(32px,3.6vw,56px);margin:18px 0 22px}
+.pb-hotel-card .pb-facts{justify-content:flex-start;margin:28px 0 30px;gap:18px 36px}
+
+.pb-end{padding:clamp(100px,16vh,180px) var(--gutter) clamp(80px,12vh,140px);border-top:1px solid var(--hair2);text-align:center;overflow:hidden;position:relative}
+.pb-end .pb-halo{width:60vmax;height:40vmax;left:50%;top:-10vmax;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(201,168,98,.16),transparent)}
+.pb-end .pb-18{margin:0 auto 30px}
+.pb-end .pb-k{justify-content:center}
+.pb-end .pb-k::after{content:"";width:34px;height:1px;background:currentColor;opacity:.8}
+.pb-end-msg{max-width:30em;margin:22px auto 32px;font-family:var(--display);font-stretch:108%;font-weight:500;font-size:clamp(21px,2.2vw,32px);line-height:1.35!important;letter-spacing:-.01em}
+.pb-end-msg a{color:var(--gold-l);border-bottom:1px solid var(--gold)}
+.pb-end .pb-cta{justify-content:center}
+.pb-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 0;margin-top:clamp(60px,10vh,100px);padding-top:30px;border-top:1px solid var(--hair2)}
+.pb-links a{padding:10px 22px;font-family:var(--display);font-stretch:115%;font-size:clamp(17px,1.5vw,22px);font-weight:500;color:var(--mu);transition:color .3s}
+.pb-links a:hover{color:var(--gold-l)}
+.pb-links .pb-k{width:100%;margin-bottom:8px}
+
+/* ---------- Tablette et mobile ---------- */
+@media (max-width:1000px){
+  .pb-hero-bar{grid-template-columns:1fr}
+  .pb-facts{justify-content:flex-start}
+  .pb-hrs-out{grid-template-columns:1fr 1fr}
+  .pb-hrs-c{grid-column:1 / -1}
+  .pb-hrs-out>div.pb-hrs-r{padding-left:0;border-left:0}
+  .pb-hrs-out>div.pb-hrs-c+div{border-top:1px solid var(--hair2)}
+  .pb-hrs-out>div.pb-hrs-s{border-top:1px solid var(--hair2)}
+  .pb-yc-grid,.pb-salon-body,.pb-ecl{grid-template-columns:1fr}
+  .pb-yc-txt{padding-top:0}
+}
+@media (max-width:700px){
+  .pb-hero{padding-top:96px}
+  .pb-hero-bg img{object-position:46% 30%}
+  .pb-h1{font-size:clamp(52px,17.4vw,90px);letter-spacing:-.06em}
+  .pb-h1 .l1{font-size:.3em}
+  .pb-h1 .l3{padding-left:.5em}
+  .pb-hero-mid{padding-top:30vh}
+  .pb-live{margin-bottom:14px}
+  .pb-hero .pb-cta .btn{height:46px;padding:0 18px}
+  .pb-facts{gap:14px 26px;font-size:13.5px}
+  .pb-facts>div:first-child{width:100%}
+  .pb-nav{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:14px 8px}
+  .pb-nav::-webkit-scrollbar{display:none}
+  .pb-nav a{flex:none;padding:8px 14px}
+  .pb-infos-head{grid-template-columns:1fr}
+  .pb-sign{justify-self:stretch;max-width:none;aspect-ratio:4/3.4;border-radius:200px 200px 22px 22px}
+  .pb-hrs{border-radius:24px;padding:22px 18px 24px}
+  .pb-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:100%}
+  .pb-days button{min-width:0;padding:0;height:42px;font-size:12.5px}
+  .pb-days .pb-eve{grid-column:1 / -1}
+  .pb-hrs-out{grid-template-columns:1fr}
+  .pb-hrs-out>div,.pb-hrs-out>div+div{padding:18px 0 14px;border-left:0}
+  .pb-hrs-out>div+div{border-top:1px solid var(--hair2)}
+  .pb-hrs-c .pb-hrs-v{font-size:clamp(32px,11vw,48px)}
+  .pb-hrs-v{font-size:28px}
+  .pb-cond{grid-template-columns:1fr;gap:22px}
+  .pb-card{height:72svh;min-height:480px;border-radius:24px;top:calc(76px + var(--i,0) * 14px)}
+  .pb-num{font-size:clamp(120px,40vw,200px)}
+  .pb-card-in{padding:24px 22px}
+  .pb-livecard{padding:18px 20px}
+  .pb-livecard span.r{padding:9px 0;font-size:13.5px}
+  .pb-card-2 .pb-card-in{flex-direction:column;align-items:flex-start;justify-content:flex-end;top:0}
+  .pb-resp{align-items:flex-start;padding:16px 18px}
+  .pb-ev{width:76vw}
+  .pb-jeux{padding-bottom:30px}
+  .pb-aff-pin{padding-top:70px}
+  .pb-yc-title{font-size:clamp(64px,20vw,120px)}
+  .pb-yc-grid{margin-top:-24px}
+  .pb-arch{max-width:none;aspect-ratio:3/3.6}
+  .pb-salon-stage{height:140vh}
+  .pb-salon-media{clip-path:inset(calc((1 - var(--sp,0)) * 14%) calc((1 - var(--sp,0)) * 10%) round calc((1 - var(--sp,0)) * 28px))}
+  .pb-salon-title h2{font-size:clamp(64px,19vw,110px)}
+  .pb-mini{padding:18px 18px}
+  .pb-hotel{min-height:0;display:block;padding:0}
+  .pb-hotel-bg{position:relative;height:62svh}
+  .pb-hotel-card{position:relative;margin:-26svh 14px 0;width:auto;border-radius:24px;padding:26px 20px}
+  .pb-links a{padding:10px 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pb *,.pb *::before,.pb *::after{animation:none!important;transition:none!important}
+  .pb-js [data-pb]{opacity:1;transform:none;filter:none}
+  .pb-js .pb-mask>span{transform:none}
+  .pb-js .pb-arch{clip-path:none}
+  .pb-card{transform:none}
+  .pb-salon-stage{height:auto}
+  .pb-salon-pin{position:relative;height:80vh}
+  .pb-salon-media{clip-path:none}
+  .pb-salon-title h2{opacity:1;transform:none}
+}
+</style>
+
+<div class="pb" id="pb">
+
+<!-- Ouverture -->
+<section class="pb-hero" aria-labelledby="pb-title">
+  <div class="pb-hero-bg"><img src="https://tranchant.backoffice.lbo-data.fr/storage/1087/IMG_4541.jpeg" alt="La façade du Casino de Pougues-les-Eaux et sa tour" fetchpriority="high"></div>
+  <div class="pb-hero-sh" aria-hidden="true"></div>
+  <i class="pb-halo h1" aria-hidden="true"></i><i class="pb-halo h2" aria-hidden="true"></i>
+  {{crumbs}}
+  <div class="pb-hero-mid">
+    <p class="pb-k">Casino · Nièvre</p>
+    <h1 class="pb-h1" id="pb-title"><span class="l l1"><span>Casino de</span></span><span class="l l2"><span>Pougues&#8209;</span></span><span class="l l3"><span class="pb-gold">les&#8209;Eaux</span></span></h1>
+    <div class="pb-hero-bar">
+      <div>
+        <p class="pb-live" data-live><i aria-hidden="true"></i><span>Espace ouvert 7/7 jours, 365 jours/an</span></p>
+        <div class="pb-cta">
+          <a class="btn solid" href="https://app.overfull.fr/booking-v2/?key_id=Wy23TKTKtS8&amp;source=Web&amp;lang=fr" target="_blank" rel="noopener">Réserver une table <span aria-hidden="true">↗</span></a>
+          <a class="btn" href="https://www.google.fr/maps/dir/?api=1&amp;travelmode=driving&amp;destination=1315%20Avenue%20de%20Paris+58320%20Pougues-les-Eaux" target="_blank" rel="noopener">GPS <span aria-hidden="true">↗</span></a>
+          <a class="btn" href="tel:+33386901700">Appeler</a>
+        </div>
+      </div>
+      <dl class="pb-facts">
+        <div><dt>Adresse</dt><dd>1315 Avenue de Paris<br>58320 Pougues-les-Eaux</dd></div>
+        <div><dt>Téléphone</dt><dd><a href="tel:+33386901700">+33(0)3 86 90 17 00</a></dd></div>
+        <div><dt>E-mail</dt><dd><a href="mailto:infopou@groupetranchant.com">infopou@groupetranchant.com</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<nav class="pb-nav" aria-label="Sur cette page">
+  <a href="#infos">Infos pratiques</a><a href="#jeux">Les jeux</a><a href="#animations">Animations et spectacles</a><a href="#ycaste">Restaurant L'Ycaste</a><a href="#salon">Le Salon</a><a href="#eclipse">L'Eclipse</a><a href="#hotel">Hôtel</a>
+</nav>
+
+<!-- Infos pratiques : un seul sélecteur de jour pour le casino, le restaurant et le salon -->
+<section class="pb-sec pb-infos" id="infos" aria-labelledby="pb-infos-t">
+  <i class="pb-halo" aria-hidden="true"></i>
+  <div class="pb-infos-head">
+    <div data-pb>
+      <p class="pb-k">Infos pratiques</p>
+      <h2 class="pb-h2" id="pb-infos-t"><span class="pb-mask"><span>Espace ouvert</span></span><span class="pb-mask"><span class="pb-gold">7/7 jours, 365 jours/an</span></span></h2>
+    </div>
+    <figure class="pb-sign" data-pb style="--dl:.15s"><img src="https://tranchant.backoffice.lbo-data.fr/storage/1089/IMG_4539.jpeg" alt="L'enseigne du casino" loading="lazy" data-px></figure>
+  </div>
+
+  <div class="pb-hrs" data-pb>
+    <div class="pb-hrs-top">
+      <h3 class="pb-hrs-t">Horaire d'ouverture</h3>
+      <div class="pb-days" role="group" aria-label="Choisir un jour">
+        <button type="button" data-d="1" aria-label="Lundi" data-c="09:00 – 03:00" data-r="" data-s="09:00 – 00:00">Lun</button>
+        <button type="button" data-d="2" aria-label="Mardi" data-c="09:00 – 03:00" data-r="12:00 – 14:00 / 19:00 – 22:15" data-s="09:00 – 00:00">Mar</button>
+        <button type="button" data-d="3" aria-label="Mercredi" data-c="09:00 – 03:00" data-r="12:00 – 14:00 / 19:00 – 22:15" data-s="09:00 – 00:00">Mer</button>
+        <button type="button" data-d="4" aria-label="Jeudi" data-c="09:00 – 03:00" data-r="12:00 – 14:00 / 19:00 – 22:15" data-s="09:00 – 00:00">Jeu</button>
+        <button type="button" data-d="5" aria-label="Vendredi" data-c="09:00 – 04:00" data-r="12:00 – 14:00 / 19:00 – 23:00" data-s="09:00 – 02:00">Ven</button>
+        <button type="button" data-d="6" aria-label="Samedi" data-c="09:00 – 04:00" data-r="12:00 – 14:00 / 19:00 – 23:00" data-s="09:00 – 02:00">Sam</button>
+        <button type="button" data-d="0" aria-label="Dimanche" data-c="09:00 – 03:00" data-r="" data-s="09:00 – 00:00">Dim</button>
+        <button type="button" class="pb-eve" data-d="eve" aria-label="Veille de jour férié" data-c="09:00 – 04:00" data-r="12:00 – 14:00 / 19:00 – 23:00" data-s="09:00 – 02:00">Veille de jour férié</button>
+      </div>
+    </div>
+    <div class="pb-hrs-out" aria-live="polite">
+      <div class="pb-hrs-c"><p class="pb-hrs-l">Casino</p><p class="pb-hrs-v" data-o="c">09:00 – 03:00</p></div>
+      <div class="pb-hrs-r"><p class="pb-hrs-l">Restaurant L'Ycaste</p><p class="pb-hrs-v" data-o="r">Fermé</p></div>
+      <div class="pb-hrs-s"><p class="pb-hrs-l">Le Salon</p><p class="pb-hrs-v" data-o="s">09:00 – 00:00</p></div>
+    </div>
+    <p class="pb-hrs-day" data-o="day"><b>Lundi</b></p>
+  </div>
+
+  <div class="pb-cond" data-pb>
+    <p class="pb-18" aria-hidden="true">18+</p>
+    <div class="pb-txt">
+      <h3>Conditions d'entrée</h3>
+      <p>Tenue correcte exigée. Tenue de sport et de plage interdites. Conformément à la réglementation en vigueur, l'accès aux salles de jeux est réservé aux personnes majeures sur présentation d'une pièce d'identité en cours de validité ; à l'exception des personnes dont le Ministère de l'Intérieur a requis l'exclusion dans les conditions fixées par Arrêté.</p>
+      <p class="pb-id">18+ · Pièce d'identité en cours de validité</p>
+    </div>
+  </div>
+</section>
+
+<!-- Les jeux : cartes qui se superposent -->
+<section class="pb-sec pb-jeux" id="jeux" aria-labelledby="pb-jeux-t">
+  <header class="pb-jeux-head" data-pb>
+    <div>
+      <p class="pb-k">Les jeux</p>
+      <h2 class="pb-h2" id="pb-jeux-t">Machines à sous, jeux électroniques et <span class="pb-gold">jeux traditionnels</span></h2>
+    </div>
+  </header>
+  <div class="pb-stack">
+    <article class="pb-card" style="--i:0">
+      <img src="https://tranchant.backoffice.lbo-data.fr/storage/1030/Machines-%C3%A0-sous.JPEG" alt="La salle des machines à sous" loading="lazy">
+      <div class="pb-card-sh" aria-hidden="true"></div>
+      <div class="pb-card-in"><h3><b class="pb-num pb-gold">199</b><span class="pb-num-l">Machines à sous</span></h3></div>
+    </article>
+    <article class="pb-card pb-card-2" style="--i:1">
+      <i class="pb-rings" aria-hidden="true"></i>
+      <div class="pb-card-in">
+        <h3><b class="pb-num pb-gold">35</b><span class="pb-num-l">Jeux électroniques</span></h3>
+        <a class="pb-livecard" href="https://casino-pougues-les-eaux.fr/live-historique" target="_blank" rel="noopener">
+          <span class="pb-k">Live / Historique</span>
+          <span class="r">Les Jackpots progressifs</span>
+          <span class="r">3 plus gros gains de la semaine</span>
+          <span class="r">Les 12 derniers gains &gt; à 100€</span>
+          <span class="more">Voir historique <span aria-hidden="true">↗</span></span>
+        </a>
+      </div>
+    </article>
+    <article class="pb-card" style="--i:2">
+      <img src="https://tranchant.backoffice.lbo-data.fr/storage/1090/IMG_0936.jpg" alt="Une table de jeux traditionnels" loading="lazy" style="object-position:60% 70%">
+      <div class="pb-card-sh" aria-hidden="true"></div>
+      <div class="pb-card-in"><h3><b class="pb-num pb-gold">7</b><span class="pb-num-l">Jeux traditionnels</span></h3></div>
+    </article>
+  </div>
+  <p class="pb-resp" data-pb><b aria-hidden="true">18+</b><span>Les jeux d'argent et de hasard peuvent être dangereux : pertes d'argent, conflits familiaux, addiction… Retrouvez nos conseils sur <a href="https://www.joueurs-info-service.fr/" target="_blank" rel="noopener">joueurs-info-service.fr</a> (09 74 75 13 13 - appel non surtaxé).</span></p>
+</section>
+
+<!-- Animations et spectacles : galerie d'affiches -->
+<section class="pb-aff" id="animations" aria-labelledby="pb-aff-t">
+  <div class="pb-aff-pin">
+    <header class="pb-aff-head">
+      <div data-pb>
+        <p class="pb-k">Animations et spectacles</p>
+        <h2 class="pb-h2" id="pb-aff-t">À l'<span class="pb-gold">affiche</span></h2>
+      </div>
+      <div class="pb-aff-ctl" data-pb style="--dl:.1s">
+        <span class="pb-aff-hint" aria-hidden="true"><i></i>Faites défiler</span>
+        <a class="btn" href="https://casino-pougues-les-eaux.fr/animations" target="_blank" rel="noopener">Billetterie <span aria-hidden="true">↗</span></a>
+        <button type="button" class="pb-arrow" data-dir="-1" aria-label="Affiches précédentes">←</button>
+        <button type="button" class="pb-arrow" data-dir="1" aria-label="Affiches suivantes">→</button>
+      </div>
+    </header>
+    <ol class="pb-track" tabindex="0" aria-label="Animations et spectacles, faire défiler">
+      <li class="pb-ev">
+        <figure class="pb-poster"><img class="glow" src="https://tranchant.backoffice.lbo-data.fr/storage/1625/Encart-site-internet---concert-%C3%A0-l'Ycaste---10-novembre-2026.png" alt="" aria-hidden="true" loading="lazy"><img class="ph" src="https://tranchant.backoffice.lbo-data.fr/storage/1625/Encart-site-internet---concert-%C3%A0-l'Ycaste---10-novembre-2026.png" alt="Affiche du concert crooner au restaurant L'Ycaste" loading="lazy"></figure>
+        <div class="pb-ev-t">
+          <p class="pb-ev-d"><b>10</b> nov. 2026 · 20h</p>
+          <h3>Concert à L'Ycaste le 10 novembre</h3>
+          <p class="x">Mardi 10 novembre à 20h, veille de jour férié, le restaurant l'Ycaste vous convie à une soirée spéciale CROONER ! Une bonne table, de la musique &amp; un moment de partage… tous les ingrédients sont réunis pour une soirée réussie !</p>
+          <p class="r">Renseignements &amp; réservations au <a href="tel:+33386901700">03 86 90 17 00</a></p>
+        </div>
+      </li>
+      <li class="pb-ev">
+        <figure class="pb-poster"><img class="glow" src="https://tranchant.backoffice.lbo-data.fr/storage/1627/Encart-site-internet---concert-%C3%A0-l'Ycaste---13-novembre-2026.png" alt="" aria-hidden="true" loading="lazy"><img class="ph" src="https://tranchant.backoffice.lbo-data.fr/storage/1627/Encart-site-internet---concert-%C3%A0-l'Ycaste---13-novembre-2026.png" alt="Affiche du concert de YELOH au restaurant L'Ycaste" loading="lazy"></figure>
+        <div class="pb-ev-t">
+          <p class="pb-ev-d"><b>13</b> nov. 2026 · 20h</p>
+          <h3>Concert à L'Ycaste le 13 novembre</h3>
+          <p class="x">Envie d'une belle soirée musicale ? Retrouvez YELOH, duo acoustique guitare &amp; voix, pour un concert placé sous le signe de la pop, du rock &amp; de la folk !</p>
+          <p class="r">Renseignements &amp; réservations : <a href="tel:+33386901700">03 86 90 17 00</a></p>
+        </div>
+      </li>
+      <li class="pb-ev">
+        <figure class="pb-poster"><img class="glow" src="https://tranchant.backoffice.lbo-data.fr/storage/1553/Encart-site-web---Monopoly---ao%C3%BBt-2026.jpg" alt="" aria-hidden="true" loading="lazy"><img class="ph" src="https://tranchant.backoffice.lbo-data.fr/storage/1553/Encart-site-web---Monopoly---ao%C3%BBt-2026.jpg" alt="Affiche Monopoly sur les machines à sous" loading="lazy"></figure>
+        <div class="pb-ev-t">
+          <p class="pb-ev-d">Depuis le <b>27</b> août 2026</p>
+          <h3>Le Monopoly change de plateau</h3>
+          <p class="x">Le célèbre Monopoly est arrivé sur 4 de vos machines à sous ! Préparez-vous à redécouvrir le jeu emblématique… d'une toute nouvelle façon !</p>
+        </div>
+      </li>
+      <li class="pb-ev">
+        <figure class="pb-poster"><i class="pb-flash-g" aria-hidden="true"></i><span class="pb-flash" aria-hidden="true"><b>Flash</b><span>Tickets « Flash » · borne · lots</span></span></figure>
+        <div class="pb-ev-t">
+          <p class="pb-ev-d">2026 – 2027</p>
+          <h3>Flashs</h3>
+          <p class="x">Comme toujours : transformez vos flashs en cadeaux ! Jouez sur les machines, remportez des tickets « Flash », scannez-les sur la borne &amp; échangez-les contre un lot !</p>
+        </div>
+      </li>
+      <li class="pb-ev">
+        <figure class="pb-poster"><img class="glow" src="https://tranchant.backoffice.lbo-data.fr/storage/1107/Encart-site-web---Dragon-d'or---2025-2026.jpg" alt="" aria-hidden="true" loading="lazy"><img class="ph" src="https://tranchant.backoffice.lbo-data.fr/storage/1107/Encart-site-web---Dragon-d'or---2025-2026.jpg" alt="Affiche Le précieux trésor du Dragon d'Or" loading="lazy"></figure>
+        <div class="pb-ev-t">
+          <p class="pb-ev-d">Tous les jours</p>
+          <h3>Le précieux trésor du Dragon d'Or</h3>
+          <p class="x">Le Dragon d'Or garde son trésor… mais il est prêt à le partager avec vous ! Tous les jours, scannez vos tickets sur la borne située en salle des machines à sous.</p>
+        </div>
+      </li>
+      <li class="pb-ev">
+        <figure class="pb-poster"><img class="glow" src="https://tranchant.backoffice.lbo-data.fr/storage/1642/Encart-site-web---Tombola-privil%C3%A8ge-500%E2%82%AC---2025-2026.png" alt="" aria-hidden="true" loading="lazy"><img class="ph" src="https://tranchant.backoffice.lbo-data.fr/storage/1642/Encart-site-web---Tombola-privil%C3%A8ge-500%E2%82%AC---2025-2026.png" alt="Affiche Tombola privilège" loading="lazy"></figure>
+        <div class="pb-ev-t">
+          <p class="pb-ev-d">Tous les <b>1<sup>ers</sup></b> du mois</p>
+          <h3>Tombola privilège 500€</h3>
+          <p class="x">Tous les 1ers du mois, un ticket de jeu de 500€ est à gagner. Qui décrochera le prochain ? Bonne chance à tous !</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- Restaurant L'Ycaste -->
+<section class="pb-sec pb-yc" id="ycaste" aria-labelledby="pb-yc-t">
+  <i class="pb-halo" aria-hidden="true"></i>
+  <p class="pb-k" data-pb>Restaurant</p>
+  <h2 class="pb-yc-title" id="pb-yc-t" data-pb><span class="pb-mask"><span>L'<span class="pb-gold">Ycaste</span></span></span></h2>
+  <div class="pb-yc-grid">
+    <figure class="pb-arch" data-pb><img src="https://tranchant.backoffice.lbo-data.fr/storage/206/terrasse.jpg" alt="La terrasse du restaurant L'Ycaste au bord de l'eau" loading="lazy" data-px></figure>
+    <div class="pb-yc-txt pb-txt" data-pb style="--dl:.15s">
+      <ul class="pb-badges"><li><b>90</b> couverts</li><li><b>50</b> en terrasse</li></ul>
+      <p>Dans un décor cosy et contemporain, vous passerez sans aucun doute un moment délicieux au restaurant "L'Ycaste" ou sur sa terrasse au bord de l'eau. En cuisine, le chef et sa brigade s'attachent à vous proposer des menus et une carte de mets variés et originaux, tout en équilibre et en délicatesse, alliant cuisine du terroir et produits régionaux qui évoluent au rythme des saisons.</p>
+      <p>Formules rapides pour le midi, apéritifs, ou menus de fête. Une farandole de plaisirs à déguster en toute liberté ! Le restaurant est une adresse idéale pour tous les dîners d'affaires, commerciaux, en famille ou encore en amoureux.</p>
+      <div class="pb-cta" style="margin-top:30px">
+        <a class="btn solid" href="https://app.overfull.fr/booking-v2/?key_id=Wy23TKTKtS8&amp;source=Web&amp;lang=fr" target="_blank" rel="noopener">Réserver <span aria-hidden="true">↗</span></a>
+        <a class="btn" href="https://menu.lbo-data.fr/restaurant/restaurant-lycaste-du-casino" target="_blank" rel="noopener">Voir la carte <span aria-hidden="true">↗</span></a>
+        <a class="btn" href="tel:+33386901700">03 86 90 17 00</a>
+      </div>
+      <div class="pb-mini">
+        <h3>Horaire d'ouverture</h3>
+        <dl>
+          <div><dt>Mardi, mercredi, jeudi</dt><dd>12:00 – 14:00 / 19:00 – 22:15</dd></div>
+          <div><dt>Vendredi, samedi</dt><dd>12:00 – 14:00 / 19:00 – 23:00</dd></div>
+          <div><dt>Veille de jour férié</dt><dd>12:00 – 14:00 / 19:00 – 23:00</dd></div>
+        </dl>
+        <p class="pb-note">Les réservations près de la baie vitrée ne sont pas sûres, merci de votre compréhension.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bar Le Salon : la photo s'ouvre en plein écran -->
+<section class="pb-salon" id="salon" aria-labelledby="pb-salon-t">
+  <div class="pb-salon-stage">
+    <div class="pb-salon-pin">
+      <figure class="pb-salon-media"><img src="https://tranchant.backoffice.lbo-data.fr/storage/1091/IMG_1228.jpg" alt="Les fauteuils du Salon" loading="lazy"></figure>
+      <div class="pb-salon-title"><p class="pb-k">Bar</p><h2 id="pb-salon-t">Le Salon</h2></div>
+    </div>
+  </div>
+  <div class="pb-salon-body">
+    <div class="pb-txt" data-pb>
+      <ul class="pb-badges"><li><b>35</b> couverts</li><li class="pb-tag">Terrasse</li><li class="pb-tag">Coworking</li></ul>
+      <p>Dans une ambiance élégante et feutrée, Le Salon vous accueille pour un moment de détente et de convivialité. Que vous soyez entre amis, en famille, en duo ou de passage, laissez-vous séduire par ce lieu chaleureux et accessible à tous. Tout au long de la journée et en soirée, profitez d'une pause gourmande autour de cocktails maison, d'une sélection de vins, de softs raffinés et de planches à partager.</p>
+      <p>Un espace de coworking est également à votre disposition, idéal pour travailler dans un environnement inspirant et confortable. Le lieu peut aussi être privatisé pour vos événements professionnels et privés.</p>
+      <div class="pb-cta" style="margin-top:30px">
+        <a class="btn" href="tel:+33386901700">03 86 90 17 00</a>
+        <a class="btn" href="mailto:infopou@groupetranchant.com">infopou@groupetranchant.com</a>
+      </div>
+    </div>
+    <div data-pb style="--dl:.15s">
+      <div class="pb-mini" style="margin-top:0">
+        <h3>Horaire d'ouverture</h3>
+        <dl>
+          <div><dt>Lundi, mardi, mercredi, jeudi</dt><dd>09:00 – 00:00</dd></div>
+          <div><dt>Vendredi, samedi</dt><dd>09:00 – 02:00</dd></div>
+          <div><dt>Dimanche</dt><dd>09:00 – 00:00</dd></div>
+          <div><dt>Veille de jour férié</dt><dd>09:00 – 02:00</dd></div>
+        </dl>
+        <a class="pb-tolist" href="#infos">Tous les horaires, jour par jour</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Salle L'Eclipse -->
+<section class="pb-sec pb-ecl" id="eclipse" aria-labelledby="pb-ecl-t">
+  <div class="pb-eclipse" aria-hidden="true"><i class="rays"></i><i class="co"></i><i class="moon"></i><p class="big"><span>600 m²<small>de réception</small></span></p></div>
+  <div class="pb-txt" data-pb>
+    <p class="pb-k">Entreprise · Réception</p>
+    <h2 class="pb-h2" id="pb-ecl-t">Salle <span class="pb-gold">L'Eclipse</span></h2>
+    <ul class="pb-badges"><li><b>600</b> m²</li><li><b>200</b> couverts</li><li class="pb-tag">Terrasse</li></ul>
+    <p class="pb-lead">Recevoir dans un casino du Groupe Tranchant, c'est vouloir partager entre collaborateurs un moment de joie et de convivialité.</p>
+    <p>Véritable lieu atypique pour vos manifestations, le Casino de Pougues-les-Eaux est avant tout un espace de réception de 600m carré.</p>
+    <p>Assemblée générale, séminaire, repas de fin d'année, conférence, arbre de Noël, cocktail, ... quelle que soit l'occasion, l'espace est modulable selon vos envies et votre événement.</p>
+    <p>Un interlocuteur unique vous accompagne tout au long de votre projet pour coordonner tous les prestataires et faire de votre manifestation un moment inoubliable.</p>
+    <div class="pb-cta" style="margin-top:32px">
+      <a class="btn solid" href="mailto:infopou@groupetranchant.com">infopou@groupetranchant.com</a>
+      <a class="btn" href="tel:+33386901700">03 86 90 17 00</a>
+    </div>
+  </div>
+</section>
+
+<!-- Hôtel des Sources -->
+<section class="pb-hotel" id="hotel" aria-labelledby="pb-hotel-t">
+  <figure class="pb-hotel-bg"><img src="https://tranchant.backoffice.lbo-data.fr/storage/201/Ext%C3%A9rieur.jpg" alt="La façade de l'Hôtel des Sources" loading="lazy" data-px></figure>
+  <div class="pb-hotel-card pb-txt" data-pb>
+    <p class="pb-k">Hôtel des Sources</p>
+    <h2 class="pb-h2" id="pb-hotel-t">Partir très loin, <span class="pb-gold">sans partir trop loin</span></h2>
+    <p>Dans un cadre de verdure et de calme, au cœur de la station de Pougues-les-Eaux, l'Hôtel des Sources est situé à 5 minutes du casino. Nous vous offrons un lieu unique et charmant alliant travail et détente. Profitez de votre séjour dans la Nièvre pour pratiquer une multitude d'activités, été comme hiver, et découvrir l'une des plus belles régions de France avec ses départements limitrophes : l'Yonne, la Côte-d'Or, la Saône-et-Loire, l'Allier, le Cher et le Loiret.</p>
+    <dl class="pb-facts">
+      <div><dt>Réservation</dt><dd><a href="tel:+33386367405">03 86 36 74 05</a><br>24h/24 - 7j/7</dd></div>
+      <div><dt>Adresse</dt><dd>132 Rue de la Mignarderie<br>58320 Pougues-les-Eaux</dd></div>
+      <div><dt>E-mail</dt><dd><a href="mailto:info@hoteldessources.fr">info@hoteldessources.fr</a></dd></div>
+    </dl>
+    <div class="pb-cta"><a class="btn solid" href="https://www.hoteldessources.fr/fr/" target="_blank" rel="noopener">Réservez : www.hoteldessources.fr <span aria-hidden="true">↗</span></a></div>
+  </div>
+</section>
+
+<!-- Jeu responsable et liens -->
+<section class="pb-end" aria-labelledby="pb-end-t">
+  <i class="pb-halo" aria-hidden="true"></i>
+  <div data-pb>
+    <p class="pb-18" aria-hidden="true">18+</p>
+    <h2 class="pb-k" id="pb-end-t">Jeu responsable</h2>
+    <p class="pb-end-msg">Les jeux d'argent et de hasard peuvent être dangereux : pertes d'argent, conflits familiaux, addiction… Retrouvez nos conseils sur <a href="https://www.joueurs-info-service.fr/" target="_blank" rel="noopener">joueurs-info-service.fr</a> (09 74 75 13 13 - appel non surtaxé).</p>
+    <div class="pb-cta"><a class="btn" href="https://jeuresponsable.groupetranchant.com/" target="_blank" rel="noopener">Jeu responsable <span aria-hidden="true">↗</span></a></div>
+  </div>
+  <nav class="pb-links" aria-label="Suivre le casino" data-pb>
+    <p class="pb-k">Suivre le casino</p>
+    <a href="https://www.facebook.com/casinopougues" target="_blank" rel="noopener">Facebook <span aria-hidden="true">↗</span></a>
+    <a href="https://www.instagram.com/casinopougues/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a>
+    <a href="https://casino-pougues-les-eaux.fr/" target="_blank" rel="noopener">Site du casino <span aria-hidden="true">↗</span></a>
+    <a href="/nos-destinations/#annuaire">Toutes nos destinations</a>
+  </nav>
+</section>
+</div>
+
+<script type="module">
+const root = document.getElementById('pb');
+if (root) {
+  root.classList.add('pb-js');
+  const mqRM = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduce = () => mqRM.matches;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+  /* révélations */
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -12% 0px' });
+  root.querySelectorAll('[data-pb]').forEach(el => io.observe(el));
+
+  /* statut « ouvert maintenant » (casino : 09:00, fermeture 03:00, 04:00 les vendredis et samedis) */
+  const live = root.querySelector('[data-live]');
+  const closeAt = d => (d === 5 || d === 6) ? 4 : 3;
+  const now = new Date(), d = now.getDay(), h = now.getHours() + now.getMinutes() / 60;
+  if (live) {
+    const y = (d + 6) % 7;
+    let txt, open = true;
+    if (h >= 9) txt = `Ouvert maintenant · jusqu'à 0${closeAt(d)}:00`;
+    else if (h < closeAt(y)) txt = `Ouvert maintenant · jusqu'à 0${closeAt(y)}:00`;
+    else { open = false; txt = 'Fermé · ouverture à 09:00'; }
+    live.querySelector('span').textContent = txt;
+    live.classList.toggle('off', !open);
+  }
+
+  /* horaires : un seul sélecteur de jour */
+  const days = [...root.querySelectorAll('.pb-days button')];
+  const out = root.querySelector('.pb-hrs-out');
+  const fmt = v => v ? v.split(' / ').map(s => `<span>${s.replace(' – ', '<i class="sep">–</i>')}</span>`).join('') : 'Fermé';
+  const pick = (b, anim) => {
+    days.forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    const apply = () => {
+      for (const k of ['c', 'r', 's']) { const el = out.querySelector(`[data-o="${k}"]`); el.innerHTML = fmt(b.dataset[k]); el.classList.toggle('off', !b.dataset[k]); }
+      root.querySelector('[data-o="day"]').innerHTML = `<b>${b.getAttribute('aria-label')}</b>${b.classList.contains('today') ? ' · aujourd’hui' : ''}`;
+      out.classList.remove('swap');
+    };
+    if (anim && !reduce()) { out.classList.add('swap'); setTimeout(apply, 260); } else apply();
+  };
+  const today = days.find(b => b.dataset.d === String(d));
+  if (today) today.classList.add('today');
+  days.forEach(b => b.addEventListener('click', () => pick(b, true)));
+  if (today) pick(today, false);
+
+  /* galerie d'affiches : épinglée sur grand écran, glissée au doigt ailleurs */
+  const aff = root.querySelector('.pb-aff'), track = aff.querySelector('.pb-track'), evs = [...track.children];
+  const mqPin = matchMedia('(min-width: 1000px) and (min-height: 620px)');
+  let pinned = false, maxX = 0;
+  const layout = () => {
+    pinned = mqPin.matches && !reduce();
+    aff.classList.toggle('pinned', pinned);
+    if (pinned) {
+      track.style.setProperty('--pb-x', '0px');
+      maxX = Math.max(0, track.scrollWidth - innerWidth);
+      aff.style.height = `${innerHeight + maxX}px`;
+    } else { aff.style.height = ''; track.style.removeProperty('--pb-x'); }
+    tick();
+  };
+  aff.querySelectorAll('.pb-arrow').forEach(b => b.addEventListener('click', () => {
+    const w = evs[0].getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 30);
+    track.scrollBy({ left: +b.dataset.dir * w, behavior: reduce() ? 'auto' : 'smooth' });
+  }));
+  /* clavier : en mode épinglé, amener l'affiche qui reçoit le focus à l'écran */
+  track.addEventListener('focusin', e => {
+    if (!pinned) return;
+    const li = e.target.closest('.pb-ev'); if (!li) return;
+    const top = aff.getBoundingClientRect().top + scrollY;
+    const x = clamp(li.offsetLeft - innerWidth * .3, 0, maxX);
+    scrollTo({ top: top + x, behavior: 'auto' });
+  });
+
+  /* défilement : ouverture, cartes empilées, galerie, salon, éclipse, parallaxe */
+  const hero = root.querySelector('.pb-hero');
+  const cards = [...root.querySelectorAll('.pb-card')];
+  const salon = root.querySelector('.pb-salon-stage');
+  const ecl = root.querySelector('.pb-ecl');
+  const px = [...root.querySelectorAll('[data-px]')];
+  let raf = 0;
+  function tick() {
+    raf = 0;
+    const vh = innerHeight, rm = reduce();
+    hero.style.setProperty('--hp', rm ? 0 : clamp(scrollY / vh).toFixed(4));
+    cards.forEach((c, i) => {
+      const r = c.getBoundingClientRect();
+      c.style.setProperty('--cin', rm ? 1 : clamp(1 - (r.top - 84) / vh).toFixed(3));
+      const n = cards[i + 1];
+      if (!n || rm) { c.style.setProperty('--cv', 0); return; }
+      const nt = n.getBoundingClientRect().top;
+      c.style.setProperty('--cv', clamp(1 - (nt - r.top) / (vh * .8)).toFixed(3));
+    });
+    if (pinned) {
+      const r = aff.getBoundingClientRect();
+      const p = clamp(-r.top / Math.max(1, maxX));
+      track.style.setProperty('--pb-x', `${(-p * maxX).toFixed(1)}px`);
+    }
+    evs.forEach(li => {
+      const r = li.getBoundingClientRect();
+      if (r.right < -200 || r.left > innerWidth + 200) return;
+      const dn = clamp(((r.left + r.width / 2) - innerWidth / 2) / innerWidth, -1, 1);
+      li.style.setProperty('--d', rm ? 0 : dn.toFixed(3));
+      li.style.setProperty('--ad', rm ? 0 : Math.abs(dn).toFixed(3));
+    });
+    if (salon) { const r = salon.getBoundingClientRect(); salon.style.setProperty('--sp', rm ? 1 : clamp(-r.top / (r.height - vh) * 1.25).toFixed(4)); }
+    if (ecl) { const r = ecl.getBoundingClientRect(); ecl.style.setProperty('--ep', rm ? 1 : clamp(1 - (r.top + r.height * .35) / vh).toFixed(4)); }
+    if (!rm) px.forEach(img => {
+      const r = img.parentElement.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) return;
+      img.style.setProperty('--py', `${((r.top + r.height / 2 - vh / 2) / vh * -60).toFixed(1)}px`);
+    });
+  }
+  const req = () => { if (!raf) raf = requestAnimationFrame(tick); };
+  addEventListener('scroll', req, { passive: true });
+  track.addEventListener('scroll', req, { passive: true });
+  addEventListener('resize', layout);
+  mqRM.addEventListener('change', layout);
+  evs.forEach(li => li.querySelectorAll('img').forEach(im => im.complete || im.addEventListener('load', layout, { once: true })));
+  layout();
+}
+</script>

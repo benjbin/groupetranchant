@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Groupe Tranchant — symbole"><rect width="120" height="120" rx="0" fill="#08111F"/><g transform="translate(0 0) scale(1) translate(0 -3)"><clipPath id="si9"><path d="M22 120V58A38 38 0 0 1 98 58V120Z"/></clipPath><clipPath id="sr10"><path d="M27 104V58A33 33 0 0 1 27.75 51H92.25A33 33 0 0 1 93 58V104Z"/></clipPath>
+<g clip-path="url(#si9)"><rect x="0" y="0" width="120" height="38" fill="#8E1C32"/><rect x="0" y="38" width="120" height="8" fill="#E2B65E"/></g>
+<path d="M60 23L61.6 27.9L66.5 29.5L61.6 31.1L60 36L58.4 31.1L53.5 29.5L58.4 27.9Z" fill="#F3D896"/>
+<path d="M14 108V58A46 46 0 0 1 106 58V108H98V58A38 38 0 0 0 22 58V108Z" fill="#E2B65E"/><rect x="8" y="108" width="104" height="6" fill="#E2B65E"/>
+<rect x="55.5" y="46" width="9" height="39" fill="#E2B65E"/>
+<path d="M43 108A17 17 0 0 1 77 108Z" fill="#E2B65E"/>
+<g clip-path="url(#sr10)"><path d="M37.16 100.62L-25.64 80.34L-20.12 67L38.63 97.07ZM41.72 92.45L-8.54 49.67L1.67 39.46L44.45 89.72ZM49.07 86.63L19 27.88L32.34 22.36L52.62 85.16ZM67.38 85.16L87.66 22.36L101 27.88L70.93 86.63ZM75.55 89.72L118.33 39.46L128.54 49.67L78.28 92.45ZM81.37 97.07L140.12 67L145.64 80.34L82.84 100.62Z" fill="#E2B65E"/></g></g></svg>

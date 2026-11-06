@@ -42,29 +42,86 @@
   </div>
 </section>
 
-<!-- NOS DESTINATIONS -->
-<section id="destinations" class="dest-teaser">
-  <div class="dt-head" data-reveal>
-    <h2 class="display big">Nos destinations de jeux et de loisirs</h2>
-    <div class="legend"><span><i class="c-casino"></i>Casinos</span><span><i class="c-hotel"></i>Hôtels</span><span><i class="c-club"></i>Club de jeu</span></div>
-    <a class="btn solid" href="/nos-destinations/">Parcourir</a>
+<!-- STRATÉGIE ET IMPLANTATIONS : phrase d'accroche à gauche (texte complet sur /groupe/), carte des établissements à droite -->
+<section id="strategie" class="section hstrat">
+  <div class="hstrat-in">
+    <div class="hstrat-text">
+      <p class="kicker">Stratégie de croissance et d'expansion<i class="tri"></i></p>
+      <h2 class="display hstrat-title">Depuis sa création, le groupe TRANCHANT n’a cessé d’entreprendre, d’innover et de créer.</h2>
+      <div class="hstrat-links">
+        <a class="hs-row" href="/groupe/#strategie" data-dialog="strat-dlg" data-reveal><span class="hs-row-t">Stratégie de croissance et d'expansion</span><span class="btn">En savoir plus</span></a>
+        <a class="hs-row" href="/nos-destinations/" data-reveal><span class="hs-row-t">Nos destinations de jeux et de loisirs</span><span class="btn">Parcourir</span></a>
+      </div>
+    </div>
+    <div class="hstrat-map">
+      <div class="hs-stage" aria-hidden="true"></div>
+      <ul class="hs-legend">
+        <li data-type="casino"><i class="c-casino"></i>Casinos</li>
+        <li data-type="club"><i class="c-club"></i>Club de jeu</li>
+        <li data-type="hotel"><i class="c-hotel"></i>Hôtels</li>
+      </ul>
+    </div>
   </div>
-  <div class="dt-strip" aria-hidden="true"><div class="dt-track">{{vignettes}}</div></div>
-</section>
-
-<!-- ACTIVITÉS SPORTIVES -->
-<section id="sportives" class="section">
-  <div class="sec-head" data-reveal><p class="kicker">Activités sportives<i class="tri"></i></p></div>
-  <div class="cards c2">
-    <article class="card wide" data-reveal><figure class="card-img"><img src="https://www.groupetranchant.com/wp-content/uploads/2025/03/494x626-avion-02.jpg" alt="" loading="lazy"></figure><h4 class="display">PATROUILLE TRANCHANT</h4><a class="btn" href="/activites-sportives/#patrouille">Notre patrouille de voltige aérienne</a></article>
-    <article class="card wide" data-reveal><figure class="card-img"><img src="https://www.groupetranchant.com/wp-content/uploads/2025/03/plateau-balltrap.jpg" alt="" loading="lazy"></figure><h4 class="display">SHOOTING CLUBS</h4><a class="btn" href="/activites-sportives/#shooting">Nos complexes de loisirs sportifs</a></article>
-  </div>
+  <!-- texte complet de la stratégie (repris de /groupe/#strategie), ouvert par « En savoir plus » -->
+  <dialog id="strat-dlg" class="hs-dlg" aria-labelledby="strat-dlg-t" data-lenis-prevent>
+    <button class="hs-dlg-x" type="button" aria-label="Fermer"><i></i><i></i></button>
+    <figure class="hs-dlg-img"><img src="https://www.groupetranchant.com/wp-content/uploads/2025/03/Expansion-scaled.jpg" alt="" loading="lazy"></figure>
+    <div class="hs-dlg-body">
+      <p class="kicker">Stratégie de croissance et d'expansion<i class="tri"></i></p>
+      <p class="hs-dlg-lead" id="strat-dlg-t">Depuis sa création, le groupe TRANCHANT n’a cessé d’entreprendre, d’innover et de créer.</p>
+      <!-- texte réécrit pour la fenêtre, à valider par le groupe ; texte d'origine inchangé sur /groupe/#strategie -->
+      <p>Fort de plus de 30 ans d’exploitation de casinos et de clubs de jeux en France, le groupe TRANCHANT réinvente chaque jour la notion de loisirs, avec de nouvelles formules qui intègrent le jeu à des complexes toujours plus ambitieux.</p>
+      <p>Chaque année, il investit dans la rénovation, la modernisation et l’extension de ses établissements, et construit sur de vastes terrains de nouveaux centres dédiés au jeu, à la culture, à la restauration et à l’hébergement, avec de grands parkings et des accès facilités pour accueillir une clientèle toujours plus large.</p>
+      <p>Cette expertise lui a permis d’étendre progressivement ses activités, par des acquisitions stratégiques et des diversifications ciblées et complémentaires.</p>
+      <p>Ses filiales portent la digitalisation de ses métiers historiques : solutions, applications, services et équipements spécialisés, avec l’innovation technologique comme accélérateur de croissance.</p>
+    </div>
+  </dialog>
 </section>
 
 <!-- ACTIVITÉS SPÉCIALISÉES -->
-<section id="specialisees" class="section b2b-band">
-  <div class="sec-head" data-reveal><p class="kicker">ACTIVITÉS SPÉCIALISÉES<i class="tri"></i></p></div>
-  <div class="spec-list">{{filiales}}</div>
+<section id="specialisees" class="section sx">
+  <div class="sx-in">
+    <div class="sx-side">
+      <p class="kicker" data-reveal>ACTIVITÉS SPÉCIALISÉES<i class="tri"></i></p>
+      <div class="sx-stage" aria-hidden="true">
+        <span class="sx-count"><b>01</b><i>/</i><span>05</span></span>
+        <span class="sx-big">01</span>
+        <span class="sx-corner tl"></span><span class="sx-corner tr"></span><span class="sx-corner bl"></span><span class="sx-corner br"></span>
+      </div>
+    </div>
+    <ol class="sx-list">{{filiales-accueil}}</ol>
+  </div>
+</section>
+
+<!-- ACTIVITÉS SPORTIVES -->
+<section id="sportives" class="section spx">
+  <div class="sec-head" data-reveal><p class="kicker">Activités sportives<i class="tri"></i></p></div>
+
+  <!-- 01 : diptyque décalé, texte à droite ; un fin sillage tricolore se trace à l'apparition -->
+  <a class="spx-air" href="/activites-sportives/#patrouille" data-reveal>
+    <svg class="spx-trail" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M-20 330 C 220 300, 380 60, 620 120 S 900 300, 1020 90" stroke="#000091" pathLength="1"/>
+      <path d="M-20 336 C 220 306, 380 66, 620 126 S 900 306, 1020 96" stroke="#9DB4D0" pathLength="1"/>
+      <path d="M-20 342 C 220 312, 380 72, 620 132 S 900 312, 1020 102" stroke="#E1000F" pathLength="1"/>
+    </svg>
+    <figure class="spx-img a1"><img src="https://www.groupetranchant.com/wp-content/uploads/2025/03/494x626-avion-02.jpg" alt="" loading="lazy"></figure>
+    <figure class="spx-img a2"><img src="https://www.groupetranchant.com/wp-content/uploads/2025/03/494x626-avion-01.jpg" alt="" loading="lazy"></figure>
+    <div class="spx-txt">
+      <span class="spx-n" aria-hidden="true">01</span>
+      <h4 class="display">PATROUILLE TRANCHANT</h4>
+      <span class="btn">Notre patrouille de voltige aérienne</span>
+    </div>
+  </a>
+
+  <!-- 02 : plan large en format cinéma, titre posé sur l'image -->
+  <a class="spx-shot" href="/activites-sportives/#shooting" data-reveal>
+    <figure class="spx-img"><img src="https://www.groupetranchant.com/wp-content/uploads/2025/03/plateau-balltrap.jpg" alt="" loading="lazy"></figure>
+    <div class="spx-txt">
+      <span class="spx-n" aria-hidden="true">02</span>
+      <h4 class="display">SHOOTING CLUBS</h4>
+      <span class="btn">Nos complexes de loisirs sportifs</span>
+    </div>
+  </a>
 </section>
 
 <!-- CARRIÈRES -->

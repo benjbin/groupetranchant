@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lenticulaire · Groupe Tranchant</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20role%3D%22img%22%20aria-label%3D%22Groupe%20Tranchant%22%3E%3Ctitle%3EGroupe%20Tranchant%3C%2Ftitle%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%230A0A10%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%222%22%20height%3D%228%22%20fill%3D%22%23FF2E4C%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%223%22%20width%3D%222%22%20height%3D%228%22%20fill%3D%22%232D55FF%22%2F%3E%3Crect%20x%3D%2211%22%20y%3D%223%22%20width%3D%222%22%20height%3D%2226%22%20fill%3D%22%23FF2E4C%22%2F%3E%3Crect%20x%3D%2215%22%20y%3D%223%22%20width%3D%222%22%20height%3D%2226%22%20fill%3D%22%232D55FF%22%2F%3E%3Crect%20x%3D%2219%22%20y%3D%223%22%20width%3D%222%22%20height%3D%2226%22%20fill%3D%22%23FF2E4C%22%2F%3E%3Crect%20x%3D%2223%22%20y%3D%223%22%20width%3D%222%22%20height%3D%228%22%20fill%3D%22%232D55FF%22%2F%3E%3Crect%20x%3D%2227%22%20y%3D%223%22%20width%3D%222%22%20height%3D%228%22%20fill%3D%22%23FF2E4C%22%2F%3E%3C%2Fsvg%3E" type="image/svg+xml">
+<link rel="stylesheet" href="../../../fonts.css">
+<style>
+:root{--ink:#0A0A10;--ink2:#14141D;--ink3:#1E1E2A;--paper:#F2EFE8;--paper2:#E6E2D8;--red:#FF2E4C;--blue:#2D55FF;--mute:#8A8A99;--mute-l:#6E6A63;--line:rgba(242,239,232,.11);--line-l:rgba(10,10,16,.12);--g:clamp(16px,4.2vw,64px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--paper);font:400 16px/1.6 Manrope,Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1320px;margin:0 auto;padding:0 var(--g)}
+.ar{font-family:Archivo,sans-serif;font-stretch:125%}
+.lab{font:600 11px/1 Archivo,sans-serif;font-stretch:125%;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.lab i{font-style:normal;color:var(--paper)}
+section{position:relative}
+.sec{padding:clamp(72px,9vw,128px) 0;border-top:1px solid var(--line)}
+.sec h2{font:600 clamp(26px,3.2vw,40px)/1.08 Archivo,sans-serif;font-stretch:125%;letter-spacing:-.015em;margin:18px 0 0;max-width:20ch}
+.sec .intro{color:var(--mute);max-width:56ch;margin-top:18px}
+.light{background:var(--paper);color:var(--ink)}
+.light .lab{color:var(--mute-l)}.light .lab i{color:var(--ink)}.light .intro{color:var(--mute-l)}
+.light.sec{border-top-color:var(--line-l)}
+.head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;margin-bottom:clamp(40px,5vw,72px)}
+.num{font:500 13px/1 Archivo,sans-serif;font-stretch:125%;color:var(--mute);letter-spacing:.1em}
+
+/* barre du haut */
+.top{white-space:nowrap;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px var(--g);border-bottom:1px solid var(--line);position:relative;z-index:3}
+.top .lab:last-child{text-align:right}
+.top .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:8px 0 0 var(--blue);margin-right:18px;vertical-align:1px}
+
+/* héros */
+.hero{min-height:min(100svh,980px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(32px,5vw,96px);padding:clamp(28px,4vw,56px) var(--g) clamp(56px,6vw,88px);max-width:1440px;margin:0 auto;touch-action:pan-y}
+.stage{position:relative;width:100%;max-width:640px;justify-self:center;aspect-ratio:1;user-select:none;-webkit-user-select:none;cursor:ew-resize}
+.stage svg{width:100%;height:100%;display:block;overflow:visible;color:var(--paper)}
+.stage .ticks{position:absolute;left:0;right:0;bottom:-34px;display:flex;justify-content:space-between}
+.views{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:1px solid var(--line)}
+.views div{padding:14px 0 0;color:var(--mute);transition:color .3s}
+.views div b{display:block;font:600 12px/1 Archivo,sans-serif;font-stretch:125%;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;color:inherit}
+.views div span{font-size:13px;line-height:1.45;display:block;max-width:24ch}
+.views div.on{color:var(--paper)}
+.views div.on b::before{content:"";display:inline-block;width:14px;height:2px;margin:0 8px 3px 0;background:var(--c)}
+.hero h1{font:600 clamp(44px,6.4vw,92px)/.94 Archivo,sans-serif;font-stretch:125%;letter-spacing:-.035em;margin:22px 0 26px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--red) 0 50%,var(--blue) 50% 100%);background-size:8px 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.c{font-size:clamp(16px,1.3vw,18px);max-width:44ch;color:#C9C7CF}
+.hero p.c strong{color:var(--paper);font-weight:600}
+.ctrl{margin-top:36px;display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{font:600 11px/1 Archivo,sans-serif;font-stretch:125%;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);background:none;border:0;border-radius:999px;padding:10px 14px;cursor:pointer}
+.seg button.on{background:var(--paper);color:var(--ink)}
+.seg button[hidden]{display:none}
+.angle{font:500 13px/1 Archivo,sans-serif;font-stretch:125%;color:var(--mute);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.angle b{color:var(--paper);font-weight:600;display:inline-block;min-width:4.2ch;text-align:right}
+.range{width:100%;margin-top:22px;display:block;accent-color:var(--paper);height:24px}
+
+/* logo */
+.lock{width:100%;height:auto;display:block}
+.plates{display:grid;gap:clamp(12px,1.6vw,20px)}
+.plate{border-radius:4px;padding:clamp(40px,8vw,120px) clamp(24px,8vw,120px);position:relative}
+.plate.d{background:var(--ink2);box-shadow:inset 0 0 0 1px var(--line)}
+.plate.l{background:var(--paper)}
+.plate .lab{position:absolute;left:20px;top:18px}
+.plate .lab.r{left:auto;right:20px}
+.plates.two{grid-template-columns:1fr 1fr}
+.plates.two .plate{padding:clamp(36px,5vw,72px) clamp(20px,4vw,56px)}
+
+/* scène défilement */
+.scroll{height:320vh;border-top:1px solid var(--line)}
+.scroll .pin{position:sticky;top:0;height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(24px,5vw,80px);padding:0 var(--g);max-width:1440px;margin:0 auto;overflow:hidden}
+.scroll svg.big{width:min(76vh,100%);aspect-ratio:1;justify-self:center;display:block;overflow:visible}
+.facets{position:relative;min-height:300px}
+.facet{position:absolute;inset:0 0 auto 0;opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s}
+.facet.on{opacity:1;transform:none}
+.facet .k{font:600 clamp(64px,9vw,140px)/.9 Archivo,sans-serif;font-stretch:125%;letter-spacing:-.04em;color:var(--c)}
+.facet h3{font:600 clamp(22px,2.4vw,32px)/1.1 Archivo,sans-serif;font-stretch:125%;margin:18px 0 12px;letter-spacing:-.01em}
+.facet p{color:#C9C7CF;max-width:40ch}
+.bar{position:absolute;left:var(--g);right:var(--g);bottom:28px;height:2px;background:var(--line)}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--paper);width:0}
+
+/* construction */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,28px)}
+.cell{background:var(--ink2);border-radius:4px;padding:clamp(20px,2.4vw,32px);box-shadow:inset 0 0 0 1px var(--line)}
+.cell svg{width:100%;height:auto;display:block}
+#matrix{max-width:520px;margin:0 auto}
+.cell .lab{margin-top:18px;display:block}
+.cell p{font-size:13.5px;color:var(--mute);margin-top:8px;line-height:1.5}
+.build{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(16px,2vw,28px);margin-top:clamp(16px,2vw,28px)}
+.specs{list-style:none;display:grid;gap:0;align-content:start}
+.specs li{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}
+.specs li span:last-child{font:500 13px/1.6 Archivo,sans-serif;font-stretch:112%;color:var(--paper);font-variant-numeric:tabular-nums;text-align:right}
+.specs li span:first-child{color:var(--mute)}
+
+/* tailles */
+.sizes{display:flex;align-items:flex-end;flex-wrap:wrap;gap:clamp(24px,4vw,64px)}
+.sizes figure{display:grid;gap:14px;justify-items:start}
+.sizes svg{display:block}
+.tab{display:flex;align-items:center;gap:10px;background:#2A2A36;border-radius:10px 10px 0 0;padding:10px 16px;width:250px;font-size:13px;color:#DDD}
+.tab svg{width:16px;height:16px;border-radius:3px}
+.tab.lt{background:#E8E5DE;color:#222}
+
+/* palette */
+.pal{display:grid;grid-template-columns:2fr 2fr 1.3fr 1.3fr 1.6fr;gap:clamp(8px,1vw,14px)}
+.sw{border-radius:4px;min-height:clamp(150px,18vw,260px);padding:18px;display:flex;flex-direction:column;justify-content:flex-end;font-size:13px;line-height:1.45}
+.sw b{font:600 13px/1.2 Archivo,sans-serif;font-stretch:125%;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px}
+.sw code{font:500 12px/1.5 Archivo,sans-serif;font-stretch:100%;opacity:.8;display:block}
+.sw.mix{background:repeating-linear-gradient(90deg,var(--red) 0 3px,var(--blue) 3px 6px);color:#fff}
+.chromo{margin-top:clamp(16px,2vw,24px);display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(16px,3vw,48px);align-items:center}
+.chromo svg{width:100%;height:auto;display:block;border-radius:4px}
+
+/* typo */
+.typo{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:start}
+.typo .wmt{width:100%;height:auto;display:block;color:var(--ink)}
+.typo .wmg{width:44%;height:auto;display:block;color:var(--ink);margin-top:22px}
+.specimen{font:600 clamp(64px,9vw,128px)/1 Archivo,sans-serif;font-stretch:125%;letter-spacing:-.03em}
+.typo dl{display:grid;grid-template-columns:auto 1fr;gap:10px 22px;margin-top:28px;font-size:14px}
+.typo dt{color:var(--mute-l)}
+.manrope{font:300 clamp(28px,3vw,40px)/1.15 Manrope,sans-serif;letter-spacing:-.01em}
+.manrope b{font-weight:700}
+
+/* mises en situation */
+.apps{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(12px,1.6vw,22px)}
+.app{border-radius:4px;overflow:hidden;position:relative;background:var(--ink2);box-shadow:inset 0 0 0 1px var(--line)}
+.app .cap{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;line-height:1.7}
+.a-web{grid-column:span 12}
+.a-card{grid-column:span 7;background:#C9C4B8;box-shadow:none;min-height:440px;display:grid;place-items:center}
+.a-icon{grid-column:span 5;min-height:440px;display:grid;place-items:center;background:linear-gradient(160deg,#272637,#0E0E16)}
+.a-sign{grid-column:span 12}
+.app .cap.dk{color:var(--mute-l)}
+/* site */
+.browser{background:#1A1A24}
+.bbar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.bbar i{width:10px;height:10px;border-radius:50%;background:#3A3A48}
+.bbar span{margin-left:14px;flex:1;max-width:420px;background:#262632;border-radius:6px;font-size:12px;color:var(--mute);padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.site{background:var(--ink);position:relative;overflow:hidden}
+.site nav{display:flex;align-items:center;justify-content:space-between;padding:22px clamp(18px,3vw,40px);border-bottom:1px solid var(--line)}
+.site nav .lock{width:clamp(160px,20vw,240px)}
+.site nav ul{display:flex;gap:clamp(14px,2.4vw,34px);list-style:none;font:600 11px/1 Archivo,sans-serif;font-stretch:125%;letter-spacing:.16em;text-transform:uppercase;color:#BDBBC4}
+.site nav ul li:last-child{color:var(--paper);border:1px solid rgba(242,239,232,.3);border-radius:999px;padding:9px 14px;margin:-10px 0}
+.site .sh{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:center;padding:clamp(36px,5vw,72px) clamp(18px,3vw,40px)}
+.site .sh h4{font:600 clamp(28px,4vw,56px)/1 Archivo,sans-serif;font-stretch:125%;letter-spacing:-.03em}
+.site .sh p{color:var(--mute);margin-top:18px;max-width:40ch;font-size:15px}
+.site .sh svg{width:min(100%,300px);justify-self:end;display:block;overflow:visible;color:var(--paper)}
+.menuic{display:none;width:22px;height:12px;border-top:2px solid var(--paper);border-bottom:2px solid var(--paper)}
+/* carte */
+.cards{position:relative;width:min(86%,520px);aspect-ratio:85/55;margin:0 auto 64px}
+.card{position:absolute;width:66%;aspect-ratio:85/55;border-radius:3px;box-shadow:0 30px 50px -24px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.15)}
+.card.r{left:0;top:0;background:var(--ink);transform:rotate(-5deg);display:grid;place-items:center}
+.card.r svg{width:30%;height:auto}
+.card.v{right:0;bottom:-12%;background:var(--paper);transform:rotate(3deg);padding:7% 8%;color:var(--ink);display:flex;flex-direction:column;justify-content:space-between}
+.card.v .who b{display:block;font:600 clamp(12px,1.6vw,17px)/1.2 Archivo,sans-serif;font-stretch:125%;letter-spacing:-.005em}
+.card.v .who span{font-size:clamp(9px,1vw,11px);color:var(--mute-l)}
+.card.v .co{display:flex;justify-content:space-between;align-items:flex-end;font-size:clamp(8px,.95vw,10.5px);line-height:1.5;color:#3a3a40}
+.card.v .co svg{width:22%;height:auto;flex:none}
+/* icône */
+.ios{width:clamp(120px,14vw,180px);aspect-ratio:1;border-radius:23%;background:var(--ink);display:grid;place-items:center;box-shadow:0 24px 40px -18px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ios svg{width:62%;height:auto;overflow:visible}
+.iconrow{display:flex;gap:clamp(18px,2.6vw,34px);align-items:flex-end;justify-content:center}
+.iconrow figure{display:grid;justify-items:center;gap:10px;font-size:12px;color:#CFCDD6}
+.iconrow .ios.s{width:clamp(56px,6vw,76px)}
+/* façade */
+.night{display:block;width:100%;height:auto}
+.signcap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;line-height:1.6;padding:16px 18px;border-top:1px solid var(--line)}
+
+footer{padding:56px var(--g) 72px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;color:var(--mute);font-size:13px}
+footer a{color:var(--paper)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;padding-top:28px;gap:56px}
+  .stage{max-width:520px}
+  .scroll .pin{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:center;gap:28px}
+  .scroll svg.big{width:min(62vw,46vh)}
+  .facets{min-height:230px}
+  .grid3{grid-template-columns:1fr}
+  .build{grid-template-columns:1fr}
+  .pal{grid-template-columns:1fr 1fr}
+  .pal .sw:last-child{grid-column:span 2}
+  .chromo,.typo{grid-template-columns:1fr}
+  .a-card,.a-icon{grid-column:span 12;min-height:340px}
+  .plates.two{grid-template-columns:1fr}
+  .site nav ul{display:none}.menuic{display:block}
+  .site .sh{grid-template-columns:1fr}
+  .site .sh svg{justify-self:start;width:62%}
+  .top .lab.hide{display:none}
+  .night{height:440px}
+}
+@media (max-width:520px){
+  .views div span{font-size:12px;padding-right:8px}
+  .hero h1{margin-top:16px}
+  .ctrl{gap:12px}
+  .seg button{padding:9px 11px;letter-spacing:.1em}
+  .head{grid-template-columns:1fr}
+  .tab{width:100%}
+  .facet .k{font-size:56px}
+  .top .lab:last-child,.signcap .lab:last-child{display:none}
+  .night{height:380px}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <span class="lab"><span class="dot"></span>Groupe Tranchant · <i>Série 2</i></span>
+  <span class="lab hide">Piste 06 · Lenticulaire</span>
+  <span class="lab">Identité · 2026</span>
+</div>
+
+<!-- HÉROS -->
+<section class="hero" id="hero">
+  <div class="stage" id="stage">
+    <svg id="heroSvg" aria-label="Symbole lenticulaire interactif"></svg>
+    <div class="ticks lab"><span>Gauche</span><span>Face</span><span>Droite</span></div>
+  </div>
+  <div>
+    <span class="lab">Direction artistique · <i>Lenticulaire</i></span>
+    <h1>Un groupe,<br><em>trois</em> facettes.</h1>
+    <p class="c">Le symbole est une image lenticulaire, quinze lamelles peintes sur leurs faces comme un écran <strong>Alioscopy</strong>. Selon d’où on le regarde, il montre <strong>la Lune</strong> (la nuit, l’accueil, la scène), <strong>l’Initiale</strong> (la famille) ou <strong>l’Aile</strong> (la voltige, le sport). Un seul objet, et la technologie du groupe en est le support même.</p>
+    <div class="ctrl">
+      <div class="seg" role="group" aria-label="Mode">
+        <button data-m="auto" class="on">Auto</button>
+        <button data-m="souris">Souris</button>
+        <button data-m="gyro" hidden>Inclinaison</button>
+      </div>
+      <span class="angle">Angle de vue <b id="ang">0°</b></span>
+    </div>
+    <input class="range" id="rng" type="range" min="0" max="200" value="100" aria-label="Angle de vue">
+    <div class="views" id="views">
+      <div style="--c:var(--blue)"><b>Lune</b><span>Casinos, hôtels, restaurants, scènes</span></div>
+      <div style="--c:var(--paper)" class="on"><b>Initiale</b><span>Le groupe et la famille, depuis 1988</span></div>
+      <div style="--c:var(--red)"><b>Aile</b><span>Patrouille, voltige et loisirs sportifs</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGO -->
+<section class="sec">
+  <div class="wrap">
+    <div class="head"><div><span class="lab">01 · <i>Le logo</i></span><h2>Vu de face, l’Initiale. Le nom prolonge sa barre.</h2></div></div>
+    <div class="plates">
+      <div class="plate d"><span class="lab">Fond sombre</span><span class="lab r">logo.svg</span><svg class="lock" viewBox="0 0 621.855 120" role="img" aria-label="Groupe Tranchant"><rect x="1.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="9.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="17.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="25.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="33.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="41.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="49.5" y="0" width="5" height="120" fill="#FF2E4C"/><rect x="57.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="65.5" y="0" width="5" height="120" fill="#FF2E4C"/><rect x="73.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="81.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="89.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="97.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="105.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="113.5" y="0" width="5" height="36" fill="#FF2E4C"/><path transform="translate(145.5 0) scale(0.525)" fill="#F2EFE8" d="M30.62 68.6V12.5H0V-0.09H75.52V12.5H44.9V68.6ZM100.08 68.6V-0.09H153.89Q161.09 -0.09 165.73 2.82Q170.36 5.72 172.67 10.53Q174.98 15.34 174.98 21.22Q174.98 27.39 171.8 32.71Q168.62 38.03 162.04 40.92L176.69 68.6H160.63L147.81 43.61H114.37V68.6ZM114.37 31.74H150.04Q154.97 31.74 157.65 28.87Q160.34 25.99 160.34 21.5Q160.34 18.46 159.17 16.29Q158 14.13 155.69 13Q153.39 11.87 150.04 11.87H114.37ZM196.32 68.6 230.82 -0.09H247.05L281.56 68.6H265.86L259.01 54.69H217.85L211 68.6ZM223.52 43.09H253.33L244.88 25.54Q244.36 24.42 243.42 22.31Q242.47 20.2 241.52 17.98Q240.57 15.76 239.81 14.08Q239.04 12.41 238.88 12.17H238.08Q237.16 14.2 235.98 16.82Q234.81 19.44 233.74 21.84Q232.68 24.24 231.98 25.63ZM306.08 68.6V-0.09H319.6L358.34 37.61Q359.62 38.7 361.35 40.54Q363.09 42.38 364.96 44.3Q366.82 46.21 368.16 47.75H368.95Q368.86 45.61 368.72 42.52Q368.58 39.43 368.58 37.4V-0.09H382.33V68.6H369.18L330.29 30.49Q327.67 27.95 324.82 24.91Q321.98 21.86 320.26 20.04H319.56Q319.65 21.41 319.74 24.64Q319.83 27.87 319.83 31.86V68.6ZM453.09 69.8Q439.29 69.8 429.93 65.75Q420.58 61.69 415.88 53.74Q411.19 45.79 411.19 34.21Q411.19 17.21 421.95 7.96Q432.71 -1.29 452.96 -1.29Q464.53 -1.29 473.35 1.95Q482.17 5.18 487.11 11.32Q492.04 17.47 492.04 26.27H478.03Q478.03 21.02 474.84 17.57Q471.64 14.11 465.97 12.39Q460.29 10.67 452.68 10.67Q444.52 10.67 438.5 13.26Q432.48 15.86 429.17 20.82Q425.85 25.78 425.85 32.91V35.4Q425.85 42.68 429.18 47.68Q432.5 52.68 438.58 55.26Q444.66 57.84 452.84 57.84Q460.72 57.84 466.42 56.15Q472.13 54.46 475.26 51Q478.4 47.55 478.4 42.42H492.14Q492.14 51.05 487.24 57.19Q482.34 63.34 473.57 66.57Q464.8 69.8 453.09 69.8ZM520.88 68.6V-0.09H535.17V27.29H582.83V-0.09H597.12V68.6H582.83V39.88H535.17V68.6ZM621.62 68.6 656.12 -0.09H672.35L706.86 68.6H691.16L684.31 54.69H643.15L636.3 68.6ZM648.82 43.09H678.63L670.18 25.54Q669.66 24.42 668.72 22.31Q667.77 20.2 666.82 17.98Q665.87 15.76 665.11 14.08Q664.34 12.41 664.18 12.17H663.38Q662.46 14.2 661.28 16.82Q660.11 19.44 659.04 21.84Q657.98 24.24 657.28 25.63ZM731.38 68.6V-0.09H744.9L783.64 37.61Q784.92 38.7 786.65 40.54Q788.39 42.38 790.26 44.3Q792.12 46.21 793.46 47.75H794.25Q794.16 45.61 794.02 42.52Q793.88 39.43 793.88 37.4V-0.09H807.63V68.6H794.48L755.59 30.49Q752.97 27.95 750.12 24.91Q747.28 21.86 745.56 20.04H744.86Q744.95 21.41 745.04 24.64Q745.13 27.87 745.13 31.86V68.6ZM862.82 68.6V12.5H832.2V-0.09H907.72V12.5H877.1V68.6Z"/><path transform="translate(146.5 110.4) scale(0.14)" fill="#F2EFE8" d="M41.56 69.8Q20.76 69.8 10.38 60.99Q0 52.18 0 34.3Q0 22.62 5.26 14.68Q10.52 6.74 20.47 2.73Q30.43 -1.28 44.27 -1.28Q53.43 -1.28 60.88 0.24Q68.33 1.76 73.7 4.88Q79.06 8 81.93 12.77Q84.8 17.54 84.8 24.04H71.79Q71.79 19.94 69.57 17.18Q67.34 14.41 63.52 12.85Q59.69 11.28 54.87 10.61Q50.05 9.94 44.77 9.94Q38.22 9.94 32.55 11.23Q26.89 12.52 22.66 15.3Q18.42 18.09 16.07 22.48Q13.71 26.87 13.71 32.98V35.38Q13.71 43.76 17.33 48.85Q20.94 53.93 27.48 56.25Q34.02 58.58 42.8 58.58Q53.03 58.58 59.41 56.62Q65.8 54.65 68.79 51.01Q71.79 47.36 71.79 42.49V41.44H42.65V30.78H84.9V68.6H76.38L74.91 59.15Q71.27 62.97 66.05 65.31Q60.84 67.66 54.6 68.73Q48.36 69.8 41.56 69.8ZM154.38 68.6V-0.08H207.59Q214.7 -0.08 219.32 2.78Q223.94 5.64 226.26 10.42Q228.58 15.19 228.58 21.05Q228.58 27.29 225.36 32.58Q222.14 37.87 215.58 40.64L230.3 68.6H215.26L202.23 43.13H167.75V68.6ZM167.75 31.99H204.09Q209.24 31.99 212.06 28.98Q214.89 25.98 214.89 21.29Q214.89 18.12 213.65 15.84Q212.41 13.55 210 12.35Q207.59 11.14 204.09 11.14H167.75ZM336.53 69.8Q323.01 69.8 313.16 65.68Q303.3 61.56 298 53.62Q292.7 45.68 292.7 34.26Q292.7 22.74 298 14.85Q303.3 6.96 313.16 2.84Q323.01 -1.28 336.53 -1.28Q350.17 -1.28 359.99 2.84Q369.82 6.96 375.12 14.85Q380.42 22.74 380.42 34.26Q380.42 45.68 375.12 53.62Q369.82 61.56 359.99 65.68Q350.17 69.8 336.53 69.8ZM336.58 58.58Q343.06 58.58 348.53 57.14Q354.01 55.71 358.08 52.86Q362.15 50.01 364.43 45.61Q366.71 41.21 366.71 35.31V33.03Q366.71 27.17 364.43 22.8Q362.15 18.43 358.08 15.58Q354.01 12.74 348.53 11.34Q343.06 9.94 336.58 9.94Q330.1 9.94 324.61 11.34Q319.13 12.74 315.05 15.58Q310.97 18.43 308.73 22.8Q306.49 27.17 306.49 33.03V35.31Q306.49 41.21 308.73 45.61Q310.97 50.01 315.05 52.86Q319.14 55.71 324.62 57.14Q330.1 58.58 336.58 58.58ZM484.4 69.8Q471.74 69.8 463.46 65.88Q455.19 61.96 451.14 54.7Q447.08 47.45 447.08 37.55V-0.08H460.45V37.14Q460.45 47.43 466.67 53Q472.88 58.58 484.4 58.58Q495.93 58.58 502.14 53Q508.36 47.43 508.36 37.14V-0.08H521.73V37.55Q521.73 47.45 517.67 54.7Q513.62 61.96 505.39 65.88Q497.15 69.8 484.4 69.8ZM591.28 68.6V-0.08H640.94Q647.56 -0.08 652.43 2.76Q657.29 5.6 659.97 10.56Q662.65 15.51 662.65 21.95Q662.65 28.32 659.94 33.34Q657.23 38.36 652.29 41.2Q647.36 44.05 640.66 44.05H604.65V68.6ZM604.65 32.83H637.12Q642.86 32.83 645.95 29.92Q649.04 27.01 649.04 22.03Q649.04 18.68 647.64 16.24Q646.24 13.8 643.59 12.47Q640.93 11.14 637.12 11.14H604.65ZM726.28 68.6V-0.08H795V11.14H739.65V27.96H789.14V39.18H739.65V57.38H795.8V68.6Z"/></svg></div>
+      <div class="plate l"><span class="lab" style="color:var(--mute-l)">Fond clair</span><span class="lab r" style="color:var(--mute-l)">logo-clair.svg</span><svg class="lock" viewBox="0 0 621.855 120" role="img" aria-label="Groupe Tranchant"><rect x="1.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="9.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="17.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="25.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="33.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="41.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="49.5" y="0" width="5" height="120" fill="#FF2E4C"/><rect x="57.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="65.5" y="0" width="5" height="120" fill="#FF2E4C"/><rect x="73.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="81.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="89.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="97.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="105.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="113.5" y="0" width="5" height="36" fill="#FF2E4C"/><path transform="translate(145.5 0) scale(0.525)" fill="#0A0A10" d="M30.62 68.6V12.5H0V-0.09H75.52V12.5H44.9V68.6ZM100.08 68.6V-0.09H153.89Q161.09 -0.09 165.73 2.82Q170.36 5.72 172.67 10.53Q174.98 15.34 174.98 21.22Q174.98 27.39 171.8 32.71Q168.62 38.03 162.04 40.92L176.69 68.6H160.63L147.81 43.61H114.37V68.6ZM114.37 31.74H150.04Q154.97 31.74 157.65 28.87Q160.34 25.99 160.34 21.5Q160.34 18.46 159.17 16.29Q158 14.13 155.69 13Q153.39 11.87 150.04 11.87H114.37ZM196.32 68.6 230.82 -0.09H247.05L281.56 68.6H265.86L259.01 54.69H217.85L211 68.6ZM223.52 43.09H253.33L244.88 25.54Q244.36 24.42 243.42 22.31Q242.47 20.2 241.52 17.98Q240.57 15.76 239.81 14.08Q239.04 12.41 238.88 12.17H238.08Q237.16 14.2 235.98 16.82Q234.81 19.44 233.74 21.84Q232.68 24.24 231.98 25.63ZM306.08 68.6V-0.09H319.6L358.34 37.61Q359.62 38.7 361.35 40.54Q363.09 42.38 364.96 44.3Q366.82 46.21 368.16 47.75H368.95Q368.86 45.61 368.72 42.52Q368.58 39.43 368.58 37.4V-0.09H382.33V68.6H369.18L330.29 30.49Q327.67 27.95 324.82 24.91Q321.98 21.86 320.26 20.04H319.56Q319.65 21.41 319.74 24.64Q319.83 27.87 319.83 31.86V68.6ZM453.09 69.8Q439.29 69.8 429.93 65.75Q420.58 61.69 415.88 53.74Q411.19 45.79 411.19 34.21Q411.19 17.21 421.95 7.96Q432.71 -1.29 452.96 -1.29Q464.53 -1.29 473.35 1.95Q482.17 5.18 487.11 11.32Q492.04 17.47 492.04 26.27H478.03Q478.03 21.02 474.84 17.57Q471.64 14.11 465.97 12.39Q460.29 10.67 452.68 10.67Q444.52 10.67 438.5 13.26Q432.48 15.86 429.17 20.82Q425.85 25.78 425.85 32.91V35.4Q425.85 42.68 429.18 47.68Q432.5 52.68 438.58 55.26Q444.66 57.84 452.84 57.84Q460.72 57.84 466.42 56.15Q472.13 54.46 475.26 51Q478.4 47.55 478.4 42.42H492.14Q492.14 51.05 487.24 57.19Q482.34 63.34 473.57 66.57Q464.8 69.8 453.09 69.8ZM520.88 68.6V-0.09H535.17V27.29H582.83V-0.09H597.12V68.6H582.83V39.88H535.17V68.6ZM621.62 68.6 656.12 -0.09H672.35L706.86 68.6H691.16L684.31 54.69H643.15L636.3 68.6ZM648.82 43.09H678.63L670.18 25.54Q669.66 24.42 668.72 22.31Q667.77 20.2 666.82 17.98Q665.87 15.76 665.11 14.08Q664.34 12.41 664.18 12.17H663.38Q662.46 14.2 661.28 16.82Q660.11 19.44 659.04 21.84Q657.98 24.24 657.28 25.63ZM731.38 68.6V-0.09H744.9L783.64 37.61Q784.92 38.7 786.65 40.54Q788.39 42.38 790.26 44.3Q792.12 46.21 793.46 47.75H794.25Q794.16 45.61 794.02 42.52Q793.88 39.43 793.88 37.4V-0.09H807.63V68.6H794.48L755.59 30.49Q752.97 27.95 750.12 24.91Q747.28 21.86 745.56 20.04H744.86Q744.95 21.41 745.04 24.64Q745.13 27.87 745.13 31.86V68.6ZM862.82 68.6V12.5H832.2V-0.09H907.72V12.5H877.1V68.6Z"/><path transform="translate(146.5 110.4) scale(0.14)" fill="#0A0A10" d="M41.56 69.8Q20.76 69.8 10.38 60.99Q0 52.18 0 34.3Q0 22.62 5.26 14.68Q10.52 6.74 20.47 2.73Q30.43 -1.28 44.27 -1.28Q53.43 -1.28 60.88 0.24Q68.33 1.76 73.7 4.88Q79.06 8 81.93 12.77Q84.8 17.54 84.8 24.04H71.79Q71.79 19.94 69.57 17.18Q67.34 14.41 63.52 12.85Q59.69 11.28 54.87 10.61Q50.05 9.94 44.77 9.94Q38.22 9.94 32.55 11.23Q26.89 12.52 22.66 15.3Q18.42 18.09 16.07 22.48Q13.71 26.87 13.71 32.98V35.38Q13.71 43.76 17.33 48.85Q20.94 53.93 27.48 56.25Q34.02 58.58 42.8 58.58Q53.03 58.58 59.41 56.62Q65.8 54.65 68.79 51.01Q71.79 47.36 71.79 42.49V41.44H42.65V30.78H84.9V68.6H76.38L74.91 59.15Q71.27 62.97 66.05 65.31Q60.84 67.66 54.6 68.73Q48.36 69.8 41.56 69.8ZM154.38 68.6V-0.08H207.59Q214.7 -0.08 219.32 2.78Q223.94 5.64 226.26 10.42Q228.58 15.19 228.58 21.05Q228.58 27.29 225.36 32.58Q222.14 37.87 215.58 40.64L230.3 68.6H215.26L202.23 43.13H167.75V68.6ZM167.75 31.99H204.09Q209.24 31.99 212.06 28.98Q214.89 25.98 214.89 21.29Q214.89 18.12 213.65 15.84Q212.41 13.55 210 12.35Q207.59 11.14 204.09 11.14H167.75ZM336.53 69.8Q323.01 69.8 313.16 65.68Q303.3 61.56 298 53.62Q292.7 45.68 292.7 34.26Q292.7 22.74 298 14.85Q303.3 6.96 313.16 2.84Q323.01 -1.28 336.53 -1.28Q350.17 -1.28 359.99 2.84Q369.82 6.96 375.12 14.85Q380.42 22.74 380.42 34.26Q380.42 45.68 375.12 53.62Q369.82 61.56 359.99 65.68Q350.17 69.8 336.53 69.8ZM336.58 58.58Q343.06 58.58 348.53 57.14Q354.01 55.71 358.08 52.86Q362.15 50.01 364.43 45.61Q366.71 41.21 366.71 35.31V33.03Q366.71 27.17 364.43 22.8Q362.15 18.43 358.08 15.58Q354.01 12.74 348.53 11.34Q343.06 9.94 336.58 9.94Q330.1 9.94 324.61 11.34Q319.13 12.74 315.05 15.58Q310.97 18.43 308.73 22.8Q306.49 27.17 306.49 33.03V35.31Q306.49 41.21 308.73 45.61Q310.97 50.01 315.05 52.86Q319.14 55.71 324.62 57.14Q330.1 58.58 336.58 58.58ZM484.4 69.8Q471.74 69.8 463.46 65.88Q455.19 61.96 451.14 54.7Q447.08 47.45 447.08 37.55V-0.08H460.45V37.14Q460.45 47.43 466.67 53Q472.88 58.58 484.4 58.58Q495.93 58.58 502.14 53Q508.36 47.43 508.36 37.14V-0.08H521.73V37.55Q521.73 47.45 517.67 54.7Q513.62 61.96 505.39 65.88Q497.15 69.8 484.4 69.8ZM591.28 68.6V-0.08H640.94Q647.56 -0.08 652.43 2.76Q657.29 5.6 659.97 10.56Q662.65 15.51 662.65 21.95Q662.65 28.32 659.94 33.34Q657.23 38.36 652.29 41.2Q647.36 44.05 640.66 44.05H604.65V68.6ZM604.65 32.83H637.12Q642.86 32.83 645.95 29.92Q649.04 27.01 649.04 22.03Q649.04 18.68 647.64 16.24Q646.24 13.8 643.59 12.47Q640.93 11.14 637.12 11.14H604.65ZM726.28 68.6V-0.08H795V11.14H739.65V27.96H789.14V39.18H739.65V57.38H795.8V68.6Z"/></svg></div>
+    </div>
+    <p class="intro" style="margin-top:28px">La version fixe est l’état « de face » : lames paires en Rouge, lames impaires en Bleu, jamais mélangées et toujours côte à côte. À distance, les deux encres vibrent en un violet que l’œil fabrique seul. La capitale de TRANCHANT mesure exactement la barre du T, et GROUPE se pose au pied du fût.</p>
+    <div class="plates two" style="margin-top:clamp(28px,4vw,48px)">
+      <div class="plate d"><span class="lab">Monochrome clair</span><svg class="lock" viewBox="0 0 621.855 120" role="img" aria-label="Groupe Tranchant"><rect x="1.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="9.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="17.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="25.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="33.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="41.5" y="0" width="5" height="120" fill="#F2EFE8"/><rect x="49.5" y="0" width="5" height="120" fill="#F2EFE8"/><rect x="57.5" y="0" width="5" height="120" fill="#F2EFE8"/><rect x="65.5" y="0" width="5" height="120" fill="#F2EFE8"/><rect x="73.5" y="0" width="5" height="120" fill="#F2EFE8"/><rect x="81.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="89.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="97.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="105.5" y="0" width="5" height="36" fill="#F2EFE8"/><rect x="113.5" y="0" width="5" height="36" fill="#F2EFE8"/><path transform="translate(145.5 0) scale(0.525)" fill="#F2EFE8" d="M30.62 68.6V12.5H0V-0.09H75.52V12.5H44.9V68.6ZM100.08 68.6V-0.09H153.89Q161.09 -0.09 165.73 2.82Q170.36 5.72 172.67 10.53Q174.98 15.34 174.98 21.22Q174.98 27.39 171.8 32.71Q168.62 38.03 162.04 40.92L176.69 68.6H160.63L147.81 43.61H114.37V68.6ZM114.37 31.74H150.04Q154.97 31.74 157.65 28.87Q160.34 25.99 160.34 21.5Q160.34 18.46 159.17 16.29Q158 14.13 155.69 13Q153.39 11.87 150.04 11.87H114.37ZM196.32 68.6 230.82 -0.09H247.05L281.56 68.6H265.86L259.01 54.69H217.85L211 68.6ZM223.52 43.09H253.33L244.88 25.54Q244.36 24.42 243.42 22.31Q242.47 20.2 241.52 17.98Q240.57 15.76 239.81 14.08Q239.04 12.41 238.88 12.17H238.08Q237.16 14.2 235.98 16.82Q234.81 19.44 233.74 21.84Q232.68 24.24 231.98 25.63ZM306.08 68.6V-0.09H319.6L358.34 37.61Q359.62 38.7 361.35 40.54Q363.09 42.38 364.96 44.3Q366.82 46.21 368.16 47.75H368.95Q368.86 45.61 368.72 42.52Q368.58 39.43 368.58 37.4V-0.09H382.33V68.6H369.18L330.29 30.49Q327.67 27.95 324.82 24.91Q321.98 21.86 320.26 20.04H319.56Q319.65 21.41 319.74 24.64Q319.83 27.87 319.83 31.86V68.6ZM453.09 69.8Q439.29 69.8 429.93 65.75Q420.58 61.69 415.88 53.74Q411.19 45.79 411.19 34.21Q411.19 17.21 421.95 7.96Q432.71 -1.29 452.96 -1.29Q464.53 -1.29 473.35 1.95Q482.17 5.18 487.11 11.32Q492.04 17.47 492.04 26.27H478.03Q478.03 21.02 474.84 17.57Q471.64 14.11 465.97 12.39Q460.29 10.67 452.68 10.67Q444.52 10.67 438.5 13.26Q432.48 15.86 429.17 20.82Q425.85 25.78 425.85 32.91V35.4Q425.85 42.68 429.18 47.68Q432.5 52.68 438.58 55.26Q444.66 57.84 452.84 57.84Q460.72 57.84 466.42 56.15Q472.13 54.46 475.26 51Q478.4 47.55 478.4 42.42H492.14Q492.14 51.05 487.24 57.19Q482.34 63.34 473.57 66.57Q464.8 69.8 453.09 69.8ZM520.88 68.6V-0.09H535.17V27.29H582.83V-0.09H597.12V68.6H582.83V39.88H535.17V68.6ZM621.62 68.6 656.12 -0.09H672.35L706.86 68.6H691.16L684.31 54.69H643.15L636.3 68.6ZM648.82 43.09H678.63L670.18 25.54Q669.66 24.42 668.72 22.31Q667.77 20.2 666.82 17.98Q665.87 15.76 665.11 14.08Q664.34 12.41 664.18 12.17H663.38Q662.46 14.2 661.28 16.82Q660.11 19.44 659.04 21.84Q657.98 24.24 657.28 25.63ZM731.38 68.6V-0.09H744.9L783.64 37.61Q784.92 38.7 786.65 40.54Q788.39 42.38 790.26 44.3Q792.12 46.21 793.46 47.75H794.25Q794.16 45.61 794.02 42.52Q793.88 39.43 793.88 37.4V-0.09H807.63V68.6H794.48L755.59 30.49Q752.97 27.95 750.12 24.91Q747.28 21.86 745.56 20.04H744.86Q744.95 21.41 745.04 24.64Q745.13 27.87 745.13 31.86V68.6ZM862.82 68.6V12.5H832.2V-0.09H907.72V12.5H877.1V68.6Z"/><path transform="translate(146.5 110.4) scale(0.14)" fill="#F2EFE8" d="M41.56 69.8Q20.76 69.8 10.38 60.99Q0 52.18 0 34.3Q0 22.62 5.26 14.68Q10.52 6.74 20.47 2.73Q30.43 -1.28 44.27 -1.28Q53.43 -1.28 60.88 0.24Q68.33 1.76 73.7 4.88Q79.06 8 81.93 12.77Q84.8 17.54 84.8 24.04H71.79Q71.79 19.94 69.57 17.18Q67.34 14.41 63.52 12.85Q59.69 11.28 54.87 10.61Q50.05 9.94 44.77 9.94Q38.22 9.94 32.55 11.23Q26.89 12.52 22.66 15.3Q18.42 18.09 16.07 22.48Q13.71 26.87 13.71 32.98V35.38Q13.71 43.76 17.33 48.85Q20.94 53.93 27.48 56.25Q34.02 58.58 42.8 58.58Q53.03 58.58 59.41 56.62Q65.8 54.65 68.79 51.01Q71.79 47.36 71.79 42.49V41.44H42.65V30.78H84.9V68.6H76.38L74.91 59.15Q71.27 62.97 66.05 65.31Q60.84 67.66 54.6 68.73Q48.36 69.8 41.56 69.8ZM154.38 68.6V-0.08H207.59Q214.7 -0.08 219.32 2.78Q223.94 5.64 226.26 10.42Q228.58 15.19 228.58 21.05Q228.58 27.29 225.36 32.58Q222.14 37.87 215.58 40.64L230.3 68.6H215.26L202.23 43.13H167.75V68.6ZM167.75 31.99H204.09Q209.24 31.99 212.06 28.98Q214.89 25.98 214.89 21.29Q214.89 18.12 213.65 15.84Q212.41 13.55 210 12.35Q207.59 11.14 204.09 11.14H167.75ZM336.53 69.8Q323.01 69.8 313.16 65.68Q303.3 61.56 298 53.62Q292.7 45.68 292.7 34.26Q292.7 22.74 298 14.85Q303.3 6.96 313.16 2.84Q323.01 -1.28 336.53 -1.28Q350.17 -1.28 359.99 2.84Q369.82 6.96 375.12 14.85Q380.42 22.74 380.42 34.26Q380.42 45.68 375.12 53.62Q369.82 61.56 359.99 65.68Q350.17 69.8 336.53 69.8ZM336.58 58.58Q343.06 58.58 348.53 57.14Q354.01 55.71 358.08 52.86Q362.15 50.01 364.43 45.61Q366.71 41.21 366.71 35.31V33.03Q366.71 27.17 364.43 22.8Q362.15 18.43 358.08 15.58Q354.01 12.74 348.53 11.34Q343.06 9.94 336.58 9.94Q330.1 9.94 324.61 11.34Q319.13 12.74 315.05 15.58Q310.97 18.43 308.73 22.8Q306.49 27.17 306.49 33.03V35.31Q306.49 41.21 308.73 45.61Q310.97 50.01 315.05 52.86Q319.14 55.71 324.62 57.14Q330.1 58.58 336.58 58.58ZM484.4 69.8Q471.74 69.8 463.46 65.88Q455.19 61.96 451.14 54.7Q447.08 47.45 447.08 37.55V-0.08H460.45V37.14Q460.45 47.43 466.67 53Q472.88 58.58 484.4 58.58Q495.93 58.58 502.14 53Q508.36 47.43 508.36 37.14V-0.08H521.73V37.55Q521.73 47.45 517.67 54.7Q513.62 61.96 505.39 65.88Q497.15 69.8 484.4 69.8ZM591.28 68.6V-0.08H640.94Q647.56 -0.08 652.43 2.76Q657.29 5.6 659.97 10.56Q662.65 15.51 662.65 21.95Q662.65 28.32 659.94 33.34Q657.23 38.36 652.29 41.2Q647.36 44.05 640.66 44.05H604.65V68.6ZM604.65 32.83H637.12Q642.86 32.83 645.95 29.92Q649.04 27.01 649.04 22.03Q649.04 18.68 647.64 16.24Q646.24 13.8 643.59 12.47Q640.93 11.14 637.12 11.14H604.65ZM726.28 68.6V-0.08H795V11.14H739.65V27.96H789.14V39.18H739.65V57.38H795.8V68.6Z"/></svg></div>
+      <div class="plate l"><span class="lab" style="color:var(--mute-l)">Monochrome encre</span><svg class="lock" viewBox="0 0 621.855 120" role="img" aria-label="Groupe Tranchant"><rect x="1.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="9.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="17.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="25.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="33.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="41.5" y="0" width="5" height="120" fill="#0A0A10"/><rect x="49.5" y="0" width="5" height="120" fill="#0A0A10"/><rect x="57.5" y="0" width="5" height="120" fill="#0A0A10"/><rect x="65.5" y="0" width="5" height="120" fill="#0A0A10"/><rect x="73.5" y="0" width="5" height="120" fill="#0A0A10"/><rect x="81.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="89.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="97.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="105.5" y="0" width="5" height="36" fill="#0A0A10"/><rect x="113.5" y="0" width="5" height="36" fill="#0A0A10"/><path transform="translate(145.5 0) scale(0.525)" fill="#0A0A10" d="M30.62 68.6V12.5H0V-0.09H75.52V12.5H44.9V68.6ZM100.08 68.6V-0.09H153.89Q161.09 -0.09 165.73 2.82Q170.36 5.72 172.67 10.53Q174.98 15.34 174.98 21.22Q174.98 27.39 171.8 32.71Q168.62 38.03 162.04 40.92L176.69 68.6H160.63L147.81 43.61H114.37V68.6ZM114.37 31.74H150.04Q154.97 31.74 157.65 28.87Q160.34 25.99 160.34 21.5Q160.34 18.46 159.17 16.29Q158 14.13 155.69 13Q153.39 11.87 150.04 11.87H114.37ZM196.32 68.6 230.82 -0.09H247.05L281.56 68.6H265.86L259.01 54.69H217.85L211 68.6ZM223.52 43.09H253.33L244.88 25.54Q244.36 24.42 243.42 22.31Q242.47 20.2 241.52 17.98Q240.57 15.76 239.81 14.08Q239.04 12.41 238.88 12.17H238.08Q237.16 14.2 235.98 16.82Q234.81 19.44 233.74 21.84Q232.68 24.24 231.98 25.63ZM306.08 68.6V-0.09H319.6L358.34 37.61Q359.62 38.7 361.35 40.54Q363.09 42.38 364.96 44.3Q366.82 46.21 368.16 47.75H368.95Q368.86 45.61 368.72 42.52Q368.58 39.43 368.58 37.4V-0.09H382.33V68.6H369.18L330.29 30.49Q327.67 27.95 324.82 24.91Q321.98 21.86 320.26 20.04H319.56Q319.65 21.41 319.74 24.64Q319.83 27.87 319.83 31.86V68.6ZM453.09 69.8Q439.29 69.8 429.93 65.75Q420.58 61.69 415.88 53.74Q411.19 45.79 411.19 34.21Q411.19 17.21 421.95 7.96Q432.71 -1.29 452.96 -1.29Q464.53 -1.29 473.35 1.95Q482.17 5.18 487.11 11.32Q492.04 17.47 492.04 26.27H478.03Q478.03 21.02 474.84 17.57Q471.64 14.11 465.97 12.39Q460.29 10.67 452.68 10.67Q444.52 10.67 438.5 13.26Q432.48 15.86 429.17 20.82Q425.85 25.78 425.85 32.91V35.4Q425.85 42.68 429.18 47.68Q432.5 52.68 438.58 55.26Q444.66 57.84 452.84 57.84Q460.72 57.84 466.42 56.15Q472.13 54.46 475.26 51Q478.4 47.55 478.4 42.42H492.14Q492.14 51.05 487.24 57.19Q482.34 63.34 473.57 66.57Q464.8 69.8 453.09 69.8ZM520.88 68.6V-0.09H535.17V27.29H582.83V-0.09H597.12V68.6H582.83V39.88H535.17V68.6ZM621.62 68.6 656.12 -0.09H672.35L706.86 68.6H691.16L684.31 54.69H643.15L636.3 68.6ZM648.82 43.09H678.63L670.18 25.54Q669.66 24.42 668.72 22.31Q667.77 20.2 666.82 17.98Q665.87 15.76 665.11 14.08Q664.34 12.41 664.18 12.17H663.38Q662.46 14.2 661.28 16.82Q660.11 19.44 659.04 21.84Q657.98 24.24 657.28 25.63ZM731.38 68.6V-0.09H744.9L783.64 37.61Q784.92 38.7 786.65 40.54Q788.39 42.38 790.26 44.3Q792.12 46.21 793.46 47.75H794.25Q794.16 45.61 794.02 42.52Q793.88 39.43 793.88 37.4V-0.09H807.63V68.6H794.48L755.59 30.49Q752.97 27.95 750.12 24.91Q747.28 21.86 745.56 20.04H744.86Q744.95 21.41 745.04 24.64Q745.13 27.87 745.13 31.86V68.6ZM862.82 68.6V12.5H832.2V-0.09H907.72V12.5H877.1V68.6Z"/><path transform="translate(146.5 110.4) scale(0.14)" fill="#0A0A10" d="M41.56 69.8Q20.76 69.8 10.38 60.99Q0 52.18 0 34.3Q0 22.62 5.26 14.68Q10.52 6.74 20.47 2.73Q30.43 -1.28 44.27 -1.28Q53.43 -1.28 60.88 0.24Q68.33 1.76 73.7 4.88Q79.06 8 81.93 12.77Q84.8 17.54 84.8 24.04H71.79Q71.79 19.94 69.57 17.18Q67.34 14.41 63.52 12.85Q59.69 11.28 54.87 10.61Q50.05 9.94 44.77 9.94Q38.22 9.94 32.55 11.23Q26.89 12.52 22.66 15.3Q18.42 18.09 16.07 22.48Q13.71 26.87 13.71 32.98V35.38Q13.71 43.76 17.33 48.85Q20.94 53.93 27.48 56.25Q34.02 58.58 42.8 58.58Q53.03 58.58 59.41 56.62Q65.8 54.65 68.79 51.01Q71.79 47.36 71.79 42.49V41.44H42.65V30.78H84.9V68.6H76.38L74.91 59.15Q71.27 62.97 66.05 65.31Q60.84 67.66 54.6 68.73Q48.36 69.8 41.56 69.8ZM154.38 68.6V-0.08H207.59Q214.7 -0.08 219.32 2.78Q223.94 5.64 226.26 10.42Q228.58 15.19 228.58 21.05Q228.58 27.29 225.36 32.58Q222.14 37.87 215.58 40.64L230.3 68.6H215.26L202.23 43.13H167.75V68.6ZM167.75 31.99H204.09Q209.24 31.99 212.06 28.98Q214.89 25.98 214.89 21.29Q214.89 18.12 213.65 15.84Q212.41 13.55 210 12.35Q207.59 11.14 204.09 11.14H167.75ZM336.53 69.8Q323.01 69.8 313.16 65.68Q303.3 61.56 298 53.62Q292.7 45.68 292.7 34.26Q292.7 22.74 298 14.85Q303.3 6.96 313.16 2.84Q323.01 -1.28 336.53 -1.28Q350.17 -1.28 359.99 2.84Q369.82 6.96 375.12 14.85Q380.42 22.74 380.42 34.26Q380.42 45.68 375.12 53.62Q369.82 61.56 359.99 65.68Q350.17 69.8 336.53 69.8ZM336.58 58.58Q343.06 58.58 348.53 57.14Q354.01 55.71 358.08 52.86Q362.15 50.01 364.43 45.61Q366.71 41.21 366.71 35.31V33.03Q366.71 27.17 364.43 22.8Q362.15 18.43 358.08 15.58Q354.01 12.74 348.53 11.34Q343.06 9.94 336.58 9.94Q330.1 9.94 324.61 11.34Q319.13 12.74 315.05 15.58Q310.97 18.43 308.73 22.8Q306.49 27.17 306.49 33.03V35.31Q306.49 41.21 308.73 45.61Q310.97 50.01 315.05 52.86Q319.14 55.71 324.62 57.14Q330.1 58.58 336.58 58.58ZM484.4 69.8Q471.74 69.8 463.46 65.88Q455.19 61.96 451.14 54.7Q447.08 47.45 447.08 37.55V-0.08H460.45V37.14Q460.45 47.43 466.67 53Q472.88 58.58 484.4 58.58Q495.93 58.58 502.14 53Q508.36 47.43 508.36 37.14V-0.08H521.73V37.55Q521.73 47.45 517.67 54.7Q513.62 61.96 505.39 65.88Q497.15 69.8 484.4 69.8ZM591.28 68.6V-0.08H640.94Q647.56 -0.08 652.43 2.76Q657.29 5.6 659.97 10.56Q662.65 15.51 662.65 21.95Q662.65 28.32 659.94 33.34Q657.23 38.36 652.29 41.2Q647.36 44.05 640.66 44.05H604.65V68.6ZM604.65 32.83H637.12Q642.86 32.83 645.95 29.92Q649.04 27.01 649.04 22.03Q649.04 18.68 647.64 16.24Q646.24 13.8 643.59 12.47Q640.93 11.14 637.12 11.14H604.65ZM726.28 68.6V-0.08H795V11.14H739.65V27.96H789.14V39.18H739.65V57.38H795.8V68.6Z"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCÈNE DÉFILEMENT -->
+<section class="scroll" id="scroll">
+  <div class="pin">
+    <svg class="big" id="scrollSvg" aria-label="Le symbole change de figure au défilement"></svg>
+    <div>
+      <span class="lab">02 · <i>Faites défiler</i> : on passe devant le symbole</span>
+      <div class="facets" style="margin-top:28px">
+        <div class="facet" style="--c:var(--blue)"><div class="k">Lune</div><h3>Vu de gauche, la nuit.</h3><p>Le disque bleu des soirées : casinos et clubs de jeux, hôtels, restaurants et bars, salles de spectacle et de réception.</p></div>
+        <div class="facet" style="--c:var(--paper)"><div class="k">Initiale</div><h3>De face, la famille.</h3><p>Le T de TRANCHANT, en lames rouges et bleues alternées : les deux mondes du groupe tenus par le même nom depuis 1988.</p></div>
+        <div class="facet" style="--c:var(--red)"><div class="k">Aile</div><h3>Vu de droite, l’envol.</h3><p>Le delta rouge de la Patrouille Tranchant et des loisirs sportifs. Les technologies, elles, sont dans l’objet : sans ses lamelles, rien de tout ça ne bouge.</p></div>
+      </div>
+    </div>
+    <div class="bar"><i id="prog"></i></div>
+  </div>
+</section>
+
+<!-- CONSTRUCTION -->
+<section class="sec">
+  <div class="wrap">
+    <div class="head"><div><span class="lab">03 · <i>Construction</i></span><h2>Calculé, pas dessiné.</h2><p class="intro">Le symbole est un vrai réseau lenticulaire. Sous chaque lamelle, trois bandes sont imprimées côte à côte, une par figure. Le relief choisit celle que l’œil voit, et la position de l’œil la fait glisser.</p></div></div>
+    <div class="grid3" id="views3"></div>
+    <div class="build">
+      <div class="cell"><svg id="matrix" viewBox="0 0 120 120"></svg><span class="lab">La matrice imprimée</span><p>Chaque pas de 8 unités porte trois bandes de 2,67 : Lune, Initiale, Aile. C’est l’image réelle qu’on imprimerait sous une feuille de lentilles.</p></div>
+      <div class="cell"><ul class="specs">
+        <li><span>Carré</span><span>120 × 120</span></li>
+        <li><span>Lamelles</span><span>15, pas de 8</span></li>
+        <li><span>Lame / jour</span><span>5 / 3 (62,5 %)</span></li>
+        <li><span>Barre du T</span><span>36 (3/10)</span></li>
+        <li><span>Fût</span><span>lamelles 6 à 10</span></li>
+        <li><span>Vues entrelacées</span><span>3</span></li>
+        <li><span>Fenêtre de lentille</span><span>½ vue</span></li>
+        <li><span>Dispersion bord à bord</span><span>½ vue</span></li>
+        <li><span>Angle utile</span><span>± 30°</span></li>
+      </ul><p style="margin-top:16px">La dispersion vient de la parallaxe : l’œil ne voit pas chaque lamelle sous le même angle. C’est elle qui fait balayer la transition d’un bord à l’autre au lieu d’un fondu.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SYMBOLE TAILLES -->
+<section class="sec light">
+  <div class="wrap">
+    <div class="head"><div><span class="lab">04 · <i>Le symbole</i></span><h2>Quinze lames en grand, sept en favicon.</h2><p class="intro">Sous 48 px, le symbole passe sur sa grille de 32 : sept lames de 2 px au pas de 4, barre de 8 px, fût de trois lames. Chaque bord tombe sur un pixel entier.</p></div></div>
+    <div class="sizes" id="sizes"></div>
+  </div>
+</section>
+
+<!-- PALETTE -->
+<section class="sec">
+  <div class="wrap">
+    <div class="head"><div><span class="lab">05 · <i>Palette</i></span><h2>Deux encres qui ne se touchent jamais.</h2><p class="intro">Rouge et Bleu de même énergie, sur Encre ou sur Papier. Rouge et bleu côte à côte sur fond noir ne semblent pas à la même profondeur, le rouge avance : c’est la chromostéréopsie. Le relief sans lunettes est déjà dans la couleur.</p></div></div>
+    <div class="pal">
+      <div class="sw" style="background:var(--red);color:#fff"><b>Rouge Aile</b><code>#FF2E4C</code><code>Pantone 192 C · CMJN 0 90 60 0</code></div>
+      <div class="sw" style="background:var(--blue);color:#fff"><b>Bleu Lune</b><code>#2D55FF</code><code>Pantone 2728 C · CMJN 85 65 0 0</code></div>
+      <div class="sw" style="background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 1px var(--line)"><b>Encre</b><code>#0A0A10</code></div>
+      <div class="sw" style="background:var(--paper);color:var(--ink)"><b>Papier</b><code>#F2EFE8</code></div>
+      <div class="sw mix"><b>Violet optique</b><code>Jamais imprimé</code><code>Il naît dans l’œil, à distance</code></div>
+    </div>
+    <div class="chromo">
+      <svg id="moire" viewBox="0 0 800 300" aria-label="Moiré de deux trames"></svg>
+      <p class="intro" style="margin:0">Interférence : deux trames de lamelles au pas presque identique, l’une Rouge et l’autre Bleue, font naître de larges ondes. C’est la texture du système pour les fonds, les transitions et les écrans d’attente. Elle est générée, jamais dessinée.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TYPO -->
+<section class="sec light">
+  <div class="wrap">
+    <div class="head"><div><span class="lab">06 · <i>Typographie</i></span><h2>Large, net, sans effet.</h2></div></div>
+    <div class="typo">
+      <div><svg class="wmt" viewBox="0 -1 907.72 71.6" aria-hidden="true"><path fill="currentColor" d="M30.62 68.6V12.5H0V-0.09H75.52V12.5H44.9V68.6ZM100.08 68.6V-0.09H153.89Q161.09 -0.09 165.73 2.82Q170.36 5.72 172.67 10.53Q174.98 15.34 174.98 21.22Q174.98 27.39 171.8 32.71Q168.62 38.03 162.04 40.92L176.69 68.6H160.63L147.81 43.61H114.37V68.6ZM114.37 31.74H150.04Q154.97 31.74 157.65 28.87Q160.34 25.99 160.34 21.5Q160.34 18.46 159.17 16.29Q158 14.13 155.69 13Q153.39 11.87 150.04 11.87H114.37ZM196.32 68.6 230.82 -0.09H247.05L281.56 68.6H265.86L259.01 54.69H217.85L211 68.6ZM223.52 43.09H253.33L244.88 25.54Q244.36 24.42 243.42 22.31Q242.47 20.2 241.52 17.98Q240.57 15.76 239.81 14.08Q239.04 12.41 238.88 12.17H238.08Q237.16 14.2 235.98 16.82Q234.81 19.44 233.74 21.84Q232.68 24.24 231.98 25.63ZM306.08 68.6V-0.09H319.6L358.34 37.61Q359.62 38.7 361.35 40.54Q363.09 42.38 364.96 44.3Q366.82 46.21 368.16 47.75H368.95Q368.86 45.61 368.72 42.52Q368.58 39.43 368.58 37.4V-0.09H382.33V68.6H369.18L330.29 30.49Q327.67 27.95 324.82 24.91Q321.98 21.86 320.26 20.04H319.56Q319.65 21.41 319.74 24.64Q319.83 27.87 319.83 31.86V68.6ZM453.09 69.8Q439.29 69.8 429.93 65.75Q420.58 61.69 415.88 53.74Q411.19 45.79 411.19 34.21Q411.19 17.21 421.95 7.96Q432.71 -1.29 452.96 -1.29Q464.53 -1.29 473.35 1.95Q482.17 5.18 487.11 11.32Q492.04 17.47 492.04 26.27H478.03Q478.03 21.02 474.84 17.57Q471.64 14.11 465.97 12.39Q460.29 10.67 452.68 10.67Q444.52 10.67 438.5 13.26Q432.48 15.86 429.17 20.82Q425.85 25.78 425.85 32.91V35.4Q425.85 42.68 429.18 47.68Q432.5 52.68 438.58 55.26Q444.66 57.84 452.84 57.84Q460.72 57.84 466.42 56.15Q472.13 54.46 475.26 51Q478.4 47.55 478.4 42.42H492.14Q492.14 51.05 487.24 57.19Q482.34 63.34 473.57 66.57Q464.8 69.8 453.09 69.8ZM520.88 68.6V-0.09H535.17V27.29H582.83V-0.09H597.12V68.6H582.83V39.88H535.17V68.6ZM621.62 68.6 656.12 -0.09H672.35L706.86 68.6H691.16L684.31 54.69H643.15L636.3 68.6ZM648.82 43.09H678.63L670.18 25.54Q669.66 24.42 668.72 22.31Q667.77 20.2 666.82 17.98Q665.87 15.76 665.11 14.08Q664.34 12.41 664.18 12.17H663.38Q662.46 14.2 661.28 16.82Q660.11 19.44 659.04 21.84Q657.98 24.24 657.28 25.63ZM731.38 68.6V-0.09H744.9L783.64 37.61Q784.92 38.7 786.65 40.54Q788.39 42.38 790.26 44.3Q792.12 46.21 793.46 47.75H794.25Q794.16 45.61 794.02 42.52Q793.88 39.43 793.88 37.4V-0.09H807.63V68.6H794.48L755.59 30.49Q752.97 27.95 750.12 24.91Q747.28 21.86 745.56 20.04H744.86Q744.95 21.41 745.04 24.64Q745.13 27.87 745.13 31.86V68.6ZM862.82 68.6V12.5H832.2V-0.09H907.72V12.5H877.1V68.6Z"/></svg><svg class="wmg" viewBox="0 -1 795.8 71.6" aria-hidden="true"><path fill="currentColor" d="M41.56 69.8Q20.76 69.8 10.38 60.99Q0 52.18 0 34.3Q0 22.62 5.26 14.68Q10.52 6.74 20.47 2.73Q30.43 -1.28 44.27 -1.28Q53.43 -1.28 60.88 0.24Q68.33 1.76 73.7 4.88Q79.06 8 81.93 12.77Q84.8 17.54 84.8 24.04H71.79Q71.79 19.94 69.57 17.18Q67.34 14.41 63.52 12.85Q59.69 11.28 54.87 10.61Q50.05 9.94 44.77 9.94Q38.22 9.94 32.55 11.23Q26.89 12.52 22.66 15.3Q18.42 18.09 16.07 22.48Q13.71 26.87 13.71 32.98V35.38Q13.71 43.76 17.33 48.85Q20.94 53.93 27.48 56.25Q34.02 58.58 42.8 58.58Q53.03 58.58 59.41 56.62Q65.8 54.65 68.79 51.01Q71.79 47.36 71.79 42.49V41.44H42.65V30.78H84.9V68.6H76.38L74.91 59.15Q71.27 62.97 66.05 65.31Q60.84 67.66 54.6 68.73Q48.36 69.8 41.56 69.8ZM154.38 68.6V-0.08H207.59Q214.7 -0.08 219.32 2.78Q223.94 5.64 226.26 10.42Q228.58 15.19 228.58 21.05Q228.58 27.29 225.36 32.58Q222.14 37.87 215.58 40.64L230.3 68.6H215.26L202.23 43.13H167.75V68.6ZM167.75 31.99H204.09Q209.24 31.99 212.06 28.98Q214.89 25.98 214.89 21.29Q214.89 18.12 213.65 15.84Q212.41 13.55 210 12.35Q207.59 11.14 204.09 11.14H167.75ZM336.53 69.8Q323.01 69.8 313.16 65.68Q303.3 61.56 298 53.62Q292.7 45.68 292.7 34.26Q292.7 22.74 298 14.85Q303.3 6.96 313.16 2.84Q323.01 -1.28 336.53 -1.28Q350.17 -1.28 359.99 2.84Q369.82 6.96 375.12 14.85Q380.42 22.74 380.42 34.26Q380.42 45.68 375.12 53.62Q369.82 61.56 359.99 65.68Q350.17 69.8 336.53 69.8ZM336.58 58.58Q343.06 58.58 348.53 57.14Q354.01 55.71 358.08 52.86Q362.15 50.01 364.43 45.61Q366.71 41.21 366.71 35.31V33.03Q366.71 27.17 364.43 22.8Q362.15 18.43 358.08 15.58Q354.01 12.74 348.53 11.34Q343.06 9.94 336.58 9.94Q330.1 9.94 324.61 11.34Q319.13 12.74 315.05 15.58Q310.97 18.43 308.73 22.8Q306.49 27.17 306.49 33.03V35.31Q306.49 41.21 308.73 45.61Q310.97 50.01 315.05 52.86Q319.14 55.71 324.62 57.14Q330.1 58.58 336.58 58.58ZM484.4 69.8Q471.74 69.8 463.46 65.88Q455.19 61.96 451.14 54.7Q447.08 47.45 447.08 37.55V-0.08H460.45V37.14Q460.45 47.43 466.67 53Q472.88 58.58 484.4 58.58Q495.93 58.58 502.14 53Q508.36 47.43 508.36 37.14V-0.08H521.73V37.55Q521.73 47.45 517.67 54.7Q513.62 61.96 505.39 65.88Q497.15 69.8 484.4 69.8ZM591.28 68.6V-0.08H640.94Q647.56 -0.08 652.43 2.76Q657.29 5.6 659.97 10.56Q662.65 15.51 662.65 21.95Q662.65 28.32 659.94 33.34Q657.23 38.36 652.29 41.2Q647.36 44.05 640.66 44.05H604.65V68.6ZM604.65 32.83H637.12Q642.86 32.83 645.95 29.92Q649.04 27.01 649.04 22.03Q649.04 18.68 647.64 16.24Q646.24 13.8 643.59 12.47Q640.93 11.14 637.12 11.14H604.65ZM726.28 68.6V-0.08H795V11.14H739.65V27.96H789.14V39.18H739.65V57.38H795.8V68.6Z"/></svg>
+        <dl><dt>Logotype</dt><dd>Archivo étendu 125 %, graisse 560, interlettrage + 12 %, vectorisé</dd><dt>GROUPE</dt><dd>Archivo étendu 125 %, graisse 520, + 50 %, hauteur 9,6 (≈ 1/12 du carré)</dd><dt>Calage</dt><dd>capitale = 36 = barre du T ; le nom part de la 19ᵉ lamelle</dd></dl>
+      </div>
+      <div>
+        <div class="specimen">Aa 1988</div>
+        <p class="lab" style="margin:8px 0 34px">Archivo étendu · titres · 500 à 700</p>
+        <p class="manrope">Accueillir, divertir, <b>innover</b>. En France, en Europe et en Afrique.</p>
+        <p class="lab" style="margin-top:14px">Manrope · texte et interfaces · 300 à 700</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATIONS -->
+<section class="sec">
+  <div class="wrap">
+    <div class="head"><div><span class="lab">07 · <i>Mises en situation</i></span><h2>Partout, la figure change quand on bouge.</h2></div></div>
+    <div class="apps">
+      <div class="app a-web">
+        <div class="browser"><div class="bbar"><i></i><i></i><i></i><span>groupe-tranchant.fr</span></div>
+          <div class="site">
+            <nav><svg class="lock" viewBox="0 0 621.855 120" role="img" aria-label="Groupe Tranchant"><rect x="1.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="9.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="17.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="25.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="33.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="41.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="49.5" y="0" width="5" height="120" fill="#FF2E4C"/><rect x="57.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="65.5" y="0" width="5" height="120" fill="#FF2E4C"/><rect x="73.5" y="0" width="5" height="120" fill="#2D55FF"/><rect x="81.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="89.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="97.5" y="0" width="5" height="36" fill="#FF2E4C"/><rect x="105.5" y="0" width="5" height="36" fill="#2D55FF"/><rect x="113.5" y="0" width="5" height="36" fill="#FF2E4C"/><path transform="translate(145.5 0) scale(0.525)" fill="#F2EFE8" d="M30.62 68.6V12.5H0V-0.09H75.52V12.5H44.9V68.6ZM100.08 68.6V-0.09H153.89Q161.09 -0.09 165.73 2.82Q170.36 5.72 172.67 10.53Q174.98 15.34 174.98 21.22Q174.98 27.39 171.8 32.71Q168.62 38.03 162.04 40.92L176.69 68.6H160.63L147.81 43.61H114.37V68.6ZM114.37 31.74H150.04Q154.97 31.74 157.65 28.87Q160.34 25.99 160.34 21.5Q160.34 18.46 159.17 16.29Q158 14.13 155.69 13Q153.39 11.87 150.04 11.87H114.37ZM196.32 68.6 230.82 -0.09H247.05L281.56 68.6H265.86L259.01 54.69H217.85L211 68.6ZM223.52 43.09H253.33L244.88 25.54Q244.36 24.42 243.42 22.31Q242.47 20.2 241.52 17.98Q240.57 15.76 239.81 14.08Q239.04 12.41 238.88 12.17H238.08Q237.16 14.2 235.98 16.82Q234.81 19.44 233.74 21.84Q232.68 24.24 231.98 25.63ZM306.08 68.6V-0.09H319.6L358.34 37.61Q359.62 38.7 361.35 40.54Q363.09 42.38 364.96 44.3Q366.82 46.21 368.16 47.75H368.95Q368.86 45.61 368.72 42.52Q368.58 39.43 368.58 37.4V-0.09H382.33V68.6H369.18L330.29 30.49Q327.67 27.95 324.82 24.91Q321.98 21.86 320.26 20.04H319.56Q319.65 21.41 319.74 24.64Q319.83 27.87 319.83 31.86V68.6ZM453.09 69.8Q439.29 69.8 429.93 65.75Q420.58 61.69 415.88 53.74Q411.19 45.79 411.19 34.21Q411.19 17.21 421.95 7.96Q432.71 -1.29 452.96 -1.29Q464.53 -1.29 473.35 1.95Q482.17 5.18 487.11 11.32Q492.04 17.47 492.04 26.27H478.03Q478.03 21.02 474.84 17.57Q471.64 14.11 465.97 12.39Q460.29 10.67 452.68 10.67Q444.52 10.67 438.5 13.26Q432.48 15.86 429.17 20.82Q425.85 25.78 425.85 32.91V35.4Q425.85 42.68 429.18 47.68Q432.5 52.68 438.58 55.26Q444.66 57.84 452.84 57.84Q460.72 57.84 466.42 56.15Q472.13 54.46 475.26 51Q478.4 47.55 478.4 42.42H492.14Q492.14 51.05 487.24 57.19Q482.34 63.34 473.57 66.57Q464.8 69.8 453.09 69.8ZM520.88 68.6V-0.09H535.17V27.29H582.83V-0.09H597.12V68.6H582.83V39.88H535.17V68.6ZM621.62 68.6 656.12 -0.09H672.35L706.86 68.6H691.16L684.31 54.69H643.15L636.3 68.6ZM648.82 43.09H678.63L670.18 25.54Q669.66 24.42 668.72 22.31Q667.77 20.2 666.82 17.98Q665.87 15.76 665.11 14.08Q664.34 12.41 664.18 12.17H663.38Q662.46 14.2 661.28 16.82Q660.11 19.44 659.04 21.84Q657.98 24.24 657.28 25.63ZM731.38 68.6V-0.09H744.9L783.64 37.61Q784.92 38.7 786.65 40.54Q788.39 42.38 790.26 44.3Q792.12 46.21 793.46 47.75H794.25Q794.16 45.61 794.02 42.52Q793.88 39.43 793.88 37.4V-0.09H807.63V68.6H794.48L755.59 30.49Q752.97 27.95 750.12 24.91Q747.28 21.86 745.56 20.04H744.86Q744.95 21.41 745.04 24.64Q745.13 27.87 745.13 31.86V68.6ZM862.82 68.6V12.5H832.2V-0.09H907.72V12.5H877.1V68.6Z"/><path transform="translate(146.5 110.4) scale(0.14)" fill="#F2EFE8" d="M41.56 69.8Q20.76 69.8 10.38 60.99Q0 52.18 0 34.3Q0 22.62 5.26 14.68Q10.52 6.74 20.47 2.73Q30.43 -1.28 44.27 -1.28Q53.43 -1.28 60.88 0.24Q68.33 1.76 73.7 4.88Q79.06 8 81.93 12.77Q84.8 17.54 84.8 24.04H71.79Q71.79 19.94 69.57 17.18Q67.34 14.41 63.52 12.85Q59.69 11.28 54.87 10.61Q50.05 9.94 44.77 9.94Q38.22 9.94 32.55 11.23Q26.89 12.52 22.66 15.3Q18.42 18.09 16.07 22.48Q13.71 26.87 13.71 32.98V35.38Q13.71 43.76 17.33 48.85Q20.94 53.93 27.48 56.25Q34.02 58.58 42.8 58.58Q53.03 58.58 59.41 56.62Q65.8 54.65 68.79 51.01Q71.79 47.36 71.79 42.49V41.44H42.65V30.78H84.9V68.6H76.38L74.91 59.15Q71.27 62.97 66.05 65.31Q60.84 67.66 54.6 68.73Q48.36 69.8 41.56 69.8ZM154.38 68.6V-0.08H207.59Q214.7 -0.08 219.32 2.78Q223.94 5.64 226.26 10.42Q228.58 15.19 228.58 21.05Q228.58 27.29 225.36 32.58Q222.14 37.87 215.58 40.64L230.3 68.6H215.26L202.23 43.13H167.75V68.6ZM167.75 31.99H204.09Q209.24 31.99 212.06 28.98Q214.89 25.98 214.89 21.29Q214.89 18.12 213.65 15.84Q212.41 13.55 210 12.35Q207.59 11.14 204.09 11.14H167.75ZM336.53 69.8Q323.01 69.8 313.16 65.68Q303.3 61.56 298 53.62Q292.7 45.68 292.7 34.26Q292.7 22.74 298 14.85Q303.3 6.96 313.16 2.84Q323.01 -1.28 336.53 -1.28Q350.17 -1.28 359.99 2.84Q369.82 6.96 375.12 14.85Q380.42 22.74 380.42 34.26Q380.42 45.68 375.12 53.62Q369.82 61.56 359.99 65.68Q350.17 69.8 336.53 69.8ZM336.58 58.58Q343.06 58.58 348.53 57.14Q354.01 55.71 358.08 52.86Q362.15 50.01 364.43 45.61Q366.71 41.21 366.71 35.31V33.03Q366.71 27.17 364.43 22.8Q362.15 18.43 358.08 15.58Q354.01 12.74 348.53 11.34Q343.06 9.94 336.58 9.94Q330.1 9.94 324.61 11.34Q319.13 12.74 315.05 15.58Q310.97 18.43 308.73 22.8Q306.49 27.17 306.49 33.03V35.31Q306.49 41.21 308.73 45.61Q310.97 50.01 315.05 52.86Q319.14 55.71 324.62 57.14Q330.1 58.58 336.58 58.58ZM484.4 69.8Q471.74 69.8 463.46 65.88Q455.19 61.96 451.14 54.7Q447.08 47.45 447.08 37.55V-0.08H460.45V37.14Q460.45 47.43 466.67 53Q472.88 58.58 484.4 58.58Q495.93 58.58 502.14 53Q508.36 47.43 508.36 37.14V-0.08H521.73V37.55Q521.73 47.45 517.67 54.7Q513.62 61.96 505.39 65.88Q497.15 69.8 484.4 69.8ZM591.28 68.6V-0.08H640.94Q647.56 -0.08 652.43 2.76Q657.29 5.6 659.97 10.56Q662.65 15.51 662.65 21.95Q662.65 28.32 659.94 33.34Q657.23 38.36 652.29 41.2Q647.36 44.05 640.66 44.05H604.65V68.6ZM604.65 32.83H637.12Q642.86 32.83 645.95 29.92Q649.04 27.01 649.04 22.03Q649.04 18.68 647.64 16.24Q646.24 13.8 643.59 12.47Q640.93 11.14 637.12 11.14H604.65ZM726.28 68.6V-0.08H795V11.14H739.65V27.96H789.14V39.18H739.65V57.38H795.8V68.6Z"/></svg><ul><li>Le groupe</li><li>Loisirs</li><li>Technologies</li><li>Sport</li><li>Contact</li></ul><span class="menuic"></span></nav>
+            <div class="sh"><div><span class="lab">Depuis 1988</span><h4 style="margin-top:16px">Accueillir,<br>divertir, innover.</h4><p>Casinos, hôtels, scènes, technologies et sport : un groupe familial en France, en Europe et en Afrique.</p></div><svg id="webSvg" aria-hidden="true"></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="app a-card"><div class="cards">
+        <div class="card r"><svg viewBox="0 0 120 120" class="symT"></svg></div>
+        <div class="card v"><div class="who"><b>Prénom Nom</b><span>Direction du développement</span></div>
+          <div class="co"><div>+33 1 00 00 00 00<br>prenom.nom@groupe-tranchant.fr<br>Paris · France</div><svg viewBox="0 0 120 120" class="symT ink"></svg></div></div>
+      </div><span class="lab cap dk">Carte de visite · 85 × 55 · deux tons directs</span></div>
+      <div class="app a-icon"><div class="iconrow">
+        <figure><div class="ios s"><svg viewBox="0 0 120 120" class="symT"></svg></div>64</figure>
+        <figure><div class="ios"><svg viewBox="0 0 120 120" id="iconSvg"></svg></div>Tranchant</figure>
+      </div><span class="lab cap">Icône d’appli · l’icône bascule à l’inclinaison</span></div>
+      <div class="app a-sign">
+        <svg class="night" id="night" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" aria-label="Façade de nuit"></svg>
+        <div class="signcap"><span class="lab"><i>Enseigne</i> · façade à lames verticales, peintes sur deux faces</span><span class="lab">On passe devant : Lune, Initiale, Aile</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><span>Groupe Tranchant · Série 2 · Piste « Lenticulaire » · symbole, lamelles et moiré générés par calcul</span><a href="../index.html">← Toutes les directions</a></footer>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const COL = { ink:'#0A0A10', paper:'#F2EFE8', red:'#FF2E4C', blue:'#2D55FF' };
+const FIG = {
+  lune: '<circle cx="60" cy="60" r="60"/>',
+  t:    '<path d="M0 0H120V36H80V120H40V36H0Z"/>',
+  aile: '<path d="M60 0L120 120H0Z"/>'
+};
+const f3 = v => Math.round(v * 1000) / 1000;
+let UID = 0;
+
+/* Moteur lenticulaire.
+   N lamelles au pas p. Sous chaque lamelle, 3 vues entrelacées (0 Lune, 1 Initiale, 2 Aile).
+   Lamelle i vue en v_i = V + σ·((i+½)/N − ½) (parallaxe). La lentille montre la fenêtre
+   [v_i − w/2, v_i + w/2] étirée sur la lame : chaque vue occupe la part de lame qui lui revient. */
+class Lenti {
+  constructor(svg, o = {}) {
+    Object.assign(this, { N:15, gap:.375, w:.5, sigma:.5, ghost:0, sheen:0,
+      col:{ lune:COL.blue, tE:COL.red, tO:COL.blue, aile:COL.red } }, o);
+    const id = 'L' + (UID++), p = 120 / this.N, b = p * (1 - this.gap), off = (p - b) / 2;
+    Object.assign(this, { p, b, off });
+    svg.setAttribute('viewBox', '0 0 120 120');
+    const L = [['lune', this.col.lune], ['t', this.col.tE], ['t', this.col.tO], ['aile', this.col.aile]];
+    let defs = '<defs>', body = '';
+    if (this.ghost) { body += `<g fill="currentColor" opacity="${this.ghost}">`; for (let i = 0; i < this.N; i++) body += `<rect x="${f3(i*p+off)}" y="0" width="${f3(b)}" height="120"/>`; body += '</g>'; }
+    L.forEach(([f, c], j) => {
+      defs += `<clipPath id="${id}c${j}">`; for (let i = 0; i < this.N; i++) defs += `<rect x="0" y="-1" width="0" height="122"/>`; defs += '</clipPath>';
+      body += `<g clip-path="url(#${id}c${j})" fill="${c}">${FIG[f]}</g>`;
+    });
+    if (this.sheen) {
+      defs += `<linearGradient id="${id}s" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity="${this.sheen}"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
+      defs += `<clipPath id="${id}k">`; for (let i = 0; i < this.N; i++) defs += `<rect x="${f3(i*p+off)}" y="0" width="${f3(b)}" height="120"/>`; defs += '</clipPath>';
+      body += `<g clip-path="url(#${id}k)" style="mix-blend-mode:screen"><rect class="sh" x="-60" y="0" width="70" height="120" fill="url(#${id}s)"/></g>`;
+    }
+    svg.innerHTML = defs + '</defs>' + body;
+    this.R = L.map((_, j) => [...svg.querySelectorAll(`#${id}c${j} rect`)]);
+    this.sh = svg.querySelector('.sh');
+    this.V = null; this.set(1);
+  }
+  set(V) {
+    if (V === this.V) return; this.V = V;
+    const { N, w, sigma, p, b, off, R } = this;
+    for (let i = 0; i < N; i++) {
+      const vi = V + sigma * ((i + .5) / N - .5), lo = vi - w / 2, hi = lo + w, bx = i * p + off;
+      for (let k = 0; k < 3; k++) {
+        const a = k ? k - .5 : -1e9, z = k < 2 ? k + .5 : 1e9, o0 = Math.max(lo, a), o1 = Math.min(hi, z);
+        const j = k === 0 ? 0 : k === 2 ? 3 : (i % 2 ? 2 : 1);
+        const r = R[j][i], on = o1 > o0;
+        r.setAttribute('x', on ? f3(bx + (o0 - lo) / w * b) : 0);
+        r.setAttribute('width', on ? f3((o1 - o0) / w * b) : 0);
+      }
+    }
+    if (this.sh) this.sh.setAttribute('x', f3(-70 + (2 - V) / 2 * 190));
+  }
+}
+// État fixe statique (pas de découpe) pour les petites applications
+function staticT(svg, even = COL.red, odd = COL.blue, N = 15) {
+  const p = 120 / N, b = p * .625, o = (p - b) / 2, st0 = (N - 5) / 2 | 0; let s = '';
+  for (let i = 0; i < N; i++) s += `<rect x="${f3(i*p+o)}" y="0" width="${f3(b)}" height="${i >= 5 && i <= 9 ? 120 : 36}" fill="${i % 2 ? odd : even}"/>`;
+  svg.innerHTML = s;
+}
+document.querySelectorAll('svg.symT').forEach(s => s.classList.contains('ink') ? staticT(s, COL.red, COL.blue) : staticT(s));
+
+/* Horloge automatique : Initiale → Lune → Initiale → Aile → Initiale (10,2 s) */
+const KEYS = [[0,1],[1.6,1],[2.7,0],[4.1,0],[5.2,1],[6.6,1],[7.7,2],[9.1,2],[10.2,1]];
+const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+function autoV(t) {
+  t = ((t % 10.2) + 10.2) % 10.2;
+  for (let i = 1; i < KEYS.length; i++) if (t <= KEYS[i][0]) { const [t0, v0] = KEYS[i-1], [t1, v1] = KEYS[i]; return v0 + (v1 - v0) * ease((t - t0) / (t1 - t0)); }
+  return 1;
+}
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Héros */
+const hero = new Lenti(document.getElementById('heroSvg'), { ghost:.05 });
+const stage = document.getElementById('stage'), rng = document.getElementById('rng'), ang = document.getElementById('ang');
+const vDivs = [...document.querySelectorAll('#views div')], segB = [...document.querySelectorAll('.seg button')];
+let mode = reduce ? 'souris' : 'auto', target = 1, cur = 1, idle = 0, freeze = null, gyroOn = false;
+function setMode(m) { mode = m; segB.forEach(b => b.classList.toggle('on', b.dataset.m === m)); }
+setMode(mode);
+const clamp = (v, a = 0, b = 2) => Math.max(a, Math.min(b, v));
+segB.forEach(b => b.onclick = async () => {
+  if (b.dataset.m === 'gyro') {
+    try { if (DeviceOrientationEvent.requestPermission) { const s = await DeviceOrientationEvent.requestPermission(); if (s !== 'granted') return; } } catch (e) { return; }
+    gyroOn = true;
+  }
+  setMode(b.dataset.m); idle = performance.now();
+});
+const heroSec = document.getElementById('hero');
+heroSec.addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse' || mode === 'gyro') return;
+  const r = stage.getBoundingClientRect(), cx = r.left + r.width / 2;
+  target = clamp(1 + (e.clientX - cx) / (Math.max(r.width, 300) * .75));
+  if (mode === 'auto') setMode('souris'); idle = performance.now();
+});
+heroSec.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') idle = performance.now() - 1800; });
+// glisser au doigt sur le symbole
+let drag = null;
+stage.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') return; drag = { x: e.clientX, v: cur }; setMode('souris'); });
+addEventListener('pointermove', e => { if (!drag) return; target = clamp(drag.v + (e.clientX - drag.x) / (stage.offsetWidth * .5)); idle = performance.now(); });
+addEventListener('pointerup', () => { drag = null; });
+rng.addEventListener('input', () => { target = rng.value / 100; if (mode !== 'gyro') setMode('souris'); idle = performance.now(); });
+// gyroscope
+if ('DeviceOrientationEvent' in window && matchMedia('(pointer:coarse)').matches) document.querySelector('[data-m=gyro]').hidden = false;
+addEventListener('deviceorientation', e => {
+  if (e.gamma == null) return;
+  if (!gyroOn && !DeviceOrientationEvent.requestPermission) { gyroOn = true; }
+  if (mode === 'gyro') target = clamp(1 + e.gamma / 28);
+});
+
+/* Scène au défilement */
+const scrollSec = document.getElementById('scroll'), big = new Lenti(document.getElementById('scrollSvg'), { ghost:.05 });
+const facets = [...document.querySelectorAll('.facet')], prog = document.getElementById('prog');
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+function scrollV() {
+  const r = scrollSec.getBoundingClientRect(), p = clamp(-r.top / (r.height - innerHeight), 0, 1);
+  prog.style.width = (p * 100) + '%';
+  return { p, v: sstep(.12, .4, p) + sstep(.6, .88, p) };
+}
+
+/* Petites instances */
+const web = new Lenti(document.getElementById('webSvg'), { ghost:.06 });
+const icon = new Lenti(document.getElementById('iconSvg'), {});
+
+/* Trois vues + matrice */
+const v3 = document.getElementById('views3');
+[['Vue de gauche', 'Lune', 0, 'Le disque bleu : la nuit, l’accueil, la scène.'], ['Vue de face', 'Initiale', 1, 'Le T, lames paires rouges, impaires bleues. C’est l’état fixe.'], ['Vue de droite', 'Aile', 2, 'Le delta rouge : la voltige et le sport.']].forEach(([a, b, v, t]) => {
+  const c = document.createElement('div'); c.className = 'cell';
+  c.innerHTML = `<svg></svg><span class="lab">${a} · <i>${b}</i></span><p>${t}</p>`; v3.append(c);
+  new Lenti(c.querySelector('svg'), { ghost:.05 }).set(v);
+});
+(function matrix() {
+  const m = document.getElementById('matrix'), p = 8, q = p / 3; let defs = '<defs>', body = '';
+  const lay = [['lune', COL.blue, 0], ['t', COL.red, 1, 0], ['t', COL.blue, 1, 1], ['aile', COL.red, 2]];
+  lay.forEach(([f, c, k, par], j) => {
+    defs += `<clipPath id="mx${j}">`;
+    for (let i = 0; i < 15; i++) if (par === undefined || i % 2 === par) defs += `<rect x="${f3(i*p+k*q)}" y="0" width="${f3(q)}" height="120"/>`;
+    defs += '</clipPath>'; body += `<g clip-path="url(#mx${j})" fill="${c}">${FIG[f]}</g>`;
+  });
+  for (let i = 1; i < 15; i++) body += `<line x1="${i*p}" x2="${i*p}" y1="-4" y2="124" stroke="#F2EFE8" stroke-opacity=".16" stroke-width=".25"/>`;
+  m.innerHTML = defs + '</defs>' + body; m.setAttribute('viewBox', '0 -4 120 128');
+})();
+
+/* Tailles */
+(function sizes() {
+  const fav = `<title>Groupe Tranchant</title><rect width="32" height="32" fill="#0A0A10"/><rect x="3" y="3" width="2" height="8" fill="#FF2E4C"/><rect x="7" y="3" width="2" height="8" fill="#2D55FF"/><rect x="11" y="3" width="2" height="26" fill="#FF2E4C"/><rect x="15" y="3" width="2" height="26" fill="#2D55FF"/><rect x="19" y="3" width="2" height="26" fill="#FF2E4C"/><rect x="23" y="3" width="2" height="8" fill="#2D55FF"/><rect x="27" y="3" width="2" height="8" fill="#FF2E4C"/>`, el = document.getElementById('sizes');
+  const mk = (sz, kind, lab, dark) => {
+    const f = document.createElement('figure');
+    const bg = dark ? COL.ink : 'transparent';
+    const inner = kind === 'full' ? `<svg width="${sz}" height="${sz}" viewBox="-12 -12 144 144" style="background:${bg};border-radius:${sz*.08}px"></svg>` : `<svg width="${sz}" height="${sz}" viewBox="0 0 32 32" style="border-radius:${sz*.08}px">${fav}</svg>`;
+    f.innerHTML = inner + `<span class="lab">${lab}</span>`; el.append(f);
+    if (kind === 'full') { const g = document.createElementNS(NS, 'g'); f.querySelector('svg').append(g); staticT(g); }
+  };
+  mk(128, 'full', '128 px · 15 lames', true); mk(64, 'full', '64 px', true); mk(32, 'fav', '32 px · 7 lames'); mk(16, 'fav', '16 px');
+  const tabs = document.createElement('figure');
+  tabs.innerHTML = `<div class="tab"><svg viewBox="0 0 32 32">${fav}</svg>Groupe Tranchant</div><div class="tab lt"><svg viewBox="0 0 32 32">${fav}</svg>Groupe Tranchant</div><span class="lab">Favicon · symbole.svg</span>`;
+  el.append(tabs);
+})();
+
+/* Moiré : deux trames au pas 6 et 6,35, la seconde légèrement tournée */
+const moire = document.getElementById('moire');
+function drawMoire(t) {
+  // trame Rouge fixe, trame Bleue au même pas tournée de 2 à 5° : les ondes naissent de l'écart
+  const W = 800, H = 300, p = 7, a = 2 + 1.5 * (1 + Math.sin(t * .35)); let A = '';
+  for (let x = -300; x < W + 300; x += p) A += `M${x} -300h${p/2}v${H+600}h${-p/2}z`;
+  moire.innerHTML = `<rect width="${W}" height="${H}" fill="${COL.ink}"/><path fill="${COL.red}" d="${A}"/><path fill="${COL.blue}" d="${A}" transform="rotate(${f3(a)} ${W/2} ${H/2}) translate(${f3((t*3)%p)} 0)"/>`;
+}
+drawMoire(0);
+
+/* Façade de nuit : toute la façade est faite de lames au pas de l'enseigne ; seules 15 sont peintes. */
+(function night() {
+  const n = document.getElementById('night');
+  const SX = 466, SY = 78, SZ = 268, P = SZ / 15, B = P * .625, O = (P - B) / 2;
+  let s = `<defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#040408"/><stop offset="1" stop-color="#11101A"/></linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14131C"/><stop offset="1" stop-color="#060609"/></linearGradient>
+    <radialGradient id="halo" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#5A3B8F" stop-opacity=".35"/><stop offset="1" stop-color="#5A3B8F" stop-opacity="0"/></radialGradient>
+    <linearGradient id="door" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B3540"/><stop offset="1" stop-color="#1C1A22"/></linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="blur" x="-10%" y="-40%" width="120%" height="180%"><feGaussianBlur stdDeviation="4 2"/></filter>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <mask id="rf"><rect x="0" y="521" width="1200" height="99" fill="url(#fade)"/></mask>
+  </defs>
+  <rect width="1200" height="620" fill="url(#sky)"/>
+  <rect x="0" y="150" width="270" height="370" fill="#0C0C12"/><rect x="930" y="120" width="270" height="400" fill="#0C0C12"/>`;
+  // fenêtres des voisins
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+    const a = (r * 5 + c * 3) % 7 === 0, b = (r * 3 + c * 5) % 6 === 0;
+    s += `<rect x="${22 + c * 62}" y="${186 + r * 78}" width="30" height="42" fill="${a ? '#2A2530' : '#111118'}"/><rect x="${958 + c * 62}" y="${156 + r * 84}" width="30" height="42" fill="${b ? '#2A2530' : '#111118'}"/>`;
+  }
+  // immeuble principal : planchers éclairés derrière les lames
+  s += `<rect x="286" y="40" width="628" height="480" fill="#0F0F16"/><rect x="286" y="40" width="628" height="1.5" fill="#2A2A38"/>`;
+  [[110, .5], [190, .3], [270, .45], [350, .25]].forEach(([y, o], k) => { s += `<rect x="286" y="${y}" width="628" height="46" fill="#2C2636" opacity="${o}"/>`; });
+  s += `<ellipse cx="600" cy="212" rx="260" ry="200" fill="url(#halo)"/>`;
+  // lames de façade au pas exact de l'enseigne
+  let fins = '';
+  for (let x = SX + O - Math.ceil((SX - 286) / P) * P; x < 914; x += P) if (x > 284 && (x < SX || x > SX + SZ)) fins += `M${f3(x)} 40h${f3(B)}v380h${f3(-B)}z`;
+  s += `<path d="${fins}" fill="#17171F"/>`;
+  // entrée + nom
+  s += `<g transform="translate(466 384) scale(${268 / 907.72})"><path fill="#F2EFE8" d="M30.62 68.6V12.5H0V-0.09H75.52V12.5H44.9V68.6ZM100.08 68.6V-0.09H153.89Q161.09 -0.09 165.73 2.82Q170.36 5.72 172.67 10.53Q174.98 15.34 174.98 21.22Q174.98 27.39 171.8 32.71Q168.62 38.03 162.04 40.92L176.69 68.6H160.63L147.81 43.61H114.37V68.6ZM114.37 31.74H150.04Q154.97 31.74 157.65 28.87Q160.34 25.99 160.34 21.5Q160.34 18.46 159.17 16.29Q158 14.13 155.69 13Q153.39 11.87 150.04 11.87H114.37ZM196.32 68.6 230.82 -0.09H247.05L281.56 68.6H265.86L259.01 54.69H217.85L211 68.6ZM223.52 43.09H253.33L244.88 25.54Q244.36 24.42 243.42 22.31Q242.47 20.2 241.52 17.98Q240.57 15.76 239.81 14.08Q239.04 12.41 238.88 12.17H238.08Q237.16 14.2 235.98 16.82Q234.81 19.44 233.74 21.84Q232.68 24.24 231.98 25.63ZM306.08 68.6V-0.09H319.6L358.34 37.61Q359.62 38.7 361.35 40.54Q363.09 42.38 364.96 44.3Q366.82 46.21 368.16 47.75H368.95Q368.86 45.61 368.72 42.52Q368.58 39.43 368.58 37.4V-0.09H382.33V68.6H369.18L330.29 30.49Q327.67 27.95 324.82 24.91Q321.98 21.86 320.26 20.04H319.56Q319.65 21.41 319.74 24.64Q319.83 27.87 319.83 31.86V68.6ZM453.09 69.8Q439.29 69.8 429.93 65.75Q420.58 61.69 415.88 53.74Q411.19 45.79 411.19 34.21Q411.19 17.21 421.95 7.96Q432.71 -1.29 452.96 -1.29Q464.53 -1.29 473.35 1.95Q482.17 5.18 487.11 11.32Q492.04 17.47 492.04 26.27H478.03Q478.03 21.02 474.84 17.57Q471.64 14.11 465.97 12.39Q460.29 10.67 452.68 10.67Q444.52 10.67 438.5 13.26Q432.48 15.86 429.17 20.82Q425.85 25.78 425.85 32.91V35.4Q425.85 42.68 429.18 47.68Q432.5 52.68 438.58 55.26Q444.66 57.84 452.84 57.84Q460.72 57.84 466.42 56.15Q472.13 54.46 475.26 51Q478.4 47.55 478.4 42.42H492.14Q492.14 51.05 487.24 57.19Q482.34 63.34 473.57 66.57Q464.8 69.8 453.09 69.8ZM520.88 68.6V-0.09H535.17V27.29H582.83V-0.09H597.12V68.6H582.83V39.88H535.17V68.6ZM621.62 68.6 656.12 -0.09H672.35L706.86 68.6H691.16L684.31 54.69H643.15L636.3 68.6ZM648.82 43.09H678.63L670.18 25.54Q669.66 24.42 668.72 22.31Q667.77 20.2 666.82 17.98Q665.87 15.76 665.11 14.08Q664.34 12.41 664.18 12.17H663.38Q662.46 14.2 661.28 16.82Q660.11 19.44 659.04 21.84Q657.98 24.24 657.28 25.63ZM731.38 68.6V-0.09H744.9L783.64 37.61Q784.92 38.7 786.65 40.54Q788.39 42.38 790.26 44.3Q792.12 46.21 793.46 47.75H794.25Q794.16 45.61 794.02 42.52Q793.88 39.43 793.88 37.4V-0.09H807.63V68.6H794.48L755.59 30.49Q752.97 27.95 750.12 24.91Q747.28 21.86 745.56 20.04H744.86Q744.95 21.41 745.04 24.64Q745.13 27.87 745.13 31.86V68.6ZM862.82 68.6V12.5H832.2V-0.09H907.72V12.5H877.1V68.6Z"/></g>`;
+  s += `<rect x="286" y="420" width="628" height="100" fill="#0B0B11"/><rect x="470" y="436" width="260" height="84" fill="url(#door)"/><rect x="598" y="436" width="4" height="84" fill="#0B0B11"/>`;
+  s += `<rect x="0" y="520" width="1200" height="100" fill="url(#road)"/><rect x="0" y="520" width="1200" height="1" fill="#2C2C3A"/>`;
+  s += `<g id="nsign"></g><g id="nref" mask="url(#rf)"><g transform="matrix(1 0 0 -.35 0 702)"></g></g>`;
+  n.innerHTML = s;
+  const mk = (parent, flt) => { const sv = document.createElementNS(NS, 'svg'); for (const [k, v] of [['x', SX], ['y', SY], ['width', SZ], ['height', SZ]]) sv.setAttribute(k, v); if (flt) sv.setAttribute('filter', flt); parent.append(sv); return sv; };
+  window.__sign = new Lenti(mk(n.querySelector('#nsign'), 'url(#glow)'), { ghost:.05 });
+  window.__signR = new Lenti(mk(n.querySelector('#nref g'), 'url(#blur)'), {});
+})();
+
+/* Boucle */
+const NAMES = ['Lune', 'Initiale', 'Aile'];
+let lastDom = -1, t0 = performance.now();
+function frame(now) {
+  const t = (now - t0) / 1000;
+  if (freeze !== null) cur = freeze;
+  else {
+    if (mode === 'souris' && !drag && now - idle > 3200 && !reduce) setMode('auto');
+    if (mode === 'auto') { target = autoV(t); cur = target; } else cur += (target - cur) * .12;
+  }
+  hero.set(f3(cur));
+  if (document.activeElement !== rng) rng.value = Math.round(cur * 100);
+  const deg = Math.round((cur - 1) * 30); ang.textContent = (deg > 0 ? '+' : deg < 0 ? '−' : '') + Math.abs(deg) + '°';
+  const dom = Math.round(cur); if (dom !== lastDom) { vDivs.forEach((d, i) => d.classList.toggle('on', i === dom)); lastDom = dom; }
+  const sv = window.__scrollFreeze ?? scrollV(); big.set(f3(sv.v));
+  const fi = sv.v < .5 ? 0 : sv.v < 1.5 ? 1 : 2; facets.forEach((f, i) => f.classList.toggle('on', i === fi));
+  if (!reduce) {
+    const wt = window.__webFreeze ?? autoV(t + 3.3); web.set(f3(wt)); icon.set(f3(window.__webFreeze ?? autoV(t + 5)));
+    const st = window.__signFreeze ?? autoV(t * .8 + 1.2); __sign.set(f3(st)); __signR.set(f3(st));
+    drawMoire(t);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.LT = { setHero(v) { freeze = v; }, release() { freeze = null; } };
+</script>
+</body>
+</html>

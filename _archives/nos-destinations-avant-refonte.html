@@ -1,0 +1,32 @@
+<section class="page-head slim">
+  <div class="page-head-in">
+    <h1 class="display huge" data-reveal>Nos destinations de jeux et de loisirs</h1>
+  </div>
+</section>
+
+<!-- CARTE DES IMPLANTATIONS : la carte à plat de l'accueil, en grand, et les établissements par région -->
+<section id="carte" class="section dmap">
+  <div class="dmap-in">
+    <div class="hstrat-map dmap-map">
+      <div class="hs-stage" aria-hidden="true"></div>
+      <ul class="hs-legend">
+        <li data-type="casino"><i class="c-casino"></i>Casinos</li>
+        <li data-type="club"><i class="c-club"></i>Club de jeu</li>
+        <li data-type="hotel"><i class="c-hotel"></i>Hôtels</li>
+      </ul>
+    </div>
+    <div class="dmap-regions">
+      <ul class="places" data-reveal>{{region:manche}}</ul>
+      <ul class="places" data-reveal>{{region:centre}}</ul>
+      <ul class="places" data-reveal>{{region:sud}}</ul>
+      <ul class="places" data-reveal>{{region:est}}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="section dest-sec" id="annuaire">
+  <div class="filters" data-target="#dest-grid" role="group" aria-label="Filtrer">
+    <button type="button" data-f="all" aria-pressed="true">{{V2}}</button><button type="button" data-f="casino" aria-pressed="false"><i class="c-casino"></i>Casinos</button><button type="button" data-f="hotel" aria-pressed="false"><i class="c-hotel"></i>Hôtels</button><button type="button" data-f="club" aria-pressed="false"><i class="c-club"></i>Club de jeu</button>
+  </div>
+  <div class="dest-grid" id="dest-grid">{{destinations}}</div>
+</section>

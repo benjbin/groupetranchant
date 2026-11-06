@@ -11,23 +11,32 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 if (window.gsap) gsap.ticker.lagSmoothing(0);
 
 export const IMG = 'https://www.groupetranchant.com/wp-content/uploads/';
-export const BRAND = { blue: 0x2F5F90, navy: 0x1C3557, yellow: 0xF2C230, bordeaux: 0xA51E30 };
+export const BRAND = { blue: 0x335F94, navy: 0x0B1B2E, yellow: 0xF9C83B, bordeaux: 0xBA2637 };
 export const clamp01 = x => Math.min(1, Math.max(0, x));
 export const smooth = x => x * x * (3 - 2 * x);
 export const mobile = () => innerWidth < 821;
 
 /* Grain, vignettage, légère aberration chromatique */
 const FinishShader = {
-  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: .05 }, uVig: { value: .4 }, uAb: { value: .002 } },
+  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: .05 }, uVig: { value: .4 }, uAb: { value: .002 },
+    uHOn: { value: 0 }, uHC: { value: new THREE.Vector2() }, uHM: { value: new THREE.Vector4() }, uHR: { value: 1 }, uHPx: { value: .01 }, uSl: { value: Array.from({ length: 17 }, () => new THREE.Vector2()) } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime, uGrain, uVig, uAb; varying vec2 vUv;
+  /* uHOn : ouverture du jeton portail — le disque central (uHR, unités du jeton) moins les lames encore fermées (uSl : centre, demi-largeur)
+     devient transparent : la section suivante, sous le canevas, apparaît sans aucun travail de mise en page */
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime, uGrain, uVig, uAb, uHOn, uHR, uHPx; uniform vec2 uHC, uSl[17]; uniform vec4 uHM; varying vec2 vUv;
     float rnd(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
     void main(){
       vec2 d = vUv - .5; float r2 = dot(d, d);
       vec3 c = vec3(texture2D(tDiffuse, vUv + d * uAb).r, texture2D(tDiffuse, vUv).g, texture2D(tDiffuse, vUv - d * uAb).b);
       c *= 1. - uVig * smoothstep(.04, .55, r2 * 1.7);
       c += (rnd(vUv * 1000. + fract(uTime)) - .5) * uGrain;
-      gl_FragColor = vec4(c, 1.);
+      float a = 1.;
+      if (uHOn > .5) {
+        vec2 v = gl_FragCoord.xy - uHC, l = vec2(dot(uHM.xy, v), dot(uHM.zw, v)); float cov = 0.;
+        for (int k = 0; k < 17; k++) if (uSl[k].y > 0.) cov = max(cov, 1. - smoothstep(uSl[k].y, uSl[k].y + 2. * uHPx, abs(l.x - uSl[k].x)));
+        a = 1. - (1. - smoothstep(uHR - 2. * uHPx, uHR, length(l))) * (1. - cov);
+      }
+      gl_FragColor = vec4(c * a, a);
     }`
 };
 
@@ -46,7 +55,7 @@ const TiltShader = {
 
 export function createStage(o = {}) {
   const canvas = o.canvas;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: !!o.alpha, powerPreference: 'high-performance' });
   const dpr = Math.min(devicePixelRatio, o.maxDpr || 1.5);
   renderer.setPixelRatio(dpr);
   renderer.setSize(innerWidth, innerHeight);

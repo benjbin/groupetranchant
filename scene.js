@@ -1,96 +1,191 @@
-/* Groupe Tranchant — scènes 3D (ouverture Monogramme et maquette des implantations) */
+/* Groupe Tranchant — scènes 3D (ouverture Jeton casino et maquette des implantations) */
 import * as THREE from 'three';
 import { Reflector } from 'three/addons/objects/Reflector.js';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { createStage, beam, dust, keyframes, mouse, stepMouse, mobile, clamp01, BRAND } from './stage.js';
+import { createStage, beam, keyframes, mouse, stepMouse, mobile, clamp01, BRAND } from './stage.js';
 import { IMG, PLACES, FRANCE, PHOTO } from './data.js';
+import { chipKit, holeMask, PHASES } from './jeton-portail.js';
 
 function initHero(ctx, LITE, onReady) {
 const { lenis, chapters, progressOf, smoother, reduceMotion } = ctx;
 /* ================= OUVERTURE : MONOGRAMME ================= */
 const heroEl = document.getElementById('hero');
+/* deux hauteurs d'écran de plus pour la fin (1,6 sur téléphone) : le jeton tombe, se couche et s'ouvre sur la section suivante
+   (glissée dessous, cf. .jt-hero) ; tout est fonction de la progression de défilement, sans temps réel ni défilement forcé */
+const ZT = mobile() ? 1.6 : 2, PE = 3 / (3 + ZT), sticky = heroEl.querySelector('.sticky'), nextEl = heroEl.nextElementSibling, port = { f: 0, open: false }, ENVX = Math.PI / 2;
+heroEl.style.setProperty('--screens', 4 + ZT); heroEl.classList.add('jt-hero');
+let span = 1; const bufSz = new THREE.Vector2(), measure = () => { span = heroEl.offsetHeight - innerHeight; };
 const H = createStage({
-  canvas: document.getElementById('gl-hero'), fov: 30, exposure: 1.05,
+  canvas: document.getElementById('gl-hero'), fov: 30, exposure: 1.05, alpha: true,
   dof: LITE ? null : { focus: 15, aperture: .00018, maxblur: .006 },
-  bloom: { strength: .3, radius: .7, threshold: 1.0 },
+  bloom: { strength: .12, radius: .6, threshold: 1.2 },
   grain: .045, vignette: .6, aberration: .0022
 });
-H.scene.background = new THREE.Color(0x050608);
-H.scene.fog = new THREE.FogExp2(0x050608, .05);
+H.scene.background = new THREE.Color(0x0B1B2E);
+/* Photo de fond du site actuel (Arc de Triomphe), cadrée en « cover » et assombrie pour la lisibilité */
+new THREE.TextureLoader().load('/img/hero-paris.jpg', bg => {
+  bg.colorSpace = THREE.SRGBColorSpace;
+  const fit = () => {
+    const r = (innerWidth / innerHeight) / (bg.image.width / bg.image.height);
+    if (r > 1) { bg.repeat.set(1, 1 / r); bg.offset.set(0, (1 - 1 / r) / 2); }
+    else { bg.repeat.set(r, 1); bg.offset.set((1 - r) / 2, 0); }
+  };
+  fit(); addEventListener('resize', fit);
+  H.scene.background = bg; H.scene.backgroundIntensity = .45;
+});
+H.scene.fog = new THREE.FogExp2(0x0B1B2E, .05);
 {
-  const mirror = new Reflector(new THREE.PlaneGeometry(120, 120), { textureWidth: innerWidth * H.dpr * (LITE ? .35 : .6), textureHeight: innerHeight * H.dpr * (LITE ? .35 : .6), color: 0x9a9a9a, clipBias: .003 });
+  /* Sol miroir qui s'efface avec la distance (de R0 à R1) : il se fond dans la photo, sans ligne d'horizon */
+  const R0 = 4, R1 = 30, S = Reflector.ReflectorShader;
+  const fadeShader = { ...S,
+    vertexShader: S.vertexShader.replace('void main() {', 'varying vec2 vFloor;\nvoid main() {\nvFloor = position.xy;'),
+    fragmentShader: S.fragmentShader.replace('void main() {', 'varying vec2 vFloor;\nvoid main() {')
+      .replace(/gl_FragColor = vec4\((.*), 1\.0 \);/, `gl_FragColor = vec4($1, 1.0 - smoothstep(${R0}.0, ${R1}.0, length(vFloor)));`) };
+  const mirror = new Reflector(new THREE.PlaneGeometry(120, 120), { textureWidth: innerWidth * H.dpr * (LITE ? .35 : .6), textureHeight: innerHeight * H.dpr * (LITE ? .35 : .6), color: 0x9a9a9a, clipBias: .003, shader: fadeShader });
+  mirror.material.transparent = true;
   mirror.rotation.x = -Math.PI / 2; H.scene.add(mirror);
-  const tint = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), new THREE.MeshStandardMaterial({ color: 0x060709, roughness: .5, transparent: true, opacity: .8 }));
-  tint.rotation.x = -Math.PI / 2; tint.position.y = .003; tint.receiveShadow = true; H.scene.add(tint);
+  const c = document.createElement('canvas'); c.width = c.height = 512;
+  const x = c.getContext('2d'), k = 256 / 60, gr = x.createRadialGradient(256, 256, R0 * k, 256, 256, R1 * k);
+  gr.addColorStop(0, '#fff'); gr.addColorStop(1, '#000');
+  x.fillStyle = gr; x.fillRect(0, 0, 512, 512);
+  const tint = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), new THREE.MeshStandardMaterial({ color: 0x0A1726, roughness: .5, transparent: true, opacity: .8, alphaMap: new THREE.CanvasTexture(c) }));
+  tint.rotation.x = -Math.PI / 2; tint.position.y = .003; tint.receiveShadow = true; tint.renderOrder = 1; H.scene.add(tint);
 }
-function coinGeo(R, h, b) {
-  const pts = [new THREE.Vector2(0, -h / 2)];
-  for (let k = 0; k <= 10; k++) { const a = -Math.PI / 2 + k / 10 * Math.PI / 2; pts.push(new THREE.Vector2(R - b + Math.cos(a) * b, -h / 2 + b + Math.sin(a) * b)); }
-  for (let k = 0; k <= 10; k++) { const a = k / 10 * Math.PI / 2; pts.push(new THREE.Vector2(R - b + Math.cos(a) * b, h / 2 - b + Math.sin(a) * b)); }
-  pts.push(new THREE.Vector2(0, h / 2));
-  return new THREE.LatheGeometry(pts, 180).rotateX(Math.PI / 2);
-}
-/* Tranche cannelée, comme une vraie pièce */
-function reededGeo(R, h, ridges) {
-  const g = new THREE.CylinderGeometry(R, R, h, ridges * 4, 1, true);
-  const p = g.attributes.position;
-  for (let i = 0; i < p.count; i++) {
-    const x = p.getX(i), z = p.getZ(i), a = Math.atan2(z, x), k = 1 + .006 * Math.cos(a * ridges);
-    p.setX(i, Math.cos(a) * R * k); p.setZ(i, Math.sin(a) * R * k);
-  }
-  g.computeVertexNormals();
-  return g.rotateX(Math.PI / 2);
-}
-/* Guilloché gravé sous le vernis : rayons pour le G, ondes concentriques pour le T */
-function guilloche(kind) {
-  const c = document.createElement('canvas'); c.width = c.height = 1024;
-  const x = c.getContext('2d'), m = 512;
-  x.fillStyle = '#808080'; x.fillRect(0, 0, 1024, 1024);
-  x.translate(m, m);
-  if (kind === 'rays') {
-    for (let k = 0; k < 360; k++) {
-      x.rotate(Math.PI * 2 / 360);
-      x.fillStyle = k % 2 ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.22)';
-      x.beginPath(); x.moveTo(0, 0); x.lineTo(-4.5, -m); x.lineTo(4.5, -m); x.closePath(); x.fill();
-    }
-  } else {
-    x.lineWidth = 2.2;
-    for (let r = 14; r < m; r += 9) {
-      x.strokeStyle = (r / 9) % 2 < 1 ? 'rgba(255,255,255,.3)' : 'rgba(0,0,0,.3)';
-      x.beginPath();
-      for (let a = 0; a <= Math.PI * 2 + .01; a += .01) { const rr = r + Math.sin(a * 24) * 3.2; a ? x.lineTo(Math.cos(a) * rr, Math.sin(a) * rr) : x.moveTo(rr, 0); }
-      x.stroke();
-    }
-  }
-  const t = new THREE.CanvasTexture(c);
-  t.anisotropy = H.renderer.capabilities.getMaxAnisotropy();
-  return t;
-}
-const CR = 1.6, CH = .36;
-const mats = {
-  enamel: new THREE.MeshPhysicalMaterial({ color: 0xE4E1DA, roughness: .22, clearcoat: 1, clearcoatRoughness: .03, envMapIntensity: .65 }),
-  lacquer: new THREE.MeshPhysicalMaterial({ color: BRAND.yellow, roughness: .24, metalness: .4, clearcoat: 1, clearcoatRoughness: .03, envMapIntensity: 1 }),
-  blue: new THREE.MeshPhysicalMaterial({ color: BRAND.blue, roughness: .2, metalness: .15, clearcoat: 1, clearcoatRoughness: .04, envMapIntensity: .8 }),
-  white: new THREE.MeshPhysicalMaterial({ color: 0xFBFAF7, roughness: .16, clearcoat: 1, clearcoatRoughness: .04, envMapIntensity: .7 }),
-  gold: new THREE.MeshStandardMaterial({ color: 0xC9A13E, metalness: 1, roughness: .2 })
-};
-const faceG = mats.enamel.clone(); faceG.bumpMap = guilloche('rays'); faceG.bumpScale = 1.4;
-const faceT = mats.lacquer.clone(); faceT.bumpMap = guilloche('waves'); faceT.bumpScale = 1.8;
+/* Emblème « Jeton lenticulaire » : le jeton (textures, lentille GT, argile) vient de jeton-portail.js, partagé avec les transitions de sections ;
+   le jeton héros est la version « portail » : son centre ivoire s'ouvre en persiennes à la fin de l'ouverture */
+const K = chipKit(H.renderer);
+const { R, CT, RC, C, chipFace, chipEdge, edgeGeo, faceGeo, goldMat, ringGeo, clay, lensMat, lensView } = K;
 const mono = new THREE.Group(); H.scene.add(mono);
-let G = null, T = null;
-function medallion(body, face, letterMat, ringMat, letter, font) {
-  const g = new THREE.Group();
-  const coin = new THREE.Mesh(coinGeo(CR, CH, .07), body); coin.castShadow = coin.receiveShadow = true; g.add(coin);
-  const edge = new THREE.Mesh(reededGeo(CR + .003, CH - .15, 220), body); g.add(edge);
-  const disc = new THREE.Mesh(new THREE.CircleGeometry(CR * .885, 160), face); disc.position.z = CH / 2 + .002; disc.receiveShadow = true; g.add(disc);
-  [CR * .9, CR * .955].forEach((r, k) => { const ring = new THREE.Mesh(new THREE.TorusGeometry(r, k ? .01 : .02, 16, 220), ringMat); ring.position.z = CH / 2; g.add(ring); });
-  const tg = new TextGeometry(letter, { font, size: 1.5, height: .16, depth: .16, curveSegments: 14, bevelEnabled: true, bevelThickness: .035, bevelSize: .024, bevelSegments: 6 });
-  tg.computeBoundingBox(); const bb = tg.boundingBox;
-  tg.translate(-(bb.max.x + bb.min.x) / 2, -(bb.max.y + bb.min.y) / 2, 0);
-  const txt = new THREE.Mesh(tg, letterMat); txt.position.z = CH / 2 - .02; txt.castShadow = true; g.add(txt);
-  const pivot = new THREE.Group(); pivot.add(g);
-  return pivot;
+let hero = null, lenses = null;
+const tmpV = new THREE.Vector3();
+addEventListener('resize', () => { span = 1; });
+
+/* ===== Le geste du croupier : petits jetons instanciés (rouge, noir), un tirage par matière =====
+   Chaque pose est calculée au contact exact : piles aux multiples de l'épaisseur, jetons plaqués
+   face contre face dans l'éventail, posés sur la tranche au sol ; aucun jeton n'en traverse un autre. */
+const S = .42, hS = CT * S, rS = R * S, PI = Math.PI;
+// fusion de géométries indexées, couchées (axe du jeton vertical)
+const merge = gs => { const g = new THREE.BufferGeometry(), at = { position: [], normal: [], uv: [] }, idx = []; let o = 0;
+  gs.forEach(s => { for (const k in at) at[k].push(...s.attributes[k].array); s.index.array.forEach(i => idx.push(i + o)); o += s.attributes.position.count; });
+  for (const k in at) g.setAttribute(k, new THREE.Float32BufferAttribute(at[k], k === 'uv' ? 2 : 3));
+  g.setIndex(idx); return g.rotateX(-PI / 2); };
+const both = (geo, z) => merge([geo.clone().translate(0, 0, z), geo.clone().rotateY(PI).translate(0, 0, -z)]);
+const fiches = [], fx = { kinds: null, rings: null, blobs: null, ghosts: null, lastA: 0 };
+const dum = new THREE.Object3D(), qa = new THREE.Quaternion(), qb = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0), ZV = new THREE.Vector3(0, 0, 1);
+const P = { x: 0, y: 0, z: 0, hd: 0, a: 0, s: 0, k: 1 };     // pose : cap, inclinaison (a), rotation propre (s)
+const seg = (x, a, b) => clamp01((x - a) / (b - a)), sm = x => x * x * (3 - 2 * x), o3 = x => 1 - (1 - x) ** 3, o2 = x => 1 - (1 - x) ** 2;
+const back = x => 1 + 2.2 * (x - 1) ** 3 + 1.2 * (x - 1) ** 2;          // dépassement puis retour
+const mix = (a, b, e) => a + (b - a) * e;
+const ext = a => hS / 2 * Math.abs(Math.cos(a)) + rS * Math.abs(Math.sin(a));   // demi-hauteur d'un jeton incliné de a
+const jit = (n, k) => { const v = Math.sin(n * 12.9898 + k * 78.233) * 43758.5453; return v - Math.floor(v) - .5; };  // aléa fixe par jeton
+/* ombre de contact : tache douce sous chaque jeton, plus sombre et plus nette quand il touche le miroir */
+const blobMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false,
+  vertexShader: 'attribute float aO; varying float vO; varying vec2 vU; void main() { vO = aO; vU = uv * 2. - 1.; gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.); }',
+  fragmentShader: 'varying float vO; varying vec2 vU; void main() { float r = clamp(1. - length(vU), 0., 1.); gl_FragColor = vec4(0., 0., 0., vO * r * r * (3. - 2. * r)); }' });
+function blob(i, x, z, size, op) {
+  dum.position.set(x, .006, z); dum.quaternion.identity(); dum.scale.set(size, 1, size); dum.updateMatrix();
+  fx.blobs.setMatrixAt(i, dum.matrix); fx.blobs.geometry.attributes.aO.array[i] = op;
+}
+function poser(c) {
+  dum.position.set(P.x, P.y, P.z);
+  dum.quaternion.setFromAxisAngle(UP, P.hd).multiply(qa.setFromAxisAngle(ZV, P.a)).multiply(qb.setFromAxisAngle(UP, P.s));
+  dum.scale.setScalar(S * P.k); dum.updateMatrix();
+  const m = fx.kinds[c.col]; m.edge.setMatrixAt(c.ci, dum.matrix); m.face.setMatrixAt(c.ci, dum.matrix); fx.rings.setMatrixAt(c.n, dum.matrix);
+  const hb = P.y - ext(P.a);                                          // hauteur du point le plus bas
+  blob(c.n, P.x, P.z, 2 * rS * (.75 + .6 * Math.abs(Math.cos(P.a))) * (1 + hb * .6), P.k * .34 * (1 - sm(clamp01(hb / .9))));
+}
+/* tableau : battage à gauche au fond (deux piles → une), ramassage à droite, roulé derrière le jeton héros */
+const AX = -3, AZ = -4.8, G = rS + .042, nR = LITE ? 5 : 7, NT = 2 * nR;
+const TX = 2.7, TZ = -1.2, pre = LITE ? 2 : 3;
+const LOOSE = [[4.6, .3], [1.9, 1.5], [4.9, -2.3], [3.9, 1.9], [1.2, -2.9]].slice(0, LITE ? 3 : 5), nL = LOOSE.length;
+const FD = [-.9708, .2402], FA = .42, FDX = hS / Math.sin(FA) * 1.03;            // éventail : direction, inclinaison, pas au sol
+const RR = 3.9, RR2 = 3.7, PS0 = Math.atan2(TZ, TX) - .3, PS1 = -2.25, A0 = PI / 2 + .14;   // roulé, penché dans le virage
+/* éventail : le jeton 0 reste à plat ; le 1 s'appuie sur son arête, les suivants se couchent face contre face (inclinaison b) */
+function fan(m, b) {
+  let u = 0, y = hS / 2, a = 0;
+  if (m > 0 && b > 0) {
+    const k = b / FA, e1 = hS / Math.tan(FA) * k, dx = FDX * k, dy = Math.max(0, hS - dx * Math.sin(b)) / Math.cos(b);
+    const lx = rS + e1 + (m - 1) * dx, ly = hS - e1 * Math.tan(b) + (m - 1) * dy;   // arête basse avant
+    u = lx - rS * Math.cos(b) + hS / 2 * Math.sin(b); y = ly + rS * Math.sin(b) + hS / 2 * Math.cos(b); a = b;
+  } else y = hS * (m + .5);
+  P.x = AX + FD[0] * u; P.z = AZ + FD[1] * u; P.y = y; P.a = a; P.hd = Math.atan2(FD[1], -FD[0]);
+}
+/* poser sur une pile : le jeton se lève, passe au-dessus, puis descend juste sur le dessus (Y) */
+function hop(h, ax, az, bx, bz, Y, c = .18) {
+  const mv = sm(seg(h, .3, .85));
+  P.x = mix(ax, bx, mv); P.z = mix(az, bz, mv);
+  P.y = mix(hS / 2, Y + c, o3(seg(h, 0, .45))) - c * sm(seg(h, .75, 1));
+}
+// petit balancement amorti sur l'arête après la pose (le point bas reste au contact)
+function rock(w, amp, hd) {
+  if (w <= 0 || w >= 1) return;
+  const a = amp * Math.sin(3 * PI * w) * (1 - w) ** 2;
+  P.a += a; P.s -= hd - P.hd; P.hd = hd; P.y += rS * Math.abs(Math.sin(a)) - hS / 2 * (1 - Math.cos(a));
+}
+function approach(sx, sz, bx, bz) { const d = Math.hypot(bx - sx, bz - sz), g = (2 * rS + .07) / d; return [bx + (sx - bx) * g, bz + (sz - bz) * g]; }
+function croupier(p, u) {
+  fiches.forEach(c => {
+    P.hd = 0; P.a = 0; P.k = 1; P.s = c.jy;
+    if (c.role === 0) {
+      /* battage : la main lève les bords intérieurs, les jetons s'écartent d'une épaisseur (chacun sa place),
+         puis glissent un à un, chacun à sa hauteur exacte : la pile alternée se referme sans choc */
+      const { sd, j, o } = c, qr = seg(p, .02, .3);
+      const a = -sd * .13 * sm(seg(qr, 0, .3)) * (1 - sm(seg(qr, .4, .55)));
+      const yl = mix(hS * (j + .5), hS * (o + .5), sm(seg(qr, .08, .4)));
+      const e = back(seg(qr, .55 + o / NT * .3, .7 + o / NT * .3)), rx = -sd * rS;
+      P.x = AX + sd * (G + rS) + rx * Math.cos(a) - yl * Math.sin(a) - sd * G * e; P.z = AZ;
+      P.y = rx * Math.sin(a) + yl * Math.cos(a); P.a = a; P.s = (sd < 0 ? .3 : -.25) * (1 - e) + c.jy;
+      /* éventail : la pile se couche d'un geste en ligne, puis se rassemble */
+      const w = sm(seg(p, .47, .62)) * (1 - sm(seg(p, .8, .9)));
+      if (w > 0) { fan(o, FA * w); P.s = c.jy - P.hd; }
+      const jf = 1 - clamp01(w * 4);
+      P.x += FD[1] * c.jl + FD[0] * c.jf * jf; P.z -= FD[0] * c.jl - FD[1] * c.jf * jf;
+    } else if (c.role === 1) {                                     // pile de droite déjà montée
+      P.x = TX + c.jl; P.z = TZ + c.jf; P.y = hS * (c.j + .5);
+    } else {
+      /* ramassage : chaque jeton glisse en courbe et ralentit par frottement, puis la main le pose sur la pile */
+      const q = c.j, Q = seg(p, .14, .5), t0 = q * .16, ls = seg(Q, t0, t0 + .2), lh = seg(Q, t0 + .2, t0 + .3), lw = seg(Q, t0 + .3, t0 + .36);
+      const [sx, sz] = LOOSE[q], [ax, az] = approach(sx, sz, TX, TZ), bend = q % 2 ? .3 : -.3;
+      const cx = (sx + ax) / 2 - (az - sz) * bend, cz = (sz + az) / 2 + (ax - sx) * bend, Y = hS * (pre + q + .5), e = o2(ls), b = 1 - e;
+      const s0 = q * 1.37, s1 = c.jy + (q % 2 ? 2 : -2) * PI;
+      if (lh === 0) { P.x = b * b * sx + 2 * b * e * cx + e * e * ax; P.z = b * b * sz + 2 * b * e * cz + e * e * az; P.y = hS / 2; P.s = mix(s0, s1, e); }
+      else { hop(lh, ax, az, TX + c.jl, TZ + c.jf, Y); P.s = s1; }
+      rock(lw, .06, q * 1.1);
+      if (c.roll && p > .5) roller(p, Y, c);
+    }
+    // ouverture : les jetons tombent un à un sur le miroir
+    const li = seg(u, c.io * .7 / fiches.length, c.io * .7 / fiches.length + .22), ei = o3(li);
+    P.y += (1 - ei) * 3.5; P.s += (1 - ei) * 1.2; P.k = li > 0 ? 1 : 0;
+    poser(c);
+  });
+  fx.kinds.forEach(m => { m.edge.instanceMatrix.needsUpdate = m.face.instanceMatrix.needsUpdate = true; });
+  fx.rings.instanceMatrix.needsUpdate = fx.blobs.instanceMatrix.needsUpdate = fx.blobs.geometry.attributes.aO.needsUpdate = true;
+}
+/* le dernier jeton ramassé est chassé d'une pichenette : il saute, se dresse, roule en long arc derrière
+   le jeton héros, tournoie comme un disque d'Euler, se couche, puis rejoint le sommet de la pile battue */
+function roller(p, Y, c) {
+  const pp = seg(p, .5, .56), pr = seg(p, .56, .76), pe = seg(p, .76, .88), pf = seg(p, .9, .99);
+  const bx = TX + c.jl, bz = TZ + c.jf, sR = -(PS1 - PS0) * (RR + RR2) / 2 / rS;
+  if (pr === 0) {
+    const h = sm(seg(pp, .2, .85));
+    P.a = A0 * sm(seg(pp, .15, .8)); P.hd = -PS0; P.s = c.jy;
+    P.x = mix(bx, (RR + rS * Math.cos(A0)) * Math.cos(PS0), h); P.z = mix(bz, (RR + rS * Math.cos(A0)) * Math.sin(PS0), h);
+    P.y = mix(Y - hS / 2, 0, sm(seg(pp, .5, 1))) + 4 * 1.1 * pp * (1 - pp) + ext(P.a);   // point bas : du dessus de la pile au sol, en cloche
+  } else if (pe === 0) {
+    const e = o2(pr), ps = mix(PS0, PS1, e), rr = mix(RR, RR2, e);
+    P.hd = -ps; P.a = A0 + .05 * Math.sin(pr * 34) * (1 - pr); P.s = c.jy + sR * e;
+    P.x = (rr + rS * Math.cos(P.a)) * Math.cos(ps); P.z = (rr + rS * Math.cos(P.a)) * Math.sin(ps); P.y = ext(P.a);
+  } else {
+    const ps = PS1 - .12 * o3(pe), r0 = RR2 + rS * Math.cos(A0) * (1 - o3(pe)), w = pe;
+    P.hd = -ps + (reduceMotion ? 3 : 10) * w * w; P.a = w > .93 ? PI - .05 * Math.sin(PI * seg(w, .93, 1)) : A0 + (PI - A0) * w ** 2.4;
+    P.s = c.jy + sR + 2.5 * w; P.x = r0 * Math.cos(ps); P.z = r0 * Math.sin(ps); P.y = ext(P.a);
+    if (pf > 0) {                                                  // glisse puis posé au sommet de la pile battue, inserts alignés
+      const ex = P.x, ez = P.z, d0 = P.hd - P.s, d = d0 - Math.round(d0 / (PI / 4)) * PI / 4, tx = AX + c.jl, tz = AZ + c.jf;
+      const [ax, az] = approach(ex, ez, tx, tz), ls = o2(seg(pf, 0, .45)), lh = seg(pf, .45, .88);
+      P.a = PI; P.s += d * sm(pf);
+      if (lh === 0) { P.x = mix(ex, ax, ls); P.z = mix(ez, az, ls); P.y = hS / 2; } else hop(lh, ax, az, tx, tz, hS * (NT + .5));
+      rock(seg(pf, .88, 1), .05, P.hd + 1);
+    }
+  }
 }
 
 /* Lumières */
@@ -102,45 +197,64 @@ H.scene.add(key, key.target);
 const rimBlue = new THREE.SpotLight(0x5A8CC8, 0, 40, .55, .8, 1.4); rimBlue.position.set(-6, 4, -6); rimBlue.target.position.set(0, 2, 0); H.scene.add(rimBlue, rimBlue.target);
 const rimWarm = new THREE.SpotLight(0xFFC27A, 0, 40, .5, .8, 1.4); rimWarm.position.set(6.5, 2.6, -4.5); rimWarm.target.position.set(0, 2, 0); H.scene.add(rimWarm, rimWarm.target);
 const fill = new THREE.PointLight(0xFFFFFF, 0, 0, 2); fill.position.set(0, 2.4, 9); H.scene.add(fill);
-/* Reflet qui balaie les médaillons */
+/* Reflet qui balaie le jeton */
 const sweep = new THREE.SpotLight(0xFFFFFF, 0, 30, .09, .6, 1.2);
 sweep.position.set(-9, 3.4, 7); sweep.target.position.set(0, 2.1, 0); H.scene.add(sweep, sweep.target);
+/* éclat chaud pendant le pile ou face */
+const flash = new THREE.PointLight(0xFFD9A0, 0, 9, 2); flash.position.set(1.2, 4.2, 3.4); H.scene.add(flash);
 const shaft = beam(key.position.clone(), new THREE.Vector3(0, 0, 0), 3.2, 0xFFEBCB, { anglePower: 2.4, opacity: 0 });
 H.scene.add(shaft);
-const motes = dust(1100, new THREE.Vector3(-4, .2, -3), new THREE.Vector3(4, 8.5, 4.5), 0xFFE7C2, .028, .55);
-H.scene.add(motes);
 
-/* Décor : paroi cannelée sombre et halos lointains */
-{
-  const c = document.createElement('canvas'); c.width = 64; c.height = 8;
-  const x = c.getContext('2d'); const gr = x.createLinearGradient(0, 0, 64, 0);
-  gr.addColorStop(0, '#202020'); gr.addColorStop(.5, '#e0e0e0'); gr.addColorStop(1, '#202020');
-  x.fillStyle = gr; x.fillRect(0, 0, 64, 8);
-  const flute = new THREE.CanvasTexture(c); flute.wrapS = THREE.RepeatWrapping; flute.repeat.set(140, 1);
-  const wall = new THREE.Mesh(new THREE.CylinderGeometry(21, 21, 18, 280, 1, true, Math.PI * .62, Math.PI * .76),
-    new THREE.MeshStandardMaterial({ color: 0x121419, roughness: .5, metalness: .25, bumpMap: flute, bumpScale: 3, side: THREE.BackSide, envMapIntensity: .25 }));
-  wall.position.set(0, 7, 6); wall.receiveShadow = true;
-  H.scene.add(wall);
-  const orbs = [[-9, 4.2, -11, 0xFFD3A0], [-6.5, 2.2, -12.5, 0xFFC890], [7.5, 3.6, -11.5, 0xFFD9AE], [10.5, 5.6, -12, 0x8FB2DE], [-12, 6.4, -9.5, 0x8FB2DE], [4.5, 6.8, -13, 0xFFE2BE], [13, 2.4, -9, 0xFFC890], [-3, 7.4, -13.5, 0xFFD9AE]];
-  orbs.forEach(([ox, oy, oz, c2]) => {
-    const o = new THREE.Mesh(new THREE.SphereGeometry(.2, 16, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(c2).multiplyScalar(2.2), fog: false }));
-    o.position.set(ox, oy, oz); H.scene.add(o);
-  });
-}
 
 /* Caméra et chorégraphie liées au défilement */
 const heroPath = keyframes([
-  { t: 0, pos: [-1.3, 2.4, 15], look: [-1.9, 1.35, 0], sep: 0, spin: -.12 },
-  { t: .37, pos: [5.2, 1.6, 7.4], look: [2.9, 2.0, 0], sep: .22, spin: .32 },
-  { t: .68, pos: [-5.6, 1.3, 7.6], look: [-3.0, 2.1, 0], sep: .22, spin: -.38 },
-  { t: 1, pos: [.4, 5.6, 13.5], look: [0, 1.7, 0], sep: 0, spin: 0 }
+  { t: 0, pos: [-1.3, 2.4, 15], look: [-1.9, 1.35, 0], spin: 0 },
+  { t: .37, pos: [5.2, 1.6, 7.4], look: [2.9, 2.0, 0], spin: -.38 },
+  { t: .68, pos: [-5.6, 1.3, 7.6], look: [-3.0, 2.1, 0], spin: .4 },
+  { t: 1, pos: [.4, 5.6, 13.5], look: [0, 1.7, 0], spin: 0 }
 ]);
 const intro = { v: 1, g: 1, t: 1 };
 const heroLook = new THREE.Vector3();
 const heroP = smoother(5);
 const tilt = { x: 0, y: 0 };
+/* lancé : le jeton tombe en tournant sur sa tranche (trois tours) et se pose sur GT ;
+   à mi-parcours, pile ou face : élan, vrilles rapides (♠/♥ en éclairs), rattrapé net sur GT */
+function heroPose(p, t, k) {
+  const fl = seg(p, .43, .6), up = seg(fl, .16, .82), st = seg(fl, .82, 1), turns = reduceMotion ? 1 : 3, air = 4 * up * (1 - up);
+  const A = (fl < .16 ? -.12 * Math.sin(PI * fl / .16) : 0) + turns * 2 * PI * (up + sm(up)) / 2 + .16 * Math.sin(2 * PI * st) * (1 - st);
+  const y = (fl < .16 ? -.22 * Math.sin(PI * fl / .16) : 0) + (mobile() ? -.3 : 1.1) * air - .08 * Math.sin(PI * st) * (1 - st);
+  mono.position.set(0, R + .38 + Math.sin(t * .8) * .05 + intro.g * 2.4 + y, -intro.g * 2 - (mobile() ? 5 : 2.2) * air);
+  mono.rotation.set(tilt.x + intro.g * .3 + A, k.spin + Math.sin(t * .3) * .06 + tilt.y + intro.g * PI * 6, Math.sin(t * .21) * .015 + .25 * Math.sin(PI * up));
+  return { up, A };
+}
+/* Fin de l'ouverture : le jeton se pose, bascule en arrière et se couche à plat (rebond, puis toupie d'Euler qui s'éteint) ;
+   la caméra monte à l'aplomb, les lames du centre pivotent en persiennes, puis la caméra plonge dans l'ouverture.
+   La chute se joue en temps réel une fois le seuil passé (et se rejoue à l'envers en remontant) ; l'ouverture suit le défilement. */
+const qT = new THREE.Quaternion(), qW = new THREE.Quaternion(), XA = new THREE.Vector3(1, 0, 0), axW = new THREE.Vector3(), offV = new THREE.Vector3();
+const LAND = new THREE.Vector3(0, CT / 2, -CT / 2 - R), camTop = new THREE.Vector3(), TAN = Math.tan(PI / 12);
+function fallPose(f) {
+  const fd = seg(f, 0, .18), ft = seg(f, .18, .58), fw = seg(f, .58, 1);
+  if (ft === 0) {                                                  // il cesse de flotter et touche le miroir
+    const e = fd * fd;
+    mono.position.set(mono.position.x * (1 - e), mix(mono.position.y, R, e), mono.position.z * (1 - e));
+    mono.rotation.set(mono.rotation.x * (1 - e), mono.rotation.y * (1 - e), mono.rotation.z * (1 - e));
+    return;
+  }
+  let b = PI / 2 * ft ** 2.2;                                      // bascule autour de l'arête au sol, de plus en plus vite
+  if (fw > 0 && fw < .3) b = PI / 2 - .12 * Math.sin(PI * fw / .3) * (1 - fw);
+  qT.setFromAxisAngle(XA, -b); mono.quaternion.copy(qT);
+  mono.position.set(0, 0, -CT / 2).add(offV.set(0, R, CT / 2).applyQuaternion(qT));
+  if (fw >= .3) {
+    const w = (fw - .3) / .7, a = .07 * Math.sin(Math.min(1, w * 5) * PI / 2) * (1 - w) ** 1.6, ph = 2.5 + 26 * w ** 1.7;
+    qW.setFromAxisAngle(axW.set(Math.cos(ph), 0, Math.sin(ph)), a); mono.quaternion.premultiply(qW);
+    mono.position.y = CT / 2 * Math.cos(a) + R * Math.sin(a);
+  }
+}
 function renderHero(t) {
-  const p = heroP(progressOf(heroEl));
+  const raw = progressOf(heroEl), P0 = heroP(raw), p = Math.min(1, P0 / PE), u = clamp01((P0 - PE) / (1 - PE));
+  /* fin de l'ouverture : chute, pose, persiennes et plongée, fonctions pures de u (même calendrier que les autres transitions) */
+  const tp = reduceMotion ? { f: 0, so: 0, dv: 0 } : PHASES(u), so = tp.so, dv = tp.dv;
+  port.f = tp.f;
   chapters(heroEl, p);
   const k = heroPath(p);
   const f = mobile() ? 1.7 : Math.max(1, 1.62 / H.camera.aspect);
@@ -150,35 +264,103 @@ function renderHero(t) {
     heroLook.y + (k.pos[1] - k.look[1]) * (mobile() ? 1 : f) + Math.sin(t * .23) * .06 - mouse.sy * .3 + intro.v * 1.2,
     heroLook.z + (k.pos[2] - k.look[2]) * f + intro.v * 7
   );
+  const e = sm(seg(port.f, .14, .9));
+  if (e > 0) {                                                     // grue jusqu'à l'aplomb du jeton couché, puis plongée dans l'ouverture
+    const D0 = Math.max(2 * R / (.5 * 2 * TAN), 2 * R / (.84 * 2 * TAN * H.camera.aspect));
+    const D1 = CT / 2 + .006 + RC * (innerHeight / 2 / TAN) / (Math.hypot(innerWidth, innerHeight) / 2 * 1.05);
+    camTop.set(LAND.x, LAND.y + D0 * Math.pow(D1 / D0, dv), LAND.z);
+    H.camera.position.lerp(camTop, e); H.camera.position.y += Math.sin(PI * e) * 1.6;
+    heroLook.lerp(LAND, e);
+  }
+  H.camera.up.set(0, 1 - e, -e).normalize();
   H.camera.lookAt(heroLook);
+  /* couché, le jeton garde le reflet qu'il avait debout face à la caméra (sinon il refléterait le plafond lumineux) ;
+     la photo s'éteint : on ne voit plus qu'une table sombre */
+  H.scene.fog.density = .05 * (1 - .6 * e);
+  H.scene.environmentRotation.x = ENVX * sm(seg(port.f, .2, .58));
+  H.scene.backgroundIntensity = .45 * (1 - .8 * e);
+  /* la section suivante attend, calée en haut de l'écran sous la scène, dès que l'ouverture approche */
+  if (nextEl) {
+    if (span < 2) measure();
+    const ur = clamp01((raw - PE) / (1 - PE)), tf = ur > .4 && ur < 1 && !reduceMotion ? `translate3d(0,${(-(1 - raw) * span).toFixed(1)}px,0)` : '';
+    if (tf !== port.tf) nextEl.style.transform = port.tf = tf;
+  }
   if (H.bokeh) H.bokeh.uniforms.focus.value = H.camera.position.distanceTo(heroLook);
-  tilt.x += (-mouse.sy * .14 - tilt.x) * .05; tilt.y += (mouse.sx * .2 - tilt.y) * .05;
-  mono.position.y = CR + .42 + Math.sin(t * .8) * .05;
-  mono.rotation.set(tilt.x, k.spin + Math.sin(t * .3) * .06 + tilt.y, 0);
-  if (G && T) {
-    G.position.set(-1.12 - k.sep, Math.sin(t * .9) * .02 - intro.g * .4, 0);
-    G.rotation.y = -intro.g * Math.PI * .5;
-    T.position.set(1.12 + k.sep + intro.t * 1.1, Math.sin(t * .9 + 1) * .02, .32 + k.sep * .8 - intro.t * 1.2);
-    T.rotation.y = intro.t * Math.PI * .5;
+  tilt.x += (-mouse.sy * .14 - tilt.x) * .05; tilt.y += (mouse.sx * .45 - tilt.y) * .05;
+  const fl = heroPose(p, t, k);
+  if (port.f > 0) fallPose(port.f);
+  if (hero) {
+    K.openChip(hero, so);
+    hero.userData.slats[1].forEach(s => { s.m.visible = so === 0; });
+    hero.rotation.z = -.6 * dv;                                // la bague tourne comme un diaphragme pendant la plongée
+  }
+  flash.intensity = Math.sin(PI * fl.up) * (.6 + .4 * Math.cos(fl.A * 2)) * 14;
+  if (lenses) {
+    mono.updateMatrixWorld();
+    const c = mono.worldToLocal(tmpV.copy(H.camera.position)), fb = Math.sin(PI * fl.up) * .95 * Math.sin(fl.A * 1.5);
+    lenses[0].userData.phi.value = Math.atan2(c.x, c.z) + fb;
+    lenses[1].userData.phi.value = Math.atan2(-c.x, -c.z) - fb;
+  }
+  if (fx.ghosts) {                                                  // flou de bougé : deux échos en retard sur la vrille
+    const dA = clamp01(Math.abs(fl.A - fx.lastA) / .5) * Math.sign(fl.A - fx.lastA); fx.lastA = fl.A;
+    fx.ghosts.forEach((g, i) => {
+      g.visible = Math.abs(dA) > .02 && !reduceMotion;
+      g.position.copy(mono.position); g.rotation.copy(mono.rotation); g.rotation.x -= dA * .55 * (i + 1);
+      g.userData.mats.forEach(m => m.opacity = (i ? .07 : .14) * clamp01(Math.abs(dA) * 3));
+    });
+  }
+  if (fx.kinds) {
+    croupier(p, 1 - intro.t);
+    const lay = sm(seg(port.f, .4, .62));
+    blob(fiches.length, mono.position.x, mono.position.z, mix(4.4 + (mono.position.y - R) * 1.2, 4.5, lay), mix(.3 * (1 - sm(clamp01((mono.position.y - R - .38) / 2.5))), .55, lay) * (1 - intro.g));
   }
   // reflet périodique (toutes les 9 s)
   const ph = (t % 9) / 9, sw = clamp01(ph / .28);
   sweep.position.x = -9 + 18 * sw;
-  sweep.intensity = reduceMotion ? 0 : Math.sin(Math.PI * sw) * 110 * (1 - intro.v * .5);
-  if (!reduceMotion) motes.userData.update(t);
+  sweep.intensity = reduceMotion ? 0 : Math.sin(Math.PI * sw) * 60 * (1 - intro.v * .5) * (1 - sm(seg(port.f, .1, .5)));
   H.finish.uniforms.uTime.value = t;
-  H.composer.render();
+  /* la scène s'efface par les jours des lames puis par le disque qui grandit : la section suivante, glissée dessous, apparaît.
+     La découpe est faite dans le dernier passage du rendu (alpha), sans aucun calcul de mise en page */
+  const gone = reduceMotion ? u > .97 : dv > .999, open = !reduceMotion && so > 0 && !!hero;
+  if (reduceMotion) sticky.style.opacity = 1 - sm(seg(u, .3, .95));
+  if (open !== port.open) { heroEl.classList.toggle('jt-open', open); port.open = open; }
+  if (gone !== port.gone) { sticky.style.visibility = gone ? 'hidden' : ''; port.gone = gone; }
+  if (open && !gone) { H.camera.updateMatrixWorld(); H.renderer.getDrawingBufferSize(bufSz); holeMask(K, hero, H.camera, bufSz.x, bufSz.y, H.finish.uniforms, true); }
+  else H.finish.uniforms.uHOn.value = 0;
+  if (!gone) H.composer.render();
 }
 
 
 const bar = document.querySelector('#loader .bar i');
 const setLoad = v => { if (bar) bar.style.width = Math.round(v * 100) + '%'; };
 setLoad(.2);
-new FontLoader().load('/vendor/fonts/helvetiker_bold.typeface.json', font => {
+requestAnimationFrame(async () => {
+  await Promise.race([document.fonts.load(`600 64px Archivo`), new Promise(r => setTimeout(r, 1500))]).catch(() => {});
   setLoad(.7);
-  G = medallion(mats.enamel, faceG, mats.blue, mats.blue, 'G', font);
-  T = medallion(mats.lacquer, faceT, mats.white, mats.gold, 'T', font);
-  mono.add(G, T);
+  lenses = [lensMat(['♠', 'GT', '♥'].map(lensView)), lensMat(['♦', 'GT', '♣'].map(lensView))];
+  hero = K.portalChip(lenses); mono.add(hero);
+  /* jetons du croupier : deux piles à battre (rouge / noire), une pile à droite et des jetons épars à ramasser */
+  for (let j = 0; j < nR; j++) [-1, 1].forEach(sd => fiches.push({ role: 0, sd, j, o: 2 * j + (sd > 0), col: sd < 0 ? 0 : 1 }));
+  for (let j = 0; j < pre; j++) fiches.push({ role: 1, j, col: j % 2 });
+  for (let j = 0; j < nL; j++) fiches.push({ role: 2, j, col: j === nL - 1 ? 0 : (j + 1) % 2, roll: j === nL - 1 });
+  const edge2 = edgeGeo.clone().rotateX(-PI / 2), face2 = both(faceGeo, CT / 2), ring2 = both(ringGeo.clone().scale(1, 1, .35), CT / 2 + .004);
+  const inst = (geo, mat, n) => { const m = new THREE.InstancedMesh(geo, mat, n); m.castShadow = m.receiveShadow = true; m.frustumCulled = false; H.scene.add(m); return m; };
+  fx.kinds = [C.red, C.black].map((b, col) => {
+    const n = fiches.filter(c => c.col === col).length;
+    return { edge: inst(edge2, clay(chipEdge(b)), n), face: inst(face2, clay(chipFace(b, true)), n) };
+  });
+  fx.rings = inst(ring2, goldMat, fiches.length); fx.rings.castShadow = false;
+  // imperfections : chaque jeton garde un infime décalage (rotation propre, position)
+  const cnt = [0, 0]; fiches.forEach((c, n) => Object.assign(c, { n, io: n, ci: cnt[c.col]++, jy: jit(n, 1) * .06, jl: jit(n, 2) * .018, jf: jit(n, 3) * .018 }));
+  const bg = new THREE.PlaneGeometry(1, 1).rotateX(-PI / 2); bg.setAttribute('aO', new THREE.InstancedBufferAttribute(new Float32Array(fiches.length + 1), 1));
+  fx.blobs = new THREE.InstancedMesh(bg, blobMat, fiches.length + 1); fx.blobs.frustumCulled = false; fx.blobs.renderOrder = 2; H.scene.add(fx.blobs);
+  // échos du pile ou face (flou de bougé), mêmes géométries, matières translucides
+  fx.ghosts = [0, 1].map(() => {
+    const g = new THREE.Group(), r = new THREE.Group(), mats = [fx.kinds[0].edge.material, fx.kinds[0].face.material].map(m => Object.assign(m.clone(), { transparent: true, depthWrite: false }));
+    r.rotation.x = PI / 2; g.add(r); r.add(new THREE.Mesh(edge2, mats[0]), new THREE.Mesh(face2, mats[1]));
+    g.userData.mats = mats; g.visible = false; H.scene.add(g); return g;
+  });
+  croupier(0, 0);
   H.renderer.compile(H.scene, H.camera);
   setLoad(1);
   onReady();
@@ -187,13 +369,13 @@ new FontLoader().load('/vendor/fonts/helvetiker_bold.typeface.json', font => {
   if (reduceMotion) gsap.globalTimeline.timeScale(6);
   setTimeout(() => {
     gsap.to(intro, { v: 0, duration: 3.6, ease: 'power3.inOut', onComplete: () => lenis.start() });
-    gsap.to(intro, { g: 0, duration: 2.6, delay: .5, ease: 'expo.inOut' });
-    gsap.to(intro, { t: 0, duration: 2.8, delay: 1.0, ease: 'expo.inOut' });
-    gsap.to(key, { intensity: 170, duration: 2.6, delay: .3, ease: 'power2.inOut' });
+    gsap.to(intro, { g: 0, duration: 3, delay: .4, ease: 'expo.inOut' });
+    gsap.to(intro, { t: 0, duration: 3.2, delay: 1.4, ease: 'none' });
+    gsap.to(key, { intensity: 100, duration: 2.6, delay: .3, ease: 'power2.inOut' });
     gsap.to(rimBlue, { intensity: 110, duration: 2.6, delay: .9, ease: 'power2.inOut' });
     gsap.to(rimWarm, { intensity: 70, duration: 2.6, delay: 1.2, ease: 'power2.inOut' });
-    gsap.to(fill, { intensity: 4, duration: 2.6, delay: .6 });
-    gsap.to(shaft.material.uniforms.uOpacity, { value: .22, duration: 3, delay: .4 });
+    gsap.to(fill, { intensity: 2.5, duration: 2.6, delay: .6 });
+    gsap.to(shaft.material.uniforms.uOpacity, { value: .1, duration: 3, delay: .4 });
     setTimeout(() => document.dispatchEvent(new Event('hero:intro')), reduceMotion ? 0 : 1500);
   }, 400);
 });
@@ -211,8 +393,8 @@ const M = createStage({
   bloom: { strength: .4, radius: .5, threshold: 1.1 },
   grain: .035, vignette: .55, aberration: .0006
 });
-M.scene.background = new THREE.Color(0x07080B);
-M.scene.fog = new THREE.Fog(0x07080B, 26, 62);
+M.scene.background = new THREE.Color(0x0B1B2E);
+M.scene.fog = new THREE.Fog(0x0B1B2E, 26, 62);
 
 /* Projection (identique pour le relief, les punaises et la caméra) */
 const S = .95, BASE = .35, EXAG = 1 / 117000 * 19;
@@ -226,7 +408,7 @@ const lonOf = x => (x / S + 5.45) / .69 - 5.4, latOf = z => 51.4 - (z / S + 4.75
 {
   const mirror = new Reflector(new THREE.PlaneGeometry(160, 160), { textureWidth: innerWidth * M.dpr * (LITE ? .3 : .5), textureHeight: innerHeight * M.dpr * (LITE ? .3 : .5), color: 0x8a8a8a, clipBias: .003 });
   mirror.rotation.x = -Math.PI / 2; M.scene.add(mirror);
-  const tint = new THREE.Mesh(new THREE.PlaneGeometry(160, 160), new THREE.MeshStandardMaterial({ color: 0x0B0C10, roughness: .55, metalness: .1, transparent: true, opacity: .86 }));
+  const tint = new THREE.Mesh(new THREE.PlaneGeometry(160, 160), new THREE.MeshStandardMaterial({ color: 0x0C1A2B, roughness: .55, metalness: .1, transparent: true, opacity: .86 }));
   tint.rotation.x = -Math.PI / 2; tint.position.y = .003; tint.receiveShadow = true; M.scene.add(tint);
 }
 
@@ -330,7 +512,7 @@ async function buildRelief() {
 }
 
 /* Punaises de carte : tige en laiton, tête laquée aux couleurs de la marque */
-const ACC = { casino: 0x3F78B8, hotel: 0xF2C230, club: 0xB3243A };
+const ACC = { casino: 0x9DB4D0, hotel: 0xF9C83B, club: 0xBA2637 };
 const brass = new THREE.MeshStandardMaterial({ color: 0xCFA64A, metalness: 1, roughness: .22 });
 const rodGeo = new THREE.CylinderGeometry(.009, .009, .46, 10).translate(0, .23, 0);
 const headGeo = new THREE.SphereGeometry(.058, 32, 20);

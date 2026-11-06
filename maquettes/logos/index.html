@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logos Groupe TRANCHANT — 9 directions</title>
+<link rel="stylesheet" href="/fonts.css">
+<style>
+:root{--bg:#0B1B2E;--fg:#F5F1EA;--muted:rgba(245,241,234,.6);--line:rgba(245,241,234,.12);--paper:#F5F1EA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Manrope,system-ui,sans-serif}
+header{padding:56px clamp(16px,5vw,72px) 28px}
+h1{font:700 clamp(28px,4vw,52px)/1 Archivo,sans-serif;font-stretch:115%;margin:0 0 12px;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted);max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,560px),1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.dir{background:var(--bg);padding:36px clamp(16px,4vw,48px) 40px;display:flex;flex-direction:column;gap:22px}
+.dir h2{margin:0;font:600 12px/1 Manrope;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.dir h2 b{color:var(--fg);font-weight:700;margin-right:10px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{display:block;border-radius:10px;overflow:hidden;line-height:0}
+.tile.dark{box-shadow:0 0 0 1px var(--line)}
+.tile.light{background:#F4F0E8}
+
+.tile img{width:100%;height:auto;display:block}
+.pair{align-items:start}
+.dir[data-s=signal] .tile{padding:16% 9%}.dir[data-s=signal] .tile.dark{background:#0A1628}.dir[data-s=signal] .tile.light{background:#F4F0E8}
+.sym{display:flex;align-items:center;gap:18px}
+.sym img{display:block}
+.sym .s128{width:96px;height:96px}.sym .s64{width:48px;height:48px}.sym .s32{width:24px;height:24px}
+.concept{color:var(--muted);margin:0;min-height:3em}
+.dir a{align-self:flex-start;color:var(--bg);background:var(--fg);text-decoration:none;font-weight:700;font-size:13px;padding:12px 18px;border-radius:999px}
+.dir a:hover{background:#F9C83B}
+.serie{margin:0;padding:40px clamp(16px,5vw,72px) 18px;font:600 12px/1 Manrope;letter-spacing:.22em;text-transform:uppercase;color:#F9C83B}
+.missing{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Groupe TRANCHANT<br>9 directions de logo</h1>
+  <p>Neuf identités créées de zéro. En tête, la série 3 : le jeton de casino, métier d’origine du groupe. Ouvre chaque planche pour voir le logo vivre.</p>
+</header>
+<h3 class="serie">Série 3 · le jeton de casino</h3>
+<main class="grid" id="g3"></main>
+<h3 class="serie">Série 2 · pistes audacieuses, animées</h3>
+<main class="grid" id="g2"></main>
+<h3 class="serie">Série 1 · pistes classiques</h3>
+<main class="grid" id="g"></main>
+<script>
+const DIRS = [
+  ['maison', 'La Maison', 'Une porte cochère parisienne : arc en plein cintre, clef de voûte et T dressé sur le seuil. Capitales didones dessinées, signature « Paris · 1988 ».'],
+  ['signal', 'Le Signal', 'Un bloc plein sur une grille de 9 modules, traversé d’une coupe en T : l’initiale naît de la lumière qui passe. Trois volumes pour les trois pôles.'],
+  ['riviera', 'Riviera', 'La porte du soleil : l’arche d’un grand casino de bord de mer des années 30, un T qui se lève en soleil Art déco. Lettrage en pleins et déliés, pensé pour le néon.'],
+  ['constellation', 'Constellation', 'Une étoile maîtresse ouvre ses rayons en T dans un cercle d’horizon. Trois étoiles, une par pôle, s’allument chacune dans sa couleur.']
+];
+const DIRS2 = [
+  ['voltige', 'Voltige', 'Une seule ligne, la traînée de fumée de la Patrouille Tranchant : elle entre à plat, fait un looping et repart vers le ciel. Le nom reste au sol, le geste s’envole.'],
+  ['lenticulaire', 'Lenticulaire', 'Quinze lamelles, comme un écran Alioscopy : la Lune depuis la gauche, l’initiale de face, l’Aile depuis la droite. Le logo change selon d’où on le regarde.'],
+  ['vivante', 'L’identité vivante', 'Pas un logo, une règle : sept lignes d’horizon que chaque établissement plie selon son lieu, son métier et son heure. La nuit, elles respirent à l’heure réelle.'],
+  ['rideau', 'Le Rideau', 'Le nom seul, en capitales de théâtre dont chaque plein est un pli de velours. À l’ouverture, le rideau se lève et la poursuite allume le mot.']
+];
+const render = (list, g, off) => list.forEach(([slug, name, fallback], i) => {
+  const s = document.createElement('section'); s.className = 'dir'; s.dataset.s = slug;
+  s.innerHTML = `<h2><b>0${i + 1 + off}</b>${name}</h2>
+    <div class="pair"><div class="tile dark"><img src="${slug}/logo.svg" alt="Logo ${name} sur fond sombre"></div><div class="tile light"><img src="${slug}/logo-clair.svg" alt="Logo ${name} sur fond clair"></div></div>
+    <div class="sym"><img class="s128" src="${slug}/symbole.svg" alt=""><img class="s64" src="${slug}/symbole.svg" alt=""><img class="s32" src="${slug}/symbole.svg" alt=""></div>
+    <p class="concept">${fallback}</p>
+    <a href="${slug}/planche.html">Voir la planche complète →</a>`;
+  s.querySelectorAll('img').forEach(im => im.onerror = () => { im.replaceWith(Object.assign(document.createElement('span'), { className: 'missing', textContent: 'en cours…' })); });
+  g.append(s);
+});
+render([['jeton-lenticulaire', 'Jeton lenticulaire', 'Un vrai jeton de table rouge casino, inserts ivoire, « Groupe Tranchant · Casinos · Hôtels · Divertissement · 1988 » sur le tour. De face, GT ; incliné, ♠ à gauche, ♥ à droite, ♣ et ♦ au revers. Lancé, il fait défiler les quatre enseignes.']], document.getElementById('g3'), 8);
+render(DIRS2, document.getElementById('g2'), 4);
+render(DIRS, document.getElementById('g'), 0);
+</script>
+</body>
+</html>
