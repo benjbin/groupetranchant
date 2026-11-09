@@ -204,25 +204,118 @@ export function holeMask(K, g, camera, bw, bh, U, on) {
 export const PHASES = q => ({ f: seg(q, 0, .35), so: seg(q, .45, .8), dv: sm(seg(q, .72, .95)), light: sm(seg(q, 0, .2)) });
 
 /* ================= TRANSITIONS ENTRE SECTIONS ================= */
-/* sections révélées par un jeton (la transition se joue juste avant chacune) ; une ou deux par page, les grandes coupures seulement */
-const SUITES = ['#specialisees', '#talents', '#engagements', '#index-egalite', '.ap-story', '.sz', '#carte', '#annuaire', '#offres-emploi', '#metiers', '#shooting'];
+/* sections révélées par un jeton (la transition se joue juste avant chacune) ; une ou deux par page, les grandes coupures seulement.
+   Chaque suite a sa propre animation (jamais deux fois la même sur une page) ; ?jpv=nom force une variante partout (essais) */
+const SUITES = { '#specialisees': 'pile', '#talents': 'lancer', '#engagements': 'rateau', '#index-egalite': 'iris', '.ap-story': 'roule', '.sz': 'pile',
+  '#carte': 'lancer', '#annuaire': 'rateau', '#offres-emploi': 'iris', '#metiers': 'roule', '#shooting': 'lancer' };
+const MODS = { pile: () => import('./jp-v-pile.js'), lancer: () => import('./jp-v-lancer.js'), rateau: () => import('./jp-v-rateau.js'),
+  iris: () => import('./jp-v-iris.js'), roule: () => import('./jp-v-roule.js') };
+
+/* Contrat d'une variante : create(ctx) → { frame(q), resize() }
+   ctx = { THREE, renderer, camera, K (chipKit partagé), env (texture d'environnement), view { W, H, T }, LITE, seg, sm, mix, clamp01 }
+   frame(q) est une fonction pure de q ∈ [0,1] (aucun temps réel) et fait tout le rendu (renderer.clear() puis ses scènes) :
+   à q = 0 l'écran est entièrement couvert du tapis bleu nuit #0B1B2E (raccord avec .jp-gap), à q ≥ .95 plus rien n'est dessiné
+   (calque transparent : la section suivante, glissée dessous, apparaît telle qu'on va la lire). */
+export function createChute(ctx) {
+  const { renderer, camera, K, view, env } = ctx;
+  const scene = new THREE.Scene();
+  scene.environment = env;
+  scene.environmentRotation.x = -PI / 2;                                   // reflets du studio pris de côté : rouge profond, sans voile
+  const key = new THREE.DirectionalLight(0xFFF0DA, 1.4); key.position.set(-4, 6, 10);
+  const rim = new THREE.DirectionalLight(0x8FB4E6, .9); rim.position.set(6, -5, 4);
+  scene.add(key, rim, new THREE.AmbientLight(0xffffff, .08));
+  const chip = K.portalChip(), pivot = new THREE.Group();
+  pivot.add(chip); scene.add(pivot);
+  /* tapis : couvre l'écran (feutre bleu nuit sous un douche de lumière), porte l'ombre de contact et se perce au centre du jeton */
+  const U = { uRes: { value: new THREE.Vector2() }, uTop: { value: 0 }, uL: { value: 0 }, uC: { value: new THREE.Vector2() }, uR: { value: 0 }, uS: { value: new THREE.Vector3() }, uSA: { value: 0 }, uSoft: { value: .3 } };
+  const felt = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+    uniforms: U, transparent: true, depthTest: false, depthWrite: false, premultipliedAlpha: true,
+    vertexShader: 'void main(){ gl_Position = vec4(position.xy, 0., 1.); }',
+    fragmentShader: `uniform vec2 uRes, uC; uniform float uTop, uL, uR, uSA, uSoft; uniform vec3 uS;
+      float rnd(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+      void main(){
+        vec2 p = gl_FragCoord.xy, q = (p - uRes * .5) / uRes.y;
+        vec3 c = vec3(.0431, .1059, .1804) + uL * vec3(.05, .07, .08) * (1. - smoothstep(.05, .75, length(q * vec2(.8, 1.))));
+        c += (rnd(p) - .5) * .012 * uL;
+        float d = length(p - uS.xy) / uS.z, sh = uSA * (1. - smoothstep(1. - uSoft, 1. + uSoft, d));
+        float m = clamp(uRes.y - p.y - uTop + .5, 0., 1.), hole = smoothstep(uR - 1.2, uR + 1.2, length(p - uC));
+        gl_FragColor = vec4(c * (1. - sh), 1.) * m * hole;
+      }` }));
+  felt.frustumCulled = false; const under = new THREE.Scene(); under.add(felt);   // tapis dessiné d'abord, le jeton par-dessus
+  const T = view.T;
+  let Dc = 14, zEnd = 2.4;
+  const resize = () => {
+    const { W, H } = view;
+    renderer.getDrawingBufferSize(U.uRes.value);
+    // le jeton occupe près de la moitié de la hauteur (bureau) ou les quatre cinquièmes de la largeur (téléphone)
+    Dc = Math.max(2 * K.R / (.48 * 2 * T), 2 * K.R / (.8 * 2 * T * camera.aspect));
+    zEnd = K.RC * (H / 2 / T) / (Math.hypot(W, H) / 2 * 1.06);
+  };
+  resize();
+  /* chute, fonction pure de f (donc de la position de défilement) : le jeton tombe en culbutant, frappe la table incliné,
+     rebondit, puis tournoie sur sa tranche comme un disque d'Euler qui s'éteint, et se couche à plat face à l'écran */
+  const qx = new THREE.Quaternion(), qs = new THREE.Quaternion(), ZA = new THREE.Vector3(0, 0, 1), ax = new THREE.Vector3();
+  const _c = new THREE.Vector3();
+  const lift = a => K.CT / 2 * Math.cos(a) + K.R * Math.abs(Math.sin(a));
+  function pose(f) {
+    const fa = seg(f, 0, .4), fb = seg(f, .4, .6), fc = seg(f, .6, 1);
+    let x = 0, y = 0, z, tilt, prec = 0, spin;
+    if (fb === 0) {                                                // chute libre, culbute d'un tour et quart
+      const s = fa; tilt = .42 + (1 - s) * 2.5 * PI; spin = 1.3 * (1 - s) ** 2 + .35;
+      z = lift(tilt) + Dc * .62 * (1 - s * s); y = K.R * 3 * (1 - s) ** 1.5; x = -K.R * .25 * (1 - s);
+    } else if (fc === 0) {                                         // impact sur la tranche : rebond et bascule
+      const s = fb; tilt = mix(.42, -.17, sm(s)); spin = .35 - .1 * s;
+      z = lift(tilt) + K.R * .3 * Math.sin(PI * s) * (1 - .3 * s);
+    } else {                                                       // toupie d'Euler : l'inclinaison s'éteint, la précession accélère
+      const w = fc; tilt = .17 * (1 - w) ** 1.6; prec = PI + 24 * w ** 1.8; spin = .25 - .1 * w;
+      z = lift(tilt);
+    }
+    ax.set(Math.cos(prec), Math.sin(prec), 0);
+    qx.setFromAxisAngle(ax, tilt); qs.setFromAxisAngle(ZA, spin);
+    pivot.quaternion.copy(qx).multiply(qs);
+    pivot.position.set(x, y, z);
+    return { x, y, z, tilt };
+  }
+  return {
+    frame(q) {
+      const { f, so, dv, light } = PHASES(q), ps = pose(f);
+      const cz = Dc * Math.pow(zEnd / Dc, dv);
+      camera.position.set(0, 0, cz); camera.up.set(0, 1, 0); camera.lookAt(0, 0, 0);
+      K.openChip(chip, so);
+      chip.userData.slats[1].forEach(s => { s.m.visible = so === 0; });   // revers masqué une fois ouvert (on voit au travers)
+      chip.rotation.z = -.6 * dv;                                           // la bague tourne comme un diaphragme
+      chip.updateWorldMatrix(true, false);                                  // lentille : GT de face, ♠/♥ quand il penche
+      const lc = chip.worldToLocal(_c.copy(camera.position));
+      chip.userData.lens[0].userData.phi.value = Math.atan2(lc.x, lc.z); chip.userData.lens[1].userData.phi.value = Math.atan2(-lc.x, -lc.z);
+      const fp = renderer.getPixelRatio() * view.H / 2 / T, cx = U.uRes.value.x / 2, cy = U.uRes.value.y / 2;
+      U.uTop.value = 0; U.uL.value = light;
+      U.uC.value.set(cx, cy); U.uR.value = so > 0 ? K.RC * fp / cz : 0;  // le tapis se perce sous le centre : les jours entre les lames montrent la suite
+      const h = ps.z - lift(ps.tilt) + Math.abs(ps.tilt) * .4;            // hauteur au-dessus du tapis
+      U.uS.value.set(cx + (ps.x + h * .35) * fp / cz, cy + (ps.y - h * .5) * fp / cz, K.R * (1.04 + h * .18) * fp / cz);
+      U.uSA.value = .62 * (1 - sm(clamp01(h / 6))) * (1 - dv); U.uSoft.value = .16 + Math.min(.5, h * .12);
+      renderer.clear(); renderer.render(under, camera); renderer.render(scene, camera);
+    },
+    resize, scene
+  };
+}
 
 export function mountPortails({ lenis, reduceMotion }) {
-  const list = SUITES.map(s => document.querySelector(s)).filter(b => b?.previousElementSibling);
+  const force = new URLSearchParams(location.search).get('jpv');
+  const list = Object.entries(SUITES).map(([s, v]) => ({ b: document.querySelector(s), v: force || v })).filter(o => o.b?.previousElementSibling);
   if (!list.length) return;
   /* mouvement réduit : la section suivante apparaît en fondu, sans chute */
   if (reduceMotion) {
     const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('jp-in', e.isIntersecting)), { rootMargin: '0px 0px -20% 0px' });
-    list.forEach(b => { b.classList.add('jp-fade'); io.observe(b); });
+    list.forEach(({ b }) => { b.classList.add('jp-fade'); io.observe(b); });
     return;
   }
   const LITE = innerWidth < 821 || (navigator.hardwareConcurrency || 8) <= 4;
   /* avant chaque suite, une zone de tapis bleu nuit (même teinte que le tapis du calque) : la section précédente s'en va
      normalement ; quand le tapis couvre l'écran, la zone est épinglée et sa progression q pilote tout, sans aucun temps réel :
      on peut défiler à n'importe quelle vitesse, dans les deux sens, l'image est toujours f(q) */
-  const ports = list.map(b => {
+  const ports = list.map(({ b, v }) => {
     const g = document.createElement('div'); g.className = 'jp-gap'; g.setAttribute('aria-hidden', 'true'); b.before(g);
-    return { b, g, top: 0, h: 1, tf: '' };
+    return { b, g, v, top: 0, h: 1, tf: '' };
   });
   let gl = null, building = false, act = null, lastQ = -1, shown = false;
   const cv = document.createElement('canvas'); cv.className = 'jp-gl'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv);
@@ -235,89 +328,31 @@ export function mountPortails({ lenis, reduceMotion }) {
     renderer.setPixelRatio(Math.min(devicePixelRatio, LITE ? 1.25 : 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .9;
     renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.setClearColor(0, 0);
-    const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 1, .05, 200);
-    const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), .04).texture; pmrem.dispose();
-    scene.environmentRotation.x = -PI / 2;                                   // reflets du studio pris de côté : rouge profond, sans voile
-    const key = new THREE.DirectionalLight(0xFFF0DA, 1.4); key.position.set(-4, 6, 10);
-    const rim = new THREE.DirectionalLight(0x8FB4E6, .9); rim.position.set(6, -5, 4);
-    scene.add(key, rim, new THREE.AmbientLight(0xffffff, .08));
-    const K = chipKit(renderer, { lite: LITE }), chip = K.portalChip(), pivot = new THREE.Group();
-    pivot.add(chip); scene.add(pivot);
-    /* tapis : couvre l'écran (feutre bleu nuit sous un douche de lumière), porte l'ombre de contact et se perce au centre du jeton */
-    const U = { uRes: { value: new THREE.Vector2() }, uTop: { value: 0 }, uL: { value: 0 }, uC: { value: new THREE.Vector2() }, uR: { value: 0 }, uS: { value: new THREE.Vector3() }, uSA: { value: 0 }, uSoft: { value: .3 } };
-    const felt = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
-      uniforms: U, transparent: true, depthTest: false, depthWrite: false, premultipliedAlpha: true,
-      vertexShader: 'void main(){ gl_Position = vec4(position.xy, 0., 1.); }',
-      fragmentShader: `uniform vec2 uRes, uC; uniform float uTop, uL, uR, uSA, uSoft; uniform vec3 uS;
-        float rnd(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
-        void main(){
-          vec2 p = gl_FragCoord.xy, q = (p - uRes * .5) / uRes.y;
-          vec3 c = vec3(.0431, .1059, .1804) + uL * vec3(.05, .07, .08) * (1. - smoothstep(.05, .75, length(q * vec2(.8, 1.))));
-          c += (rnd(p) - .5) * .012 * uL;
-          float d = length(p - uS.xy) / uS.z, sh = uSA * (1. - smoothstep(1. - uSoft, 1. + uSoft, d));
-          float m = clamp(uRes.y - p.y - uTop + .5, 0., 1.), hole = smoothstep(uR - 1.2, uR + 1.2, length(p - uC));
-          gl_FragColor = vec4(c * (1. - sh), 1.) * m * hole;
-        }` }));
-    felt.frustumCulled = false; const under = new THREE.Scene(); under.add(felt);   // tapis dessiné d'abord, le jeton par-dessus
     renderer.autoClear = false;
-    const T = Math.tan(PI / 12);
-    let Dc = 14, zEnd = 2.4, W = 1, H = 1;
-    const resize = () => {
-      W = innerWidth; H = innerHeight;
-      renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix();
-      renderer.getDrawingBufferSize(U.uRes.value);
-      // le jeton occupe près de la moitié de la hauteur (bureau) ou les quatre cinquièmes de la largeur (téléphone)
-      Dc = Math.max(2 * K.R / (.48 * 2 * T), 2 * K.R / (.8 * 2 * T * camera.aspect));
-      zEnd = K.RC * (H / 2 / T) / (Math.hypot(W, H) / 2 * 1.06);
+    const camera = new THREE.PerspectiveCamera(30, 1, .05, 200);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const env = pmrem.fromScene(new RoomEnvironment(renderer), .04).texture; pmrem.dispose();
+    const view = { W: 1, H: 1, T: Math.tan(PI / 12) };
+    const sizeRenderer = () => {
+      view.W = innerWidth; view.H = innerHeight;
+      renderer.setSize(view.W, view.H, false); camera.aspect = view.W / view.H; camera.updateProjectionMatrix();
     };
-    resize();
-    /* chute, fonction pure de f (donc de la position de défilement) : le jeton tombe en culbutant, frappe la table incliné,
-       rebondit, puis tournoie sur sa tranche comme un disque d'Euler qui s'éteint, et se couche à plat face à l'écran */
-    const qz = new THREE.Quaternion(), qx = new THREE.Quaternion(), qs = new THREE.Quaternion(), ZA = new THREE.Vector3(0, 0, 1), XA = new THREE.Vector3(1, 0, 0), ax = new THREE.Vector3();
-    const _c = new THREE.Vector3();
-    const lift = a => K.CT / 2 * Math.cos(a) + K.R * Math.abs(Math.sin(a));
-    function pose(f) {
-      const fa = seg(f, 0, .4), fb = seg(f, .4, .6), fc = seg(f, .6, 1);
-      let x = 0, y = 0, z, tilt, prec = 0, spin;
-      if (fb === 0) {                                                // chute libre, culbute d'un tour et quart
-        const s = fa; tilt = .42 + (1 - s) * 2.5 * PI; spin = 1.3 * (1 - s) ** 2 + .35;
-        z = lift(tilt) + Dc * .62 * (1 - s * s); y = K.R * 3 * (1 - s) ** 1.5; x = -K.R * .25 * (1 - s);
-      } else if (fc === 0) {                                         // impact sur la tranche : rebond et bascule
-        const s = fb; tilt = mix(.42, -.17, sm(s)); spin = .35 - .1 * s;
-        z = lift(tilt) + K.R * .3 * Math.sin(PI * s) * (1 - .3 * s);
-      } else {                                                       // toupie d'Euler : l'inclinaison s'éteint, la précession accélère
-        const w = fc; tilt = .17 * (1 - w) ** 1.6; prec = PI + 24 * w ** 1.8; spin = .25 - .1 * w;
-        z = lift(tilt);
-      }
-      ax.set(Math.cos(prec), Math.sin(prec), 0);
-      qx.setFromAxisAngle(ax, tilt); qs.setFromAxisAngle(ZA, spin);
-      pivot.quaternion.copy(qx).multiply(qs);
-      pivot.position.set(x, y, z);
-      return { x, y, z, tilt };
+    sizeRenderer();
+    const ctx = { THREE, renderer, camera, K: chipKit(renderer, { lite: LITE }), env, view, LITE, seg, sm, mix, clamp01 };
+    const vs = {};
+    for (const v of new Set(ports.map(p => p.v))) {
+      try { vs[v] = (await MODS[v]()).create(ctx); } catch (err) { console.warn('transition', v, 'indisponible', err); }
+      if (!vs[v]) vs[v] = vs.chute || (vs.chute = createChute(ctx));
+      vs[v].scene && renderer.compile(vs[v].scene, camera);
+      // préchauffage au repos : quelques images à blanc compilent tous les programmes (ombres comprises) avant le premier passage
+      for (const q of [0, .2, .4, .6, .8, .9]) vs[v].frame(q);
+      renderer.clear();
+      await new Promise(r => (window.requestIdleCallback || setTimeout)(r));
     }
     gl = {
-      frame(q) {
-        const { f, so, dv, light } = PHASES(q), ps = pose(f);
-        const cz = Dc * Math.pow(zEnd / Dc, dv);
-        camera.position.set(0, 0, cz); camera.lookAt(0, 0, 0);
-        K.openChip(chip, so);
-        chip.userData.slats[1].forEach(s => { s.m.visible = so === 0; });   // revers masqué une fois ouvert (on voit au travers)
-        chip.rotation.z = -.6 * dv;                                           // la bague tourne comme un diaphragme
-        chip.updateWorldMatrix(true, false);                                  // lentille : GT de face, ♠/♥ quand il penche
-        const lc = chip.worldToLocal(_c.copy(camera.position));
-        chip.userData.lens[0].userData.phi.value = Math.atan2(lc.x, lc.z); chip.userData.lens[1].userData.phi.value = Math.atan2(-lc.x, -lc.z);
-        const fp = renderer.getPixelRatio() * H / 2 / T, cx = U.uRes.value.x / 2, cy = U.uRes.value.y / 2;
-        U.uTop.value = 0; U.uL.value = light;
-        U.uC.value.set(cx, cy); U.uR.value = so > 0 ? K.RC * fp / cz : 0;  // le tapis se perce sous le centre : les jours entre les lames montrent la suite
-        const h = ps.z - lift(ps.tilt) + Math.abs(ps.tilt) * .4;            // hauteur au-dessus du tapis
-        U.uS.value.set(cx + (ps.x + h * .35) * fp / cz, cy + (ps.y - h * .5) * fp / cz, K.R * (1.04 + h * .18) * fp / cz);
-        U.uSA.value = .62 * (1 - sm(clamp01(h / 6))) * (1 - dv); U.uSoft.value = .16 + Math.min(.5, h * .12);
-        renderer.clear(); renderer.render(under, camera); renderer.render(scene, camera);
-      },
-      resize
+      frame(q, v) { vs[v].frame(q); },
+      resize() { sizeRenderer(); Object.values(vs).forEach(x => x.resize()); }
     };
-    renderer.compile(scene, camera);
     building = false;
     lastQ = -1; update();
   }
@@ -341,7 +376,7 @@ export function mountPortails({ lenis, reduceMotion }) {
     }
     const show = !!(a && gl);
     if (show !== shown) { cv.classList.toggle('on', show); shown = show; }
-    if (show && (q !== lastQ || a !== act)) gl.frame(q);
+    if (show && (q !== lastQ || a !== act)) gl.frame(q, a.v);
     act = a; lastQ = show ? q : -1;
   }
   lenis.on('scroll', update);
@@ -352,5 +387,7 @@ export function mountPortails({ lenis, reduceMotion }) {
   measure();
   /* le moteur du calque (textures, environnement, shaders) se prépare au repos, jamais au milieu d'un défilement */
   const idle = window.requestIdleCallback || (f => setTimeout(f, 1));
-  setTimeout(() => idle(() => { if (!gl && !building) build(); }, { timeout: 5000 }), 6000);
+  // plus tôt quand une transition est à quelques écrans du haut de la page : elle doit être prête avant qu'on l'atteigne
+  const near = ports[0].top < 4 * innerHeight;
+  setTimeout(() => idle(() => { if (!gl && !building) build(); }, { timeout: near ? 1500 : 5000 }), near ? 1200 : 6000);
 }

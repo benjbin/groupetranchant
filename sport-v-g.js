@@ -103,6 +103,8 @@ export function mountSport(section, { reduceMotion, lenis }) {
   stage.addEventListener('pointerleave', () => safe(cur, 'pointer', 0, 0));
 
   new IntersectionObserver(([e]) => { if (e.isIntersecting) load(); }, { rootMargin: '100% 0px' }).observe(section);
+  // préparées au repos : leur montage (shaders, textures) ne tombe pas au milieu de la transition jeton qui précède
+  setTimeout(() => (window.requestIdleCallback || setTimeout)(load, { timeout: 5000 }), 9000);
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); }).observe(stage);
   onScroll();
 }

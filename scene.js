@@ -69,7 +69,7 @@ const merge = gs => { const g = new THREE.BufferGeometry(), at = { position: [],
   for (const k in at) g.setAttribute(k, new THREE.Float32BufferAttribute(at[k], k === 'uv' ? 2 : 3));
   g.setIndex(idx); return g.rotateX(-PI / 2); };
 const both = (geo, z) => merge([geo.clone().translate(0, 0, z), geo.clone().rotateY(PI).translate(0, 0, -z)]);
-const fiches = [], fx = { kinds: null, rings: null, blobs: null, ghosts: null, lastA: 0 };
+const fiches = [], fx = { kinds: null, rings: null, blobs: null, ghosts: null, lastA: 0, op: 1 };
 const dum = new THREE.Object3D(), qa = new THREE.Quaternion(), qb = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0), ZV = new THREE.Vector3(0, 0, 1);
 const P = { x: 0, y: 0, z: 0, hd: 0, a: 0, s: 0, k: 1 };     // pose : cap, inclinaison (a), rotation propre (s)
 const seg = (x, a, b) => clamp01((x - a) / (b - a)), sm = x => x * x * (3 - 2 * x), o3 = x => 1 - (1 - x) ** 3, o2 = x => 1 - (1 - x) ** 2;
@@ -91,7 +91,7 @@ function poser(c) {
   dum.scale.setScalar(S * P.k); dum.updateMatrix();
   const m = fx.kinds[c.col]; m.edge.setMatrixAt(c.ci, dum.matrix); m.face.setMatrixAt(c.ci, dum.matrix); fx.rings.setMatrixAt(c.n, dum.matrix);
   const hb = P.y - ext(P.a);                                          // hauteur du point le plus bas
-  blob(c.n, P.x, P.z, 2 * rS * (.75 + .6 * Math.abs(Math.cos(P.a))) * (1 + hb * .6), P.k * .34 * (1 - sm(clamp01(hb / .9))));
+  blob(c.n, P.x, P.z, 2 * rS * (.75 + .6 * Math.abs(Math.cos(P.a))) * (1 + hb * .6), fx.op * P.k * .34 * (1 - sm(clamp01(hb / .9))));
 }
 /* tableau : battage à gauche au fond (deux piles → une), ramassage à droite, roulé derrière le jeton héros */
 const AX = -3, AZ = -4.8, G = rS + .042, nR = LITE ? 5 : 7, NT = 2 * nR;
@@ -222,8 +222,9 @@ const tilt = { x: 0, y: 0 };
 function heroPose(p, t, k) {
   const fl = seg(p, .43, .6), up = seg(fl, .16, .82), st = seg(fl, .82, 1), turns = reduceMotion ? 1 : 3, air = 4 * up * (1 - up);
   const A = (fl < .16 ? -.12 * Math.sin(PI * fl / .16) : 0) + turns * 2 * PI * (up + sm(up)) / 2 + .16 * Math.sin(2 * PI * st) * (1 - st);
-  const y = (fl < .16 ? -.22 * Math.sin(PI * fl / .16) : 0) + (mobile() ? -.3 : 1.1) * air - .08 * Math.sin(PI * st) * (1 - st);
-  mono.position.set(0, R + .38 + Math.sin(t * .8) * .05 + intro.g * 2.4 + y, -intro.g * 2 - (mobile() ? 5 : 2.2) * air);
+  // le jeton recule plus qu'il ne monte : il reste entier dans le cadre pendant les vrilles
+  const y = (fl < .16 ? -.22 * Math.sin(PI * fl / .16) : 0) + (mobile() ? -.3 : .35) * air - .08 * Math.sin(PI * st) * (1 - st);
+  mono.position.set(0, R + .38 + Math.sin(t * .8) * .05 + intro.g * 2.4 + y, -intro.g * 2 - (mobile() ? 5 : 4.2) * air);
   mono.rotation.set(tilt.x + intro.g * .3 + A, k.spin + Math.sin(t * .3) * .06 + tilt.y + intro.g * PI * 6, Math.sin(t * .21) * .015 + .25 * Math.sin(PI * up));
   return { up, A };
 }
@@ -234,10 +235,12 @@ const qT = new THREE.Quaternion(), qW = new THREE.Quaternion(), XA = new THREE.V
 const LAND = new THREE.Vector3(0, CT / 2, -CT / 2 - R), camTop = new THREE.Vector3(), TAN = Math.tan(PI / 12);
 function fallPose(f) {
   const fd = seg(f, 0, .18), ft = seg(f, .18, .58), fw = seg(f, .58, 1);
+  port.tilt = fw > 0 ? 1 : ft ** 2.2;                              // part de la bascule faite : le reflet tourne exactement avec le jeton
   if (ft === 0) {                                                  // il cesse de flotter et touche le miroir
-    const e = fd * fd;
+    // angles ramenés au tour le plus proche : après les vrilles (plusieurs tours), le jeton se redresse sans refaire de tours
+    const e = fd * fd, w = a => (a - 2 * PI * Math.round(a / (2 * PI))) * (1 - e);
     mono.position.set(mono.position.x * (1 - e), mix(mono.position.y, R, e), mono.position.z * (1 - e));
-    mono.rotation.set(mono.rotation.x * (1 - e), mono.rotation.y * (1 - e), mono.rotation.z * (1 - e));
+    mono.rotation.set(w(mono.rotation.x), w(mono.rotation.y), w(mono.rotation.z));
     return;
   }
   let b = PI / 2 * ft ** 2.2;                                      // bascule autour de l'arête au sol, de plus en plus vite
@@ -257,7 +260,7 @@ function renderHero(t) {
   port.f = tp.f;
   chapters(heroEl, p);
   const k = heroPath(p);
-  const f = mobile() ? 1.7 : Math.max(1, 1.62 / H.camera.aspect);
+  const f = mobile() ? 2.05 : Math.max(1, 1.62 / H.camera.aspect);   // téléphone : un peu plus de recul, le jeton reste entier sous l'en-tête
   heroLook.set(k.look[0] * (mobile() ? .2 : 1), k.look[1] + (mobile() ? -1.9 : 0), k.look[2]);
   H.camera.position.set(
     heroLook.x + (k.pos[0] - k.look[0]) * f + Math.sin(t * .17) * .22 + mouse.sx * .5,
@@ -277,7 +280,6 @@ function renderHero(t) {
   /* couché, le jeton garde le reflet qu'il avait debout face à la caméra (sinon il refléterait le plafond lumineux) ;
      la photo s'éteint : on ne voit plus qu'une table sombre */
   H.scene.fog.density = .05 * (1 - .6 * e);
-  H.scene.environmentRotation.x = ENVX * sm(seg(port.f, .2, .58));
   H.scene.backgroundIntensity = .45 * (1 - .8 * e);
   /* la section suivante attend, calée en haut de l'écran sous la scène, dès que l'ouverture approche */
   if (nextEl) {
@@ -288,7 +290,9 @@ function renderHero(t) {
   if (H.bokeh) H.bokeh.uniforms.focus.value = H.camera.position.distanceTo(heroLook);
   tilt.x += (-mouse.sy * .14 - tilt.x) * .05; tilt.y += (mouse.sx * .45 - tilt.y) * .05;
   const fl = heroPose(p, t, k);
+  port.tilt = 0;
   if (port.f > 0) fallPose(port.f);
+  H.scene.environmentRotation.x = ENVX * port.tilt;
   if (hero) {
     K.openChip(hero, so);
     hero.userData.slats[1].forEach(s => { s.m.visible = so === 0; });
@@ -310,6 +314,14 @@ function renderHero(t) {
     });
   }
   if (fx.kinds) {
+    /* quand la caméra monte à l'aplomb, les piles du croupier s'effacent : elles n'entrent pas coupées dans les coins */
+    const op = 1 - sm(seg(e, .1, .28));
+    if (op !== fx.op) {
+      const mats = [...fx.kinds.flatMap(m => [m.edge.material, m.face.material]), fx.rings.material];
+      mats.forEach(m => { if (m.transparent !== op < 1) { m.transparent = op < 1; m.needsUpdate = true; } m.opacity = op; });
+      [...fx.kinds.flatMap(m => [m.edge, m.face]), fx.rings].forEach(m => { m.visible = op > 0; });
+      fx.op = op;
+    }
     croupier(p, 1 - intro.t);
     const lay = sm(seg(port.f, .4, .62));
     blob(fiches.length, mono.position.x, mono.position.z, mix(4.4 + (mono.position.y - R) * 1.2, 4.5, lay), mix(.3 * (1 - sm(clamp01((mono.position.y - R - .38) / 2.5))), .55, lay) * (1 - intro.g));
@@ -317,7 +329,7 @@ function renderHero(t) {
   // reflet périodique (toutes les 9 s)
   const ph = (t % 9) / 9, sw = clamp01(ph / .28);
   sweep.position.x = -9 + 18 * sw;
-  sweep.intensity = reduceMotion ? 0 : Math.sin(Math.PI * sw) * 60 * (1 - intro.v * .5) * (1 - sm(seg(port.f, .1, .5)));
+  sweep.intensity = reduceMotion ? 0 : Math.sin(Math.PI * sw) * (mobile() ? 12 : 60) * (1 - intro.v * .5) * (1 - sm(seg(port.f, 0, .12)));
   H.finish.uniforms.uTime.value = t;
   /* la scène s'efface par les jours des lames puis par le disque qui grandit : la section suivante, glissée dessous, apparaît.
      La découpe est faite dans le dernier passage du rendu (alpha), sans aucun calcul de mise en page */
@@ -349,7 +361,7 @@ requestAnimationFrame(async () => {
     const n = fiches.filter(c => c.col === col).length;
     return { edge: inst(edge2, clay(chipEdge(b)), n), face: inst(face2, clay(chipFace(b, true)), n) };
   });
-  fx.rings = inst(ring2, goldMat, fiches.length); fx.rings.castShadow = false;
+  fx.rings = inst(ring2, goldMat.clone(), fiches.length); fx.rings.castShadow = false;   // copie : le fondu ne touche pas la bague du jeton héros
   // imperfections : chaque jeton garde un infime décalage (rotation propre, position)
   const cnt = [0, 0]; fiches.forEach((c, n) => Object.assign(c, { n, io: n, ci: cnt[c.col]++, jy: jit(n, 1) * .06, jl: jit(n, 2) * .018, jf: jit(n, 3) * .018 }));
   const bg = new THREE.PlaneGeometry(1, 1).rotateX(-PI / 2); bg.setAttribute('aO', new THREE.InstancedBufferAttribute(new Float32Array(fiches.length + 1), 1));

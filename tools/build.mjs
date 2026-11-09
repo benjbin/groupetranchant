@@ -48,7 +48,7 @@ const PAGES = [
 const href = p => '/' + (p.slug ? p.slug + '/' : '');
 
 /* ---------- copie des fichiers ---------- */
-const FILES = ['site.css', 'fonts.css', 'site.js', 'text-fx.js', 'scene.js', 'strat-map-d.js', 'strat-map-e.js', 'strat-map-f.js', 'roulette-sound.js', 'spec-fx.js', 'spec-fx-cat.js', 'spec-fx-certus.js', 'spec-fx-alioscopy.js', 'spec-fx-zalix.js', 'spec-fx-ids.js', 'sport-v-g.js', 'sport-3d-air.js', 'sport-3d-shot.js', 'ap-fx.js', 'sp-fx.js', 'sz-fx.js', 'spec-hero.js', 'ap-hub.js', 'gp-maquette.js', 'gp-suite.js', 'cx-fx.js', 'cr-fx.js', 'dn-fx.js', 'ev-fx.js', 'pg-fx.js', 'stage.js', 'jeton-portail.js', 'data.js', 'site.webmanifest', 'robots.txt', '.htaccess'];
+const FILES = ['site.css', 'fonts.css', 'site.js', 'text-fx.js', 'scene.js', 'strat-map-d.js', 'strat-map-e.js', 'strat-map-f.js', 'roulette-sound.js', 'spec-fx.js', 'spec-fx-cat.js', 'spec-fx-certus.js', 'spec-fx-alioscopy.js', 'spec-fx-zalix.js', 'spec-fx-ids.js', 'sport-v-g.js', 'sport-3d-air.js', 'sport-3d-shot.js', 'ap-fx.js', 'sp-fx.js', 'sz-fx.js', 'spec-hero.js', 'ap-hub.js', 'gp-maquette.js', 'gp-suite.js', 'cx-fx.js', 'cr-fx.js', 'dn-fx.js', 'ev-fx.js', 'pg-fx.js', 'stage.js', 'jeton-portail.js', 'jp-v-pile.js', 'jp-v-lancer.js', 'jp-v-rateau.js', 'jp-v-iris.js', 'jp-v-roule.js', 'data.js', 'site.webmanifest', 'robots.txt', '.htaccess'];
 const DIRS = ['img', 'fonts', 'vendor', 'data'];
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist);
@@ -58,9 +58,9 @@ DIRS.forEach(d => fs.cpSync(path.join(root, d), path.join(dist, d), { recursive:
 const hash = crypto.createHash('sha1');
 [...FILES.filter(f => /\.(css|js)$/.test(f)), 'src/offres.html', ...fs.readdirSync(path.join(root, 'src/pages')).map(f => 'src/pages/' + f)].forEach(f => hash.update(fs.readFileSync(path.join(root, f))));
 const v = hash.digest('hex').slice(0, 8);
-['site.js', 'scene.js', 'strat-map-d.js', 'strat-map-e.js', 'strat-map-f.js', 'roulette-sound.js', 'spec-fx.js', 'spec-fx-cat.js', 'spec-fx-certus.js', 'spec-fx-alioscopy.js', 'spec-fx-zalix.js', 'spec-fx-ids.js', 'sport-v-g.js', 'sport-3d-air.js', 'sport-3d-shot.js', 'ap-fx.js', 'sp-fx.js', 'sz-fx.js', 'spec-hero.js', 'ap-hub.js', 'gp-maquette.js', 'gp-suite.js', 'cx-fx.js', 'cr-fx.js', 'dn-fx.js', 'ev-fx.js', 'pg-fx.js', 'stage.js', 'jeton-portail.js', 'text-fx.js'].forEach(f => {
+['site.js', 'scene.js', 'strat-map-d.js', 'strat-map-e.js', 'strat-map-f.js', 'roulette-sound.js', 'spec-fx.js', 'spec-fx-cat.js', 'spec-fx-certus.js', 'spec-fx-alioscopy.js', 'spec-fx-zalix.js', 'spec-fx-ids.js', 'sport-v-g.js', 'sport-3d-air.js', 'sport-3d-shot.js', 'ap-fx.js', 'sp-fx.js', 'sz-fx.js', 'spec-hero.js', 'ap-hub.js', 'gp-maquette.js', 'gp-suite.js', 'cx-fx.js', 'cr-fx.js', 'dn-fx.js', 'ev-fx.js', 'pg-fx.js', 'stage.js', 'jeton-portail.js', 'jp-v-pile.js', 'jp-v-lancer.js', 'jp-v-rateau.js', 'jp-v-iris.js', 'jp-v-roule.js', 'text-fx.js'].forEach(f => {
   const p = path.join(dist, f);
-  fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace(/(['"])\.\/(data|scene|strat-map-[def]|roulette-sound|spec-fx(?:-[a-z]+)?|sport-v-g|sport-3d-[a-z]+|ap-fx|sp-fx|sz-fx|spec-hero|ap-hub|gp-maquette|gp-suite|cx-fx|cr-fx|dn-fx|ev-fx|pg-fx|stage|jeton-portail|text-fx)\.js\1/g, `$1./$2.js?v=${v}$1`));
+  fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace(/(['"])\.\/(data|scene|strat-map-[def]|roulette-sound|spec-fx(?:-[a-z]+)?|sport-v-g|sport-3d-[a-z]+|ap-fx|sp-fx|sz-fx|spec-hero|ap-hub|gp-maquette|gp-suite|cx-fx|cr-fx|dn-fx|ev-fx|pg-fx|stage|jeton-portail|jp-v-[a-z]+|text-fx)\.js\1/g, `$1./$2.js?v=${v}$1`));
 });
 
 if (BASE) {

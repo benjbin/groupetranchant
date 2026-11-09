@@ -81,4 +81,10 @@ export function mountSpecFx(root, { reduceMotion }) {
   }, { rootMargin: '100px' }).observe(stage);
   rows[0].classList.add('on');
   root.classList.add('ready');
+  // la première scène se prépare au repos, pas à l'instant où la transition jeton la dévoile
+  const idle = window.requestIdleCallback || (f => setTimeout(f, 1));
+  setTimeout(() => idle(() => load(0).then(s => {
+    if (!s || visible) return;
+    s.play(); requestAnimationFrame(() => requestAnimationFrame(() => { if (!visible) s.pause(); }));   // deux images à blanc : shaders compilés
+  }), { timeout: 4000 }), 7000);
 }
