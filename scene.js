@@ -11,8 +11,9 @@ const { lenis, chapters, progressOf, smoother, reduceMotion } = ctx;
 const heroEl = document.getElementById('hero');
 /* deux hauteurs d'écran de plus pour la fin (1,6 sur téléphone) : le jeton tombe, se couche et s'ouvre sur la section suivante
    (glissée dessous, cf. .jt-hero) ; tout est fonction de la progression de défilement, sans temps réel ni défilement forcé */
-const ZT = mobile() ? 1.6 : 2, PE = 3 / (3 + ZT), sticky = heroEl.querySelector('.sticky'), nextEl = heroEl.nextElementSibling, port = { f: 0, open: false }, ENVX = Math.PI / 2;
-heroEl.style.setProperty('--screens', 4 + ZT); heroEl.classList.add('jt-hero');
+/* MAIN : écrans de défilement de l'ouverture proprement dite (cartes « Présentation » et suivante) — assez pour lire sans que ça file */
+const ZT = mobile() ? 1.6 : 2, MAIN = mobile() ? 5 : 5.5, PE = MAIN / (MAIN + ZT), sticky = heroEl.querySelector('.sticky'), nextEl = heroEl.nextElementSibling, port = { f: 0, open: false }, ENVX = Math.PI / 2;
+heroEl.style.setProperty('--screens', 1 + MAIN + ZT); heroEl.classList.add('jt-hero');
 let span = 1; const bufSz = new THREE.Vector2(), measure = () => { span = heroEl.offsetHeight - innerHeight; };
 const H = createStage({
   canvas: document.getElementById('gl-hero'), fov: 30, exposure: 1.05, alpha: true,

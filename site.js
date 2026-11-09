@@ -186,7 +186,7 @@ function chapters(root, p) {
     // panneaux : dévoilement en balayage et lecture des mots synchronisés avec le défilement
     el.style.clipPath = `inset(0 ${((1 - o) * 100).toFixed(2)}% 0 0 round 22px)`;
     el.classList.toggle('fx-in', o > .35);
-    const l = clamp01((p - a) / ((b - a) * .62));
+    const l = clamp01((p - a) / ((b - a) * .5));   // les mots s'allument sur la première moitié, la seconde laisse lire
     el.querySelectorAll('.lead').forEach((lead, k, all) => FX.scrub(lead, clamp01(l * all.length - k)));
   });
 }
